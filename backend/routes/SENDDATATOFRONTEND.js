@@ -11,7 +11,7 @@ const getUserData = (session) => {
         stanBr: session.stanBr
     };
 };
-
+//s
 router.post('/', (req, res) => {
     console.log("Fetching user data...");
     try {
