@@ -87,20 +87,20 @@ export default function Upit() {
 
     return (
         <>
-            <h1>FORMA / KONTAKTIRAJTE NAS</h1>
-            <form className="KontaktForma" onSubmit={posao}>
+            <h1 className="form-header">FORMA / KONTAKTIRAJTE NAS</h1>
+            <form className="kontakt-forma" onSubmit={posao}>
                 <label>Email</label>
-                <input type="text" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                
+                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+
                 <label>Koja je tema vaseg upita?</label>
                 <SelectDropdown />
-                
+
                 <label>Poruka</label>
                 <textarea id="poruka" name="poruka" value={poruka} onChange={(e) => setPoruka(e.target.value)} required></textarea>
-                
+
                 {error}
-                
-                <button type="submit">Posalji</button>
+
+                <button type="submit">Pošaljite</button>
             </form>
 
             {protectedData && (
