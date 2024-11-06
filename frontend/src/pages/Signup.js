@@ -14,11 +14,6 @@ export default function Upit() {
     const [selectValue, setSelectValue] = useState('');
     const [selectData, setSelectData] = useState([]);
 
-
-
-
-
-
     // Auth function updated to use navigate from useNavigate
     const auth = async () => {
         try {

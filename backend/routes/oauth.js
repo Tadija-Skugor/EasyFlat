@@ -73,13 +73,60 @@ class OAuthRoutes {
           }
           res.status(400).send(`
             <html>
+              <head>
+                <style>
+                  body {
+                    background-color: #f4f4f9;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                    margin: 0;
+                  }
+                  .container {
+                    background-color: #ffffff;
+                    padding: 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                    text-align: center;
+                    max-width: 600px;
+                    width: 100%;
+                  }
+                  h1 {
+                    color: #e74c3c;
+                    font-size: 24px;
+                  }
+                  p {
+                    color: #555;
+                    font-size: 16px;
+                    margin-bottom: 20px;
+                  }
+                  button {
+                    background-color: #4CAF50;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                  }
+                  button:hover {
+                    background-color: #45a049;
+                  }
+                </style>
+              </head>
               <body>
-                <h1>Već ste poslali zahtijev za pristup ovu email adresu.</h1>
-                <p>Moći ćete pristupiti sustavu kada vas Administrator mreže odbori.</p>
-                <button onclick="window.location.href='http://localhost:5000/home'">Go to Home</button>
+                <div class="container">
+                  <h1>Već ste poslali zahtijev za pristup ovoj email adresi.</h1>
+                  <p>Moći ćete pristupiti sustavu kada vas Administrator mreže odbori.</p>
+                  <button onclick="window.location.href='http://localhost:5000/home'">Go to Home</button>
+                </div>
               </body>
             </html>
           `);
+          
         });
       } else {
         res.redirect('http://localhost:5000/potvrda');

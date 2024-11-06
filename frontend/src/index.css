@@ -357,3 +357,124 @@ button:hover {
   align-content: center;
   font-size: 1em;
 }
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-content {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.signup-content p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.google-auth-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; 
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.google-auth-button:hover {
+  background-color: #45a049;
+}
+
+.google-auth-button:focus {
+  outline: none;
+}
+
+
+.signup-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto; 
+}
+
+h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%; 
+  margin-bottom: 15px; 
+}
+
+label {
+  margin-bottom: 5px; 
+  font-size: 16px;
+  color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+option,
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  width: 100%;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus {
+  border-color: #4CAF50; 
+  outline: none; 
+}
+
+.submit-button {
+  background-color: #4CAF50; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #45a049; 
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}

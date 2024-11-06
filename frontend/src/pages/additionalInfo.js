@@ -77,22 +77,22 @@ const AdditionalSignup = () => {
   };
 
   return (
-    <div>
-      <h2>Complete Your Signup</h2>
+<div className="signup-form-container">
+      <h2>Complete Your Sign-Up</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label>First Name:</label>
           <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
         </div>
-        <div>
+        <div className="form-group">
           <label>Last Name:</label>
           <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
         </div>
-        <div>
+        <div className="form-group">
           <label>Email:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+          <input type="email" name="email" value={formData.email} onChange={handleChange} required disabled/>
         </div>
-        <div>
+        <div className="form-group">
           <label>Apartment Number:</label>
           <select value={formData.apartmentNumber} onChange={handleSelectChange} required>
             <option value="">Select Apartment</option>
@@ -103,7 +103,7 @@ const AdditionalSignup = () => {
             ))}
           </select>
         </div>
-        <button type="submit">Complete Signup</button>
+        <button type="submit" className="submit-button">Complete Signup</button>
       </form>
       {error && <p className="error">{error}</p>}
     </div>
