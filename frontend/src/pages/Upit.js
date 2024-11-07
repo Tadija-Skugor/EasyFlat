@@ -103,12 +103,14 @@ export default function Upit() {
                 <button type="submit">Pošaljite</button>
             </form>
 
-            {protectedData && (
+            { /*{protectedData && (
                 <div>
                     <h2>Protected Data:</h2>
                     <pre>{JSON.stringify(protectedData, null, 2)}</pre>
                 </div>
-            )}
+            )}*/ }
+            
+            
         </>
     );
 }
