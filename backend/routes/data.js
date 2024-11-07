@@ -1,6 +1,6 @@
 // routes/DiscussionRoutes.js
 const express = require('express');
-const pool = require('../db'); // Import your database connection
+const pool = require('../db'); // Uvezi svoju vezu na bazu podataka
 
 class DiscussionRoutes {
   constructor() {
@@ -8,19 +8,19 @@ class DiscussionRoutes {
     this.initializeRoutes();
   }
 
-  // Method to fetch recent discussions
+  // Metoda za dohvaćanje nedavnih diskusija
   async fetchAllDiscussions(req, res) {
     try {
-      // Get the number of discussions to fetch from the request body or default to 10
+      // Dobij broj diskusija za dohvatiti iz tijela zahtjeva ili zadano postavi na 10
       const brojZatrazenihDiskusija = req.body.brojZatrazenihDiskusija || 10;
 
-      // Query to get recent discussions
+      // Upit za dohvaćanje nedavnih diskusija
       const result = await pool.query(
         'SELECT id, naslov, kreator, opis, datum, br_odgovora, id_forme FROM diskusija ORDER BY datum DESC LIMIT $1;',
         [brojZatrazenihDiskusija]
       );
 
-      // Create and populate the discussion list
+      // Kreiraj i popuni listu diskusija
       const discussionList = await Promise.all(result.rows.map(async (row) => {
         const discussion = {
           id: row.id,
@@ -31,7 +31,7 @@ class DiscussionRoutes {
           br_odgovora: row.br_odgovora,
         };
 
-        // If the discussion has a form associated with it, fetch form details
+        // Ako diskusija ima povezanu formu, dohvatite detalje forme
         if (row.id_forme !== null) {
           const formResult = await pool.query(
             'SELECT id, naslov, glasova_da, glasova_ne, datum_isteklo FROM glasanje_forma WHERE id = $1',
@@ -43,19 +43,19 @@ class DiscussionRoutes {
         return discussion;
       }));
 
-      // Send the discussion list as a JSON response
+      // Pošaljite listu diskusija kao JSON odgovor
       res.json(discussionList);
     } catch (error) {
-      console.error("Error in /allDiscussions:", error.message);
-      res.status(500).send('Server Error');
+      console.error("Greška u /allDiscussions:", error.message);
+      res.status(500).send('Greška na serveru');
     }
   }
 
-  // Initialize routes
+  // Inicijaliziraj rute
   initializeRoutes() {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
   }
 }
 
-// Export an instance of DiscussionRoutes
+// Izvezi instancu DiscussionRoutes
 module.exports = new DiscussionRoutes().router;
