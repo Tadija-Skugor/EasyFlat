@@ -26,7 +26,6 @@ function ProfPodat({ info }) {
             <div>{info.email}</div>
             <div>Stan</div>
             <div>{info.stanBr}</div>
-
             <button className='uredi'>Uredi</button>
         </div>
     );
