@@ -265,7 +265,7 @@ button:hover {
 /*Styles za stranicu profila*/
 
 #contain {
-  height: 100%;
+  height: 65vh;
   background-image: url('./assets/images/LC_hephaistos.jpg');
   padding: 20px;
   display: flex;
@@ -276,6 +276,7 @@ button:hover {
 }
 
 #card {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -285,6 +286,7 @@ button:hover {
   width: 25%;
   max-width: 460px;
   max-height: 640px;
+  color: #383E42;
 }
 
 #data {
@@ -296,27 +298,30 @@ button:hover {
   max-height: 640px;
   display: grid;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-areas: 
       "title title"
       "a b"
       "c d"
       "e f"
       "g h"
-      "j k"
-      "l m"
-      "n o";
-      align-items: center;
+      "j k";
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 #title {
+  font-weight: bold;
   font-size: 2em;
   grid-area: title;
+  color: black;
 }
 
 #status {
   font-size: 1.5em;
+  font-weight: 600;
   border-bottom: 5px solid #4CAF50;
+  color: black;
 }
 
 #card img{
@@ -334,6 +339,7 @@ button:hover {
   color: white;
   align-content: center;
   font-size: 1em;
+  transition: background-color 0.3s;
 }
 
 /* sign up stranica*/
