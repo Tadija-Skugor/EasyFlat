@@ -33,10 +33,8 @@ class OAuthAuthorize {
       prompt: 'consent'
     });
 
-    // Send the generated authorization URL back to the client
     res.json({ url: authorizeUrl });
   }
 }
 
-// Export an instance of OAuthAuthorize
 module.exports = new OAuthAuthorize().router;

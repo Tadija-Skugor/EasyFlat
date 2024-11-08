@@ -88,7 +88,12 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<Layout />}>
 
-        <Route path="/" element={<Signup />} />
+        <Route path="/" element={
+          <LoggedRoute>
+          <Signup />
+        </LoggedRoute>
+          } 
+          />
           
           
           <Route 
@@ -96,7 +101,7 @@ export default function Router() {
           element={
             <LoggedRoute>
 
-          <Signup />
+            <Signup />
           </LoggedRoute>
 
           } 

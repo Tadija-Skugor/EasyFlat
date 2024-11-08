@@ -56,7 +56,7 @@ class Server {
     this.app.use('/logout',logout);
 
     this.app.use('/signupAuth',podatciKorisnikaSignup);
-    this.app.use('/userInfo',userData);
+    this.app.use('/userInfo',userDataRouter);
     this.app.use('/check-auth', checkAuth);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);

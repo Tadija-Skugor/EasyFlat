@@ -24,12 +24,9 @@ function ProfPodat({ info }) {
             <div>{info.status}</div>
             <div>E Pošta</div>
             <div>{info.email}</div>
-            <div>Broj Telefona</div>
-            <div>{info.telefon}</div>
             <div>Stan</div>
             <div>{info.stanBr}</div>
-            <div>Lozinka</div>
-            <div>****</div>
+
             <button className='uredi'>Uredi</button>
         </div>
     );
