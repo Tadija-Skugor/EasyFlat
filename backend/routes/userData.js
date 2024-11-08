@@ -27,26 +27,26 @@ class UserController {
             const userData = this.getUserData(req.session);
             res.json(userData);
         } catch (error) {
-            console.error('Error fetching user info:', error);
+            console.error('Error fetching user info: ', error);
             res.status(500).json({ message: 'Server error' });
         }
     }
 
-    async updateUserData(req,res) {
+    async updateUserData(req,res) {             //ruta prima req.body.ime i req.body.prezime u koje se zeli promjeniti
         try{
-            const result = await pool.query(
+            const korisnikUpdate = await pool.query(
                 'UPDATE korisnik SET ime=$1 AND prezime=$2 WHERE email=$3 RETURNING *',
                 [req.body.ime,req.body.prezime,req.session.email]
             );
-            if (result.rows.length > 0) {
+            if (korisnikUpdate.rows.length > 0) {
                 req.session.ime = req.body.ime;
                 req.session.prezime = req.body.prezime;
-                res.json(result.rows[0]);
+                res.json(korisnikUpdate.rows[0]);
             } else {
                 res.status(404).send({ message: 'User not found.' });
             }
         } catch(err){
-            console.error('Error updating database:', err);
+            console.error('Error updating database: ', err);
             res.status(500).send({ message: 'Internal server error.' });
         }
     }
