@@ -33,7 +33,22 @@ class UserController {
     }
 
     async updateUserData(req,res) {
-
+        try{
+            const result = await pool.query(
+                'UPDATE korisnik SET ime=$1 AND prezime=$2 WHERE email=$3 RETURNING *',
+                [req.body.ime,req.body.prezime,req.session.email]
+            );
+            if (result.rows.length > 0) {
+                req.session.ime = req.body.ime;
+                req.session.prezime = req.body.prezime;
+                res.json(result.rows[0]);
+            } else {
+                res.status(404).send({ message: 'User not found.' });
+            }
+        } catch(err){
+            console.error('Error updating database:', err);
+            res.status(500).send({ message: 'Internal server error.' });
+        }
     }
 }
 
