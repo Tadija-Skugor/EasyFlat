@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 code {
@@ -61,11 +62,9 @@ code {
   justify-content: center;
   text-align: center;
   padding: 10px;
-  /*position: fixed; */
   background-color: #f8f8f8;
   font-size: 0.9rem;
   color: #333;
-  width: 100%;
 }
 
 .DiskusijaForma {
@@ -79,15 +78,13 @@ code {
   flex-direction: column;
   justify-content: center;
   gap: 30px;
-  margin: 0 auto; /* Center the form */
+  margin: 0 auto; 
 }
 
-/* Form styling */
 .diskusija-form {
-  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 30px; /* Space between rows */
+  gap: 30px; 
 }
 
 label {
@@ -96,12 +93,11 @@ label {
   margin-bottom: 5px;
 }
 
-/* Make inputs, selects, and textareas full width */
 input[type="text"],
 input[type="number"],
 select,
 textarea {
-  width: 100%; /* Full width */
+  width: 100%; 
   padding: 12px;
   font-size: 14px;
   border-radius: 4px;
@@ -113,20 +109,18 @@ input[type="text"]:focus,
 input[type="number"]:focus,
 select:focus,
 textarea:focus {
-  border-color: #4CAF50; /* Green focus border */
+  border-color: #4CAF50; 
 }
 
 textarea {
-  min-height: 120px; /* Slightly taller for text areas */
-  resize: vertical; /* Allow vertical resizing */
+  min-height: 120px; 
+  resize: vertical;
 }
 
-/* Radio buttons */
 .red-pitanje input[type="radio"] {
-  margin-right: 5px; /* Space between radio and label */
+  margin-right: 5px; 
 }
 
-/* Submit button centered */
 button {
   background-color: #4CAF50;
   color: white;
@@ -141,18 +135,18 @@ button {
 }
 
 button:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #45a049; 
 }
 
-/* Error and success messages */
 .required {
   color: red;
   font-size: 14px;
 }
 
 .success {
-  color: green;
+  color: #27ae60;
   font-size: 14px;
+  margin-top: 10px;
 }
 
 .error {
@@ -160,7 +154,6 @@ button:hover {
   font-size: 14px;
 }
 
-/* Flexbox layout for the question sections */
 .red-pitanje {
   display: flex;
   justify-content: space-between;
@@ -204,7 +197,7 @@ button:hover {
 
 .vote-button {
   padding: 10px 15px;
-  background-color: #4CAF50; /* Green */
+  background-color: #4CAF50; 
   color: white;
   border: none;
   border-radius: 4px;
@@ -240,19 +233,6 @@ button:hover {
   margin-right: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
-
-.submit-button {
-  padding: 10px 15px;
-  background-color: #4CAF50; /* Green */
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.submit-button:hover {
-  background-color: #45a049;
 }
 
 .archive-button {
@@ -356,6 +336,7 @@ button:hover {
   font-size: 1em;
 }
 
+/* sign up stranica*/
 .signup-container {
   display: flex;
   flex-direction: column;
@@ -405,7 +386,6 @@ button:hover {
   outline: none;
 }
 
-
 .signup-form-container {
   display: flex;
   flex-direction: column;
@@ -430,12 +410,6 @@ h2 {
   flex-direction: column;
   width: 100%; 
   margin-bottom: 15px; 
-}
-
-label {
-  margin-bottom: 5px; 
-  font-size: 16px;
-  color: #555;
 }
 
 input[type="text"],
@@ -472,10 +446,6 @@ select:focus {
   background-color: #45a049; 
 }
 
-.error {
-  color: red;
-  margin-top: 10px;
-}
 /* kontakt stranica*/
 .contact-container {
   display: flex;
@@ -483,7 +453,7 @@ select:focus {
   align-items: center;
   padding: 30px;
   background-color: #f4f7f6;
-  width: 100%;
+  /*width: 100%;*/
   max-width: 900px;
   margin: 50px auto;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -626,24 +596,6 @@ select:focus {
 
 .kontakt-forma button:hover {
   background-color: #398f38;
-}
-
-.error {
-  color: #e74c3c;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.success {
-  color: #27ae60;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.required {
-  color: #f39c12;
-  font-size: 14px;
-  margin-top: 10px;
 }
 
 .kontakt-forma textarea {
