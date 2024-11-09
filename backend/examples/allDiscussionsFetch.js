@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class DiscussionService {
   constructor() {
-    this.baseUrl = '/discussionData/allDiscussions';
+    this.baseUrl = '/data/allDiscussions';
   }
 
   async fetchDiscussions(brojZatrazenihDiskusija) {
