@@ -1,6 +1,7 @@
 // routes/DiscussionRoutes.js
 const express = require('express');
 const pool = require('../db'); // Uvezi svoju vezu na bazu podataka
+const js2xmlparser = require('js2xmlparser');
 
 class DiscussionRoutes {
   constructor() {
@@ -65,6 +66,37 @@ class DiscussionRoutes {
   // Metoda za dodavanje odgovora na neku diskusiju
   async sendDiscussionResponse(req, res) {
     try {
+      const {id_diskusije, korisnik, tekst} = req.body;
+
+      const jsonData = {
+          korisnik,
+          tekst
+      };
+
+      // JSON u XML format
+      const xmlData = js2xmlparser.parse("odgovor", jsonData);
+
+      // spremanje XML u bazu
+      const rows = await pool.query(
+        'SELECT odgovori FROM diskusija WHERE id = $1', [id_diskusije]
+      );
+
+      let updatedOdgovori;
+      if (rows[0] && rows[0].odgovori) {
+        //console.log(rows[0].odgovori)
+        updatedOdgovori = rows[0].odgovori + xmlData;
+        //console.log(updatedOdgovori)
+      } else {
+        updatedOdgovori = xmlData;
+      }
+
+      await pool.query(
+        'UPDATE diskusija SET odgovori = $1 WHERE id = $2', [updatedOdgovori, id_diskusije]
+      );
+      
+      // možda stavit drugi response
+      res.set('Content-Type', 'application/xml');
+      res.send(xmlData); 
       
     } catch (error) {
       console.error("Greška u /data/discussionAddResponse:", error.message);
