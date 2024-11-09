@@ -17,7 +17,7 @@ code {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #f8f8f8; 
+  background-color: #f4f7f6; 
 }
 
 .nav-left, .nav-center, .nav-right {
@@ -43,7 +43,7 @@ code {
   width: 50%; 
   padding: 5px;
   font-size: 1rem;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .profile-image {
@@ -62,7 +62,7 @@ code {
   justify-content: center;
   text-align: center;
   padding: 10px;
-  background-color: #f8f8f8;
+  background-color: #f4f7f6;
   font-size: 0.9rem;
   color: #333;
 }
@@ -70,10 +70,10 @@ code {
 .DiskusijaForma {
   width: 60%;
   max-width: 600px; 
-  background-color: #f9f9f9;
+  background-color: #f4f7f6;
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -181,10 +181,10 @@ button:hover {
 
 .voting-box {
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 15px;
   margin: 15px 0;
-  background-color: #f9f9f9;
+  background-color: #f4f7f6;
 }
 
 .radio-group {
@@ -325,6 +325,7 @@ button:hover {
 }
 
 #card img{
+  border-radius: 50%;
   align-self: center;
   padding: 10px;
   max-width: 85%;
@@ -348,12 +349,12 @@ button:hover {
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  background-color: #f4f7f6;
+  border-radius: 12px;
   width: 100%;
   max-width: 600px;
   margin: 20px auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .signup-content {
@@ -397,9 +398,9 @@ button:hover {
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f4f7f6;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 600px;
   margin: 50px auto; 
@@ -506,8 +507,8 @@ select:focus {
   width: 100%;
   max-width: 220px;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
@@ -547,9 +548,9 @@ select:focus {
   max-width: 600px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f4f7f6;;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .form-header {
