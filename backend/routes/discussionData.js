@@ -108,7 +108,7 @@ class DiscussionRoutes {
   initializeRoutes() {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
-    this.router.get('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
+    this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
   }
 }
 
