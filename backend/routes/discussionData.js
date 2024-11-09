@@ -12,7 +12,7 @@ class DiscussionRoutes {
   async fetchAllDiscussions(req, res) {
     try {
       // Dobij broj diskusija za dohvatiti iz tijela zahtjeva ili zadano postavi na 10
-      const brojZatrazenihDiskusija = req.body.brojZatrazenihDiskusija || 10;
+      const brojZatrazenihDiskusija = req.query.brojZatrazenihDiskusija || 10;
 
       // Upit za dohvaćanje nedavnih diskusija
       const result = await pool.query(
