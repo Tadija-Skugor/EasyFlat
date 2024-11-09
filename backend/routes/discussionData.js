@@ -46,7 +46,28 @@ class DiscussionRoutes {
       // Pošaljite listu diskusija kao JSON odgovor
       res.json(discussionList);
     } catch (error) {
-      console.error("Greška u /allDiscussions:", error.message);
+      console.error("Greška u /data/allDiscussions:", error.message);
+      res.status(500).send('Greška na serveru');
+    }
+  }
+
+
+  // Metoda za dohvacanje svih odgovora neke diskusije
+  async fetchDiscussionResponses(req, res) {
+    try {
+      
+    } catch (error) {
+      console.error("Greška u /data/discussionResponses:", error.message);
+      res.status(500).send('Greška na serveru');
+    }
+  }
+
+  // Metoda za dodavanje odgovora na neku diskusiju
+  async sendDiscussionResponse(req, res) {
+    try {
+      
+    } catch (error) {
+      console.error("Greška u /data/discussionAddResponse:", error.message);
       res.status(500).send('Greška na serveru');
     }
   }
@@ -54,6 +75,8 @@ class DiscussionRoutes {
   // Inicijaliziraj rute
   initializeRoutes() {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
+    this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
+    this.router.get('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
   }
 }
 
