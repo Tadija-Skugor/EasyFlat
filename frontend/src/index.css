@@ -138,6 +138,12 @@ button:hover {
   background-color: #45a049; 
 }
 
+button:active {
+  background-color: #45a049;
+  transform: scaleY(0.95);
+  transform: scaleX(0.99);
+}
+
 .required {
   color: red;
   font-size: 14px;
@@ -206,6 +212,12 @@ button:hover {
 
 .vote-button:hover {
   background-color: #45a049;
+}
+
+.vote-button:active {
+  background-color: #45a049;
+  transform: scaleY(0.95);
+  transform: scaleX(0.99);
 }
 
 .vote-results {
@@ -286,7 +298,7 @@ button:hover {
   width: 25%;
   max-width: 460px;
   max-height: 640px;
-  color: #383E42;
+  color: #333;
 }
 
 #data {
@@ -389,6 +401,12 @@ button:hover {
   background-color: #45a049;
 }
 
+.google-auth-button:active {
+  background-color: #45a049;
+  transform: scaleY(0.95);
+  transform: scaleX(0.99);
+}
+
 .google-auth-button:focus {
   outline: none;
 }
@@ -451,6 +469,12 @@ select:focus {
 
 .submit-button:hover {
   background-color: #45a049; 
+}
+
+.submit-button:active {
+  background-color: #45a049;
+  transform: scaleY(0.95);
+  transform: scaleX(0.99);
 }
 
 /* kontakt stranica*/
@@ -603,6 +627,12 @@ select:focus {
 
 .kontakt-forma button:hover {
   background-color: #398f38;
+}
+
+.kontakt-forma button:active {
+  background-color: #398f38;
+  transform: scaleY(0.95);
+  transform: scaleX(0.99);
 }
 
 .kontakt-forma textarea {
