@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; // Import za useNavigate
 
 export default function Upit() {
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate(); // Inicijaliziraj useNavigate
     const [ime, setIme] = useState('');
     const [prezime, setPrezime] = useState('');
     const [email, setEmail] = useState('');
@@ -14,7 +14,7 @@ export default function Upit() {
     const [selectValue, setSelectValue] = useState('');
     const [selectData, setSelectData] = useState([]);
 
-    // Auth function updated to use navigate from useNavigate
+    // Auth funkcija izmjenjena tako da koristi navigate iz useNavigate
     const auth = async () => {
         try {
             const response = await fetch('http://localhost:4000/request', { method: 'POST' });
@@ -33,7 +33,7 @@ export default function Upit() {
     
 
     const handleLoginRedirect = () => {
-        navigate('/login'); // Redirect to /login
+        navigate('/login'); // Preusmjeri na /login
     };
 
     return (

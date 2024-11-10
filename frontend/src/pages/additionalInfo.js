@@ -14,7 +14,7 @@ const AdditionalSignup = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch user data for initial form population
+    // Dohvati podatke korisnika za inicijalno stanje
     const fetchUserData = async () => {
       try {
         const response = await axios.get('http://localhost:4000/signupAuth', {
@@ -25,14 +25,14 @@ const AdditionalSignup = () => {
           firstName: imeKorisnika || '',
           lastName: prezimeKorisnika || '',
           email: email || '',
-          apartmentNumber: ''  // Leave apartmentNumber empty initially
+          apartmentNumber: ''  // Inicijalno ostavi broj stana prazan
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
 
-    // Fetch apartment list for the dropdown
+    // Dohvati listu stanova za dropdown meni
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:4000/users', {
@@ -65,7 +65,7 @@ const AdditionalSignup = () => {
         withCredentials: true
       });
 
-      // Log out and inform user
+      // Odjavi se i obavjesti korisnika
       await axios.post('http://localhost:4000/logout', {}, {
         withCredentials: true
       });
