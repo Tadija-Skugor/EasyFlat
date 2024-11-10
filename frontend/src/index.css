@@ -52,6 +52,12 @@ code {
   border-radius: 50%;
   cursor: pointer;
 }
+
+.profile-image:hover{
+  background-color: white;
+  outline: white 10px solid;
+}
+
 .intro {
   text-align: center; 
   margin: 20px 0; 
