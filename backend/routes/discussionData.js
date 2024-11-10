@@ -69,7 +69,7 @@ class DiscussionRoutes {
       }
       
     } catch (error) {
-      console.error("Greška u /data/discussionResponses:", error.message);
+      console.error("Greška u /data/discussionResponses", error.message);
       res.status(500).send('Greška na serveru');
     }
   }
@@ -96,9 +96,7 @@ class DiscussionRoutes {
 
       let updatedOdgovori;
       if (rows[0] && rows[0].odgovori) {
-        //console.log(rows[0].odgovori)
         updatedOdgovori = rows[0].odgovori + xmlData;
-        //console.log(updatedOdgovori)
       } else {
         updatedOdgovori = xmlData;
       }
@@ -112,7 +110,7 @@ class DiscussionRoutes {
       res.send(xmlData); 
 
     } catch (error) {
-      console.error("Greška u /data/discussionAddResponse:", error.message);
+      console.error("Greška u /data/discussionAddResponse", error.message);
       res.status(500).send('Greška na serveru');
     }
   }
