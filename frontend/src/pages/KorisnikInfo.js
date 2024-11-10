@@ -3,10 +3,10 @@ import axios from 'axios';
 
 function ProfPrev({ info }) {
     return (
-        <div id='card'>
+        <div className='prof_card'>
             <img src={info.slika} alt="Profile" />
-            <div id='title'>{info.ime}</div>
-            <div id='status'>{info.status}</div>
+            <div className='prof_title'>{info.ime}</div>
+            <div className='prof_status'>{info.status}</div>
             <div>{info.email}</div>
             <div>{info.telefon}</div>
             <div>Stan {info.stanBr}</div>
@@ -16,8 +16,8 @@ function ProfPrev({ info }) {
 
 function ProfPodat({ info }) {
     return (
-        <div id='data'>
-            <div id='title'>Podatci o Korisniku</div>
+        <div className='prof_data'>
+            <div className ='prof_title'>Podatci o Korisniku</div>
             <div>Ime i Prezime</div>
             <div>{info.ime}</div>
             <div>Status</div>
@@ -26,14 +26,14 @@ function ProfPodat({ info }) {
             <div>{info.email}</div>
             <div>Stan</div>
             <div>{info.stanBr}</div>
-            <button className='uredi'>Uredi</button>
+            <button className='prof_uredi'>Uredi</button>
         </div>
     );
 }
 
 function Profil({ info }) {
     return (
-        <div id='contain'>
+        <div className='prof_contain'>
             <ProfPrev info={info} />
             <ProfPodat info={info} />
         </div>

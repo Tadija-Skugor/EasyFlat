@@ -274,11 +274,10 @@ button:active {
 
 }
 
-/*Styles za stranicu profila*/
+/*Stranica KorisnikInfo*/
 
-#contain {
+.prof_contain {
   height: 65vh;
-  /*background-image: url('./assets/images/LC_hephaistos.jpg');*/
   padding: 20px;
   display: flex;
   flex-direction: row;
@@ -287,56 +286,56 @@ button:active {
   font-size: 1.5em;
 }
 
-#card {
+.prof_card {
+  width: 25%;
+  max-width: 460px;
+  max-height: 640px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #f4f7f6;;
+  color: #333;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #f4f7f6;;
-  border-radius: 12px;
-  padding: 20px;
-  width: 25%;
-  max-width: 460px;
-  max-height: 640px;
-  color: #333;
 }
 
-#data {
-  background-color: #f4f7f6;
-  border-radius: 12px;
-  padding: 20px;
+.prof_data {
   width: 50%;
   max-width:  850px;
   max-height: 640px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #f4f7f6;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-areas: 
       "title title"
-      "a b"
-      "c d"
-      "e f"
-      "g h"
-      "j k";
+      "k1 t1"
+      "k2 t2"
+      "k3 t3"
+      "k4 t4"
+      "k5 t5";
   align-items: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-#title {
+.prof_title {
   font-weight: bold;
   font-size: 2em;
   grid-area: title;
   color: black;
 }
 
-#status {
+.prof_status {
   font-size: 1.5em;
   font-weight: 600;
   border-bottom: 5px solid #4CAF50;
   color: black;
 }
 
-#card img{
+.prof_card img{
   border-radius: 50%;
   align-self: center;
   padding: 10px;
@@ -344,7 +343,7 @@ button:active {
   max-height: 55%;
 }
 
-.uredi{
+.prof_uredi{
   align-self: end;
   height: 70%;
   background-color: #4CAF50;
@@ -355,7 +354,8 @@ button:active {
   transition: background-color 0.3s;
 }
 
-/* sign up stranica*/
+/*stranica Signup*/
+
 .signup-container {
   display: flex;
   flex-direction: column;
@@ -477,7 +477,8 @@ select:focus {
   transform: scaleX(0.99);
 }
 
-/* kontakt stranica*/
+/*stranica Contact*/
+
 .contact-container {
   display: flex;
   flex-direction: column;
@@ -563,7 +564,7 @@ select:focus {
   max-width: 800px;
 }
 
-/* upit stranica*/
+/*stranica KontaktDetalji*/
 
 .kontakt-forma {
   display: flex;
