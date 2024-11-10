@@ -52,10 +52,21 @@ class DiscussionRoutes {
     }
   }
 
-
   // Metoda za dohvacanje svih odgovora neke diskusije
   async fetchDiscussionResponses(req, res) {
     try {
+      const id_diskusije = req.query.id_diskusije;
+      
+      const result = await pool.query(
+        'SELECT odgovori FROM diskusija WHERE id=$1;', [id_diskusije]
+      );
+
+      if (result.rows[0]) {
+        const odgovori = result.rows[0].odgovori;
+        res.json(odgovori);
+      } else {
+        res.json('Polje odgovora je prazno');
+      }
       
     } catch (error) {
       console.error("Greška u /data/discussionResponses:", error.message);
@@ -74,12 +85,14 @@ class DiscussionRoutes {
       };
 
       // JSON u XML format
-      const xmlData = js2xmlparser.parse("odgovor", jsonData);
+      const xmlData = js2xmlparser.parse("odgovor", jsonData, { declaration: { include: false } });
 
       // spremanje XML u bazu
-      const rows = await pool.query(
+      const result = await pool.query(
         'SELECT odgovori FROM diskusija WHERE id = $1', [id_diskusije]
       );
+
+      let rows = result.rows;
 
       let updatedOdgovori;
       if (rows[0] && rows[0].odgovori) {
@@ -97,7 +110,7 @@ class DiscussionRoutes {
       // možda stavit drugi response
       res.set('Content-Type', 'application/xml');
       res.send(xmlData); 
-      
+
     } catch (error) {
       console.error("Greška u /data/discussionAddResponse:", error.message);
       res.status(500).send('Greška na serveru');
