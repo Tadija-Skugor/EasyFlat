@@ -3,7 +3,7 @@ const express = require('express');
 class UserController {
     constructor() {
         this.router = express.Router();
-        this.router.get('/', this.fetchUserData.bind(this));   //ruta za dohvat svih relevantnih podataka korisnika za display na stranici sa podacima
+        this.router.post('/', this.fetchUserData.bind(this));   //ruta za dohvat svih relevantnih podataka korisnika za display na stranici sa podacima
         this.router.post('/update', this.updateUserData.bind(this));    //ruta na koju se šalju novo ime i prezime korisnika
     }
 
