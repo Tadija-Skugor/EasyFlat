@@ -290,40 +290,42 @@ button:active {
   justify-content: center;
   gap: 20px;
   font-size: 1.5em;
+  flex-wrap: wrap; 
 }
 
 .prof_card {
-  width: 25%;
+  width: 100%;
   max-width: 460px;
   max-height: 640px;
   padding: 20px;
   border-radius: 12px;
-  background-color: #f4f7f6;;
+  background-color: #f4f7f6;
   color: #333;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
 }
 
 .prof_data {
-  width: 50%;
-  max-width:  850px;
-  max-height: 640px;
+  width: 100%;
+  max-width: 850px;
   padding: 20px;
   border-radius: 12px;
   background-color: #f4f7f6;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: grid;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-areas: 
-      "title title"
-      "k1 t1"
-      "k2 t2"
-      "k3 t3"
-      "k4 t4"
-      "k5 t5";
+  grid-template-rows: repeat(6, auto);
+  grid-gap: 15px;
+  grid-template-areas:
+    "title title"
+    "k1 t1"
+    "k2 t2"
+    "k3 t3"
+    "k4 t4"
+    "k5 t5";
   align-items: center;
 }
 
@@ -331,33 +333,59 @@ button:active {
   font-weight: bold;
   font-size: 2em;
   grid-area: title;
-  color: black;
+  color: #333;
+  text-align: center;
 }
 
 .prof_status {
   font-size: 1.5em;
   font-weight: 600;
   border-bottom: 5px solid #4CAF50;
-  color: black;
+  color: #333;
+  grid-area: k2;
+  text-align: center;
 }
 
-.prof_card img{
+.prof_card img {
   border-radius: 50%;
   align-self: center;
   padding: 10px;
   max-width: 85%;
   max-height: 55%;
+  object-fit: cover;
 }
 
-.prof_uredi{
-  align-self: end;
-  height: 70%;
-  background-color: #4CAF50;
-  border-radius: 5px;
-  color: white;
-  align-content: center;
-  font-size: 1em;
-  transition: background-color 0.3s;
+.prof_data div {
+  font-size: 1.2em;
+  padding: 5px 0;
+}
+
+.prof_data div:nth-child(even) {
+  font-weight: bold;
+}
+
+.inputs_form {
+  display: flex;
+  gap: 20px; 
+  width: 100%;
+}
+
+.editing_input {
+  width: 50%; 
+  padding: 5px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1.2em;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.button_row {
+  grid-column: 1 / span 2;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 /*stranica Signup*/

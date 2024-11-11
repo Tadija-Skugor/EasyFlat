@@ -3,21 +3,21 @@ const express = require('express');
 class UserController {
     constructor(pool) {
         console.log("Is pool defined? ", pool !== undefined);
-        this.pool = pool;
+        this.pool = pool; //promjene u bazi
         this.router = express.Router();
-        this.router.post('/', this.fetchUserData.bind(this));   // Route to fetch user data
-        this.router.post('/update', this.updateUserData.bind(this));    // Route for updating user data
+        this.router.post('/', this.fetchUserData.bind(this));   
+        this.router.post('/update', this.updateUserData.bind(this));   
     }
 
     getUserData(session) {
-        console.log("Njegov stanID je: ", session.stanBr);  // Log to check the session's stanBr
-        return {  // Format data to be sent for the user profile
+        console.log("Njegov stanID je: ", session.stanBr);  
+        return { 
             slika: session.picture,
             ime: session.ime,
             prezime: session.prezime,
             status: session.status || 'Suvlasnik',
             email: session.email,
-            stanBr: session.stanBr  // Ensure stanBr is included in the response
+            stanBr: session.stanBr  
         };
     }
 
@@ -37,8 +37,8 @@ class UserController {
 
     async updateUserData(req, res) {
         try {
-            const { ime, prezime } = req.body; // Only get ime and prezime from the request body
-            const stanBr = req.session.stanBr; // Get stanBr from the session (this should never change)
+            const { ime, prezime } = req.body; 
+            const stanBr = req.session.stanBr; 
     
             if (!stanBr) {
                 return res.status(400).json({ message: 'Missing apartment number (stanBr)' });
@@ -47,18 +47,17 @@ class UserController {
             console.log("Updating user data for email:", req.session.email);
             console.log("New data:", { ime, prezime, stanBr });
     
-            // Update the user data in the database, preserving stan_id (stanBr)
             const korisnikUpdate = await this.pool.query(
                 'UPDATE korisnik SET ime = $1, prezime = $2 WHERE email = $3 RETURNING *',
                 [ime, prezime, req.session.email]
             );
     
             if (korisnikUpdate.rows.length > 0) {
-                // Update the session with new ime and prezime
+                // promjena
                 req.session.ime = ime;
                 req.session.prezime = prezime;
 
-                // Send back the full user data including the unchanged fields
+                //sve salje nazad
                 const updatedUserData = {
                     slika: req.session.picture,
                     ime: req.session.ime,

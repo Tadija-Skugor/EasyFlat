@@ -5,8 +5,7 @@ function ProfPrev({ info }) {
     return (
         <div className='prof_card'>
             <img src={info.slika} alt="Profile" />
-            <div className='prof_title'>{info.ime}</div>
-            <div className='prof_title'>{info.prezime}</div>
+            <div className='prof_title'>{info.ime} {info.prezime}</div>
             <div className='prof_status'>{info.status}</div>
             <div>{info.email}</div>
             <div>Stan {info.stanBr}</div>
@@ -21,10 +20,18 @@ function ProfPodat({ info, onEdit, onSave, onCancel, editing, setEditingField })
             <div>Ime i Prezime</div>
             {editing ? (
                 <>
-                    <input value={info.ime} onChange={(e) => setEditingField('ime', e.target.value)} />
-                    <input value={info.prezime} onChange={(e) => setEditingField('prezime', e.target.value)} />
-                    <button onClick={onSave}>Save</button>
-                    <button onClick={onCancel}>Cancel</button>
+                    <div className='inputs_form'>
+                    <input
+                        value={info.ime}
+                        onChange={(e) => setEditingField('ime', e.target.value)}
+                        className="editing_input"
+                    />
+                    <input
+                        value={info.prezime}
+                        onChange={(e) => setEditingField('prezime', e.target.value)}
+                        className="editing_input"
+                    />
+                    </div>
                 </>
             ) : (
                 <div>{info.ime} {info.prezime}</div>
@@ -35,10 +42,21 @@ function ProfPodat({ info, onEdit, onSave, onCancel, editing, setEditingField })
             <div>{info.email}</div>
             <div>Stan</div>
             <div>{info.stanBr}</div>
-            <button onClick={onEdit}>Uredi</button>
+
+            <div className='button_row'>
+                {editing ? (
+                    <>
+                        <button onClick={onSave}>Save</button>
+                        <button onClick={onCancel}>Cancel</button>
+                    </>
+                ) : (
+                    <button onClick={onEdit}>Uredi</button>
+                )}
+            </div>
         </div>
     );
 }
+
 
 function Profil({ info, onEdit, onSave, onCancel, editing, setEditingField }) {
     return (
@@ -67,7 +85,7 @@ export default function KorisnikInfo() {
                 const response = await axios.post('http://localhost:4000/userInfo', {}, { withCredentials: true });
                 console.log('Fetched user data:', response.data); // Log the fetched data
                 setInfo(response.data);
-                setEditedInfo(response.data);  // Ensure editedInfo is initialized with the fetched data
+                setEditedInfo(response.data);  
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -77,18 +95,18 @@ export default function KorisnikInfo() {
     }, []);
 
     const handleEdit = () => {
-        setEditedInfo({ ...info });  // Ensure editedInfo gets updated with current info when editing starts
+        setEditedInfo({ ...info });  
         setEditing(true);
     };
 
     const handleCancel = () => {
         setEditing(false);
-        setEditedInfo({ ...info });  // Ensure that cancel resets the editedInfo
+        setEditedInfo({ ...info });  
     };
 
     const handleSave = async () => {
         try {
-            // Log the edited info before saving
+            
             console.log('Saving updated data:', editedInfo);
 
             const response = await axios.post(
@@ -99,9 +117,8 @@ export default function KorisnikInfo() {
                 },
                 { withCredentials: true }
             );
-            console.log('Updated user data:', response.data); // Log the updated response
+            console.log('Updated user data:', response.data); 
 
-            // Update the state with the full data (including static session data)
             setInfo(response.data);
             setEditing(false);
         } catch (error) {
