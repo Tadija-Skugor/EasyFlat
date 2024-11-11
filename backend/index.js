@@ -9,12 +9,14 @@ const podatciKorisnikaSignup = require('./routes/authentifikacija');
 const logout = require('./routes/logout');
 const adminRouter = require('./routes/admin');
 const dataRouter = require('./routes/discussionData');
-const userDataRouter = require('./routes/userData');
+//const userDataRouter = require('./routes/userData');
+const pool = require('./db');
+const userDataRouter = require('./routes/userData')(pool);
 
 
 const authMiddleware= require('./middleware/auth');
 const session = require('express-session');
-const pool = require('./db');
+//const pool = require('./db');
 
 
 

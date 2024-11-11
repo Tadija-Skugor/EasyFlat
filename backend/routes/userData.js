@@ -1,24 +1,27 @@
 const express = require('express');
 
 class UserController {
-    constructor() {
+    constructor(pool) {
+        console.log("Is pool defined? ", pool !== undefined);
+        this.pool = pool;
         this.router = express.Router();
-        this.router.post('/', this.fetchUserData.bind(this));   //ruta za dohvat svih relevantnih podataka korisnika za display na stranici sa podacima
-        this.router.post('/update', this.updateUserData.bind(this));    //ruta na koju se šalju novo ime i prezime korisnika
+        this.router.post('/', this.fetchUserData.bind(this));   // Route to fetch user data
+        this.router.post('/update', this.updateUserData.bind(this));    // Route for updating user data
     }
 
     getUserData(session) {
-        console.log("Njegov stanID je: ", session.stanBr);
-        return {                                            //podaci za display se šalju u ovakvom formatu
+        console.log("Njegov stanID je: ", session.stanBr);  // Log to check the session's stanBr
+        return {  // Format data to be sent for the user profile
             slika: session.picture,
-            ime: `${session.ime} ${session.prezime}`,
+            ime: session.ime,
+            prezime: session.prezime,
             status: session.status || 'Suvlasnik',
             email: session.email,
-            stanBr: session.stanBr
+            stanBr: session.stanBr  // Ensure stanBr is included in the response
         };
     }
 
-    fetchUserData(req, res) {                       
+    fetchUserData(req, res) {
         console.log("Fetching user data...");
         try {
             const userId = req.session.userId;
@@ -32,24 +35,48 @@ class UserController {
         }
     }
 
-    async updateUserData(req,res) {             //ruta prima req.body.ime i req.body.prezime u koje se zeli promjeniti
-        try{
-            const korisnikUpdate = await pool.query(
-                'UPDATE korisnik SET ime=$1 AND prezime=$2 WHERE email=$3 RETURNING *',
-                [req.body.ime,req.body.prezime,req.session.email]
+    async updateUserData(req, res) {
+        try {
+            const { ime, prezime } = req.body; // Only get ime and prezime from the request body
+            const stanBr = req.session.stanBr; // Get stanBr from the session (this should never change)
+    
+            if (!stanBr) {
+                return res.status(400).json({ message: 'Missing apartment number (stanBr)' });
+            }
+    
+            console.log("Updating user data for email:", req.session.email);
+            console.log("New data:", { ime, prezime, stanBr });
+    
+            // Update the user data in the database, preserving stan_id (stanBr)
+            const korisnikUpdate = await this.pool.query(
+                'UPDATE korisnik SET ime = $1, prezime = $2 WHERE email = $3 RETURNING *',
+                [ime, prezime, req.session.email]
             );
+    
             if (korisnikUpdate.rows.length > 0) {
-                req.session.ime = req.body.ime;
-                req.session.prezime = req.body.prezime;
-                res.json(korisnikUpdate.rows[0]);
+                // Update the session with new ime and prezime
+                req.session.ime = ime;
+                req.session.prezime = prezime;
+
+                // Send back the full user data including the unchanged fields
+                const updatedUserData = {
+                    slika: req.session.picture,
+                    ime: req.session.ime,
+                    prezime: req.session.prezime,
+                    status: req.session.status || 'Suvlasnik',
+                    email: req.session.email,
+                    stanBr: req.session.stanBr
+                };
+
+                res.json(updatedUserData);
             } else {
                 res.status(404).send({ message: 'User not found.' });
             }
-        } catch(err){
-            console.error('Error updating database: ', err);
+        } catch (err) {
+            console.error('Error updating database:', err);
             res.status(500).send({ message: 'Internal server error.' });
         }
     }
 }
 
-module.exports = new UserController().router;
+module.exports = (pool) => new UserController(pool).router;
