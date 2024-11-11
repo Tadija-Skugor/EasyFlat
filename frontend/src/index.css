@@ -282,7 +282,7 @@ button:active {
 
 /*Stranica KorisnikInfo*/
 
-.prof_contain {
+#contain {
   height: 65vh;
   padding: 20px;
   display: flex;
@@ -293,7 +293,7 @@ button:active {
   flex-wrap: wrap; 
 }
 
-.prof_card {
+#card {
   width: 100%;
   max-width: 460px;
   max-height: 640px;
@@ -308,7 +308,7 @@ button:active {
   align-items: center;
 }
 
-.prof_data {
+#data {
   width: 100%;
   max-width: 850px;
   padding: 20px;
@@ -329,7 +329,7 @@ button:active {
   align-items: center;
 }
 
-.prof_title {
+#title {
   font-weight: bold;
   font-size: 2em;
   grid-area: title;
@@ -337,7 +337,7 @@ button:active {
   text-align: center;
 }
 
-.prof_status {
+#status {
   font-size: 1.5em;
   font-weight: 600;
   border-bottom: 5px solid #4CAF50;
@@ -346,7 +346,7 @@ button:active {
   text-align: center;
 }
 
-.prof_card img {
+#card img {
   border-radius: 50%;
   align-self: center;
   padding: 10px;
@@ -355,12 +355,12 @@ button:active {
   object-fit: cover;
 }
 
-.prof_data div {
+#data div {
   font-size: 1.2em;
   padding: 5px 0;
 }
 
-.prof_data div:nth-child(even) {
+#data div:nth-child(even) {
   font-weight: bold;
 }
 
