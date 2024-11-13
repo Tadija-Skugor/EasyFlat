@@ -136,8 +136,10 @@ export default function Main() {
                     <div key={discussion.id} className="discussion-item">
                         <h3>{discussion.naslov}</h3>
                         <p><strong>Kreator:</strong> {discussion.kreator}</p>
-                        <p><strong>Datum kreiranja:</strong> {new Date(discussion.datum_stvoreno).toLocaleDateString()}</p>
-                        <p><strong>Datum isteka:</strong> {new Date(discussion.datum_isteko).toLocaleDateString()}</p>
+                        <div className="DatumIme">
+                            <p>Datum kreiranja: {new Date(discussion.datum_stvoreno).toLocaleDateString()}</p>
+                            <p>Datum isteka: {new Date(discussion.datum_isteko).toLocaleDateString()}</p>
+                        </div>
 
                         <div className="voting-box">
                             <h4>Slažete li se?</h4>
