@@ -16,10 +16,10 @@ class OAuthAuthorize {
   }
 
   async handleAuthorization(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:5000');
+    res.header('Access-Control-Allow-Origin', ' https://easyflat.ngrok.app');
     res.header('Referrer-Policy', 'no-referrer-when-downgrade');
 
-    const redirectUrl = 'http://localhost:4000/oauth';
+    const redirectUrl = 'https://a10c1e80c4ce.ngrok.app/oauth';
 
     const oAuth2Client = new OAuth2Client(
       process.env.CLIENT_ID,

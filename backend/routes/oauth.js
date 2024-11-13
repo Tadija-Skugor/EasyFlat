@@ -34,7 +34,7 @@ class OAuthRoutes {
     console.log("Authorization code received: ", code);
 
     try {
-      const redirectUrl = 'http://localhost:4000/oauth';
+      const redirectUrl = 'https://a10c1e80c4ce.ngrok.app/oauth';
       const oAuth2Client = new OAuth2Client(
         process.env.CLIENT_ID,
         process.env.CLIENT_SECRET,
@@ -64,7 +64,7 @@ class OAuthRoutes {
 
       // Conditional redirection based on email status
       if (emailStatus === true) {
-        res.redirect('http://localhost:5000/home'); // Redirect to home if aktivan is true
+        res.redirect('https://easyflat.ngrok.app/home'); // Redirect to home if aktivan is true
       } else if (emailStatus === false) {
         // If the user is inactive, destroy the session and display a message
         req.session.destroy((err) => {
@@ -121,7 +121,7 @@ class OAuthRoutes {
                 <div class="container">
                   <h1>Već ste poslali zahtijev za pristup ovoj email adresi.</h1>
                   <p>Moći ćete pristupiti sustavu kada vas Administrator mreže odbori.</p>
-                  <button onclick="window.location.href='http://localhost:5000/home'">Go to Home</button>
+                  <button onclick="window.location.href=' https://easyflat.ngrok.app/home'">Go to Home</button>
                 </div>
               </body>
             </html>
@@ -129,11 +129,11 @@ class OAuthRoutes {
           
         });
       } else {
-        res.redirect('http://localhost:5000/potvrda');
+        res.redirect(' https://easyflat.ngrok.app/potvrda');
       }
     } catch (err) {
       console.error('Error during token exchange:', err);
-      res.redirect('http://localhost:5000/error');
+      res.redirect(' https://easyflat.ngrok.app/error');
     }
   }
 

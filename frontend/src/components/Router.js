@@ -18,7 +18,7 @@ export default function Router() {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/check-auth', {
+      const response = await axios.get('https://a10c1e80c4ce.ngrok.app/check-auth', {
         withCredentials: true,
       });
       

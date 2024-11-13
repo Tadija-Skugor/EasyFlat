@@ -82,7 +82,7 @@ export default function KorisnikInfo() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.post('http://localhost:4000/userInfo', {}, { withCredentials: true });
+                const response = await axios.post('https://a10c1e80c4ce.ngrok.app/userInfo', {}, { withCredentials: true });
                 console.log('Fetched user data:', response.data); // Log the fetched data
                 setInfo(response.data);
                 setEditedInfo(response.data);  
@@ -110,7 +110,7 @@ export default function KorisnikInfo() {
             console.log('Saving updated data:', editedInfo);
 
             const response = await axios.post(
-                'http://localhost:4000/userInfo/update',
+                'https://a10c1e80c4ce.ngrok.app/userInfo/update',
                 { 
                     ime: editedInfo.ime, 
                     prezime: editedInfo.prezime

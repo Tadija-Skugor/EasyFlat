@@ -1,80 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default function Main() {
     const [discussions, setDiscussions] = useState([]);
     const [userEmail, setUserEmail] = useState('');
-    const [userVotes, setUserVotes] = useState({}); // Pohranjujemo glasove korisnika po diskusijama
-    const [selectedVotes, setSelectedVotes] = useState({}); // Pohranjujemo glasove korisnika po diskusijama (novi objekt)
+    const [userVotes, setUserVotes] = useState({});
+    const [selectedVotes, setSelectedVotes] = useState({});
+    const [hasVoted, setHasVoted] = useState({});
+    const [loading, setLoading] = useState(true);
 
-    const [hasVoted, setHasVoted] = useState({}); // Pohranjuje je li korisnik već glasao za svaku diskusiju
-
-    // Dohvati e-mail korisnika iz sesije
+    // Fetch user email from session
     useEffect(() => {
         const fetchUserEmail = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/glasanje/userEmail', {
-                    withCredentials: true,  // Omogućuje slanje kolačića sa zahtjevom
+                const response = await axios.get('https://a10c1e80c4ce.ngrok.app/glasanje/userEmail', {
+                    withCredentials: true,
                 });
                 setUserEmail(response.data.email);
             } catch (error) {
-                console.error('Greška prilikom dohvaćanja e-maila korisnika:', error);
+                console.error('Error fetching user email:', error);
             }
         };
 
         fetchUserEmail();
     }, []);
 
-    // Dohvati diskusije iz backend-a
+    // Fetch discussions from backend
     useEffect(() => {
         const fetchDiscussions = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/glasanje/discussions');
+                setLoading(true); // Set loading to true before starting data fetch
+                const response = await axios.get('https://a10c1e80c4ce.ngrok.app/glasanje/discussions');
                 setDiscussions(response.data);
             } catch (error) {
-                console.error('Greška prilikom dohvaćanja diskusija:', error);
+                console.error('Error fetching discussions:', error);
+                setLoading(false);
             }
         };
 
         fetchDiscussions();
     }, []);
 
-    // Provjerite je li korisnik već glasao za određenu diskusiju
+    // Check if user has voted for each discussion
     useEffect(() => {
-        if (userEmail) {
+        if (userEmail && discussions.length > 0) {
             const checkUserVotes = async () => {
                 const votes = {};
                 const votedDiscussions = {};
 
                 for (let discussion of discussions) {
-                    const response = await axios.get(`http://localhost:4000/glasanje/userVote`, {
+                    const response = await axios.get(`https://a10c1e80c4ce.ngrok.app/glasanje/userVote`, {
                         params: { email: userEmail, discussionId: discussion.id },
                         withCredentials: true,
                     });
                     if (response.data.voted) {
-                        votes[discussion.id] = response.data.vote; // Spremite glas korisnika
-                        votedDiscussions[discussion.id] = true; // Označi da je korisnik već glasao
+                        votes[discussion.id] = response.data.vote;
+                        votedDiscussions[discussion.id] = true;
                     }
                 }
 
-                setUserVotes(votes); // Pohranjujemo glasove korisnika
-                setHasVoted(votedDiscussions); // Označavamo diskusije na koje je korisnik glasao
+                setUserVotes(votes);
+                setHasVoted(votedDiscussions);
+                setLoading(false); // Set loading to false after the check is complete
             };
 
             checkUserVotes();
         }
-    }, [userEmail, discussions]);  // Pokreće se kada se promijeni userEmail ili discussions
+    }, [userEmail, discussions]); // Trigger after userEmail and discussions are fetched
 
-    // Funkcija za glasanje
     const handleVoteSubmit = async (discussionId, vote) => {
         if (!userEmail) {
-            alert('Morate biti prijavljeni da biste glasali');
+            alert('You must be logged in to vote');
             return;
         }
 
         try {
-            const response = await axios.post('http://localhost:4000/glasanje', {
+            const response = await axios.post('https://a10c1e80c4ce.ngrok.app/glasanje', {
                 userId: userEmail,
                 discussionId,
                 vote,
@@ -82,11 +84,10 @@ export default function Main() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                withCredentials: true,  // Omogućuje slanje kolačića sa zahtjevom
+                withCredentials: true,
             });
 
             if (response.data.success) {
-                // Ažuriraj glasove na frontend-u
                 setDiscussions((prevDiscussions) =>
                     prevDiscussions.map((discussion) =>
                         discussion.id === discussionId
@@ -99,35 +100,36 @@ export default function Main() {
                     )
                 );
 
-                // Pohranjujemo glas korisnika
                 setUserVotes((prevVotes) => ({
                     ...prevVotes,
                     [discussionId]: vote,
                 }));
 
-                // Označi da je korisnik već glasao
                 setHasVoted((prevHasVoted) => ({
                     ...prevHasVoted,
                     [discussionId]: true,
                 }));
 
-                // Resetiraj odabrani glas za tu diskusiju
                 setSelectedVotes((prevSelectedVotes) => ({
                     ...prevSelectedVotes,
-                    [discussionId]: '', // Resetiramo glas za diskusiju
+                    [discussionId]: '',
                 }));
             }
         } catch (error) {
-            console.error('Greška prilikom slanja glasa:', error);
+            console.error('Error submitting vote:', error);
         }
     };
 
     const handleRadioChange = (discussionId, value) => {
         setSelectedVotes((prevSelectedVotes) => ({
             ...prevSelectedVotes,
-            [discussionId]: value, // Pohranjuje glas za tu diskusiju
+            [discussionId]: value,
         }));
     };
+
+    if (loading) {
+        return <div className="loading-screen">Loading...</div>; // Show loading screen while data is being fetched
+    }
 
     return (
         <div className="main-container">
@@ -145,7 +147,7 @@ export default function Main() {
                             <h4>Slažete li se?</h4>
                             {hasVoted[discussion.id] ? (
                                 <div className="vote-results">
-                                    <p>Vaš glas: {userVotes[discussion.id]}</p>
+                                    <p>Vaš glas: {userVotes[discussion.id] === 'da' ? 'Da' : 'Ne'}</p>
                                     <p>Da: {discussion.glasovanje_da}</p>
                                     <p>Ne: {discussion.glasovanje_ne}</p>
                                 </div>
@@ -154,29 +156,29 @@ export default function Main() {
                                     <label>
                                         <input
                                             type="radio"
-                                            name={`vote_${discussion.id}`} // Dodajemo jedinstven name za svaki set radio tipki
+                                            name={`vote_${discussion.id}`}
                                             value="da"
                                             checked={selectedVotes[discussion.id] === 'da'}
                                             onChange={() => handleRadioChange(discussion.id, 'da')}
-                                            disabled={hasVoted[discussion.id]} // Onemogućeno ako je korisnik već glasao
+                                            disabled={hasVoted[discussion.id]}
                                         />
                                         Da
                                     </label>
                                     <label>
                                         <input
                                             type="radio"
-                                            name={`vote_${discussion.id}`} // Dodajemo jedinstven name za svaki set radio tipki
+                                            name={`vote_${discussion.id}`}
                                             value="ne"
                                             checked={selectedVotes[discussion.id] === 'ne'}
                                             onChange={() => handleRadioChange(discussion.id, 'ne')}
-                                            disabled={hasVoted[discussion.id]} // Onemogućeno ako je korisnik već glasao
+                                            disabled={hasVoted[discussion.id]}
                                         />
                                         Ne
                                     </label>
                                     <button
                                         className="submit-vote-button"
                                         onClick={() => handleVoteSubmit(discussion.id, selectedVotes[discussion.id])}
-                                        disabled={!selectedVotes[discussion.id] || hasVoted[discussion.id]} // Onemogućeno ako nije odabran glas ili je već glasano
+                                        disabled={!selectedVotes[discussion.id] || hasVoted[discussion.id]}
                                     >
                                         Pošaljite glas
                                     </button>
@@ -190,8 +192,6 @@ export default function Main() {
             </div>
             <Link to="/Upit" className="navigation-button">+</Link>
             <button className="archive-button">Arhiva</button>
-
-
         </div>
     );
 }

@@ -17,7 +17,7 @@ const AdditionalSignup = () => {
     // Dohvati podatke korisnika za inicijalno stanje
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/signupAuth', {
+        const response = await axios.get('https://a10c1e80c4ce.ngrok.app/signupAuth', {
           withCredentials: true,
         });
         const { imeKorisnika, prezimeKorisnika, email } = response.data.user;
@@ -35,7 +35,7 @@ const AdditionalSignup = () => {
     // Dohvati listu stanova za dropdown meni
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/users', {
+        const response = await axios.get('https://a10c1e80c4ce.ngrok.app/users', {
           withCredentials: true,
         });
         setSelectData(response.data);
@@ -61,12 +61,12 @@ const AdditionalSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:4000/signupAuth/additional-signup', formData, {
+      await axios.post('https://a10c1e80c4ce.ngrok.app/signupAuth/additional-signup', formData, {
         withCredentials: true
       });
 
       // Odjavi se i obavjesti korisnika
-      await axios.post('http://localhost:4000/logout', {}, {
+      await axios.post('https://a10c1e80c4ce.ngrok.app/logout', {}, {
         withCredentials: true
       });
       alert("Your data has been sent for review.");
