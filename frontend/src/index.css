@@ -510,6 +510,29 @@ select:focus {
   transform: scaleY(0.95);
   transform: scaleX(0.99);
 }
+.submit-vote-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.submit-vote-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.radio-group {
+  margin-top: 10px;
+}
+
+.radio-group label {
+  margin-right: 15px;
+}
+
 
 /*stranica Contact*/
 
