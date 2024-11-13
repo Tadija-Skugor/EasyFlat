@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 export default function Footer() {
     
@@ -10,13 +10,14 @@ export default function Footer() {
         if (contentHeight < viewportHeight) {
             footer.style.position = "fixed";
             footer.style.bottom = "0";
-            footer.style.width = "100%";
+            footer.style.width = "98%";
         } else {
             footer.style.position = "static";
+            footer.style.marginTop = "20px";
         }
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         adjustFooterPosition();
         window.addEventListener("resize", adjustFooterPosition);
         

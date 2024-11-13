@@ -16,8 +16,8 @@ function ProfPrev({ info }) {
 function ProfPodat({ info, onEdit, onSave, onCancel, editing, setEditingField }) {
     return (
         <div id='data'>
-            <div id='title'>Podatci o Korisniku</div>
-            <div>Ime i Prezime</div>
+            <div id='title'>Podatci o korisniku</div>
+            <div>Ime i prezime</div>
             {editing ? (
                 <>
                     <div className='inputs_form'>
@@ -38,16 +38,16 @@ function ProfPodat({ info, onEdit, onSave, onCancel, editing, setEditingField })
             )}
             <div>Status</div>
             <div>{info.status}</div>
-            <div>E Pošta</div>
+            <div>E-pošta</div>
             <div>{info.email}</div>
-            <div>Stan</div>
+            <div>Broj stana</div>
             <div>{info.stanBr}</div>
 
             <div className='button_row'>
                 {editing ? (
                     <>
-                        <button onClick={onSave}>Save</button>
-                        <button onClick={onCancel}>Cancel</button>
+                        <button onClick={onSave}>Spremi</button>
+                        <button onClick={onCancel}>Odustani</button>
                     </>
                 ) : (
                     <button onClick={onEdit}>Uredi</button>

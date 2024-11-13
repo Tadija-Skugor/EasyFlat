@@ -15,7 +15,7 @@ export default function Header(){
           </div>
 
           <div className="nav-center">
-              <input type="text" placeholder="Search..." className="search-bar" />
+              <input type="text" placeholder="Traži..." className="search-bar" />
           </div>
 
           <div className="nav-right">
@@ -33,10 +33,10 @@ export default function Header(){
                 <a href="/contact">Ovo je link koji vodi na kontakt stranicu</a>
               </li>
               <li>
-                <a href="/upit">Ovo je link koji vodi na upit za stranicz</a>
+                <a href="/upit">Ovo je link koji vodi na upit za stranicu</a>
               </li>
               <li>
-                <a href="/signup">Ovo je link koji vodi na signup za stranicz</a>
+                <a href="/signup">Ovo je link koji vodi na signup za stranicu</a>
               </li>
 
             </ul>

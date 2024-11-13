@@ -186,10 +186,10 @@ export default function Main() {
                     </div>
                 ))}
             </div>
-
+            <Link to="/Upit" className="navigation-button">+</Link>
             <button className="archive-button">Arhiva</button>
 
-            <Link to="/Upit" className="navigation-button">+</Link>
+
         </div>
     );
 }

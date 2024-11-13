@@ -38,7 +38,7 @@ export default function Upit() {
 
     return (
         <div className="signup-container">
-            <h1>Kreacija Računa</h1>
+            <h1>Prijava računa</h1>
             <div className="signup-content">
                 <p>Da biste kreirali račun, molimo vas prijavite se putem Google authentifikacije:</p>
                 
