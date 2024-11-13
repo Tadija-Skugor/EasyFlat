@@ -37,7 +37,6 @@
   }
 }
 
-
 .KontaktForma{
   margin: 0 auto; 
   display: block; 
@@ -46,32 +45,32 @@
   padding: 40px; border-radius: 20px;
   opacity: 75%;
 }
-  .KontaktForma label {
+
+.KontaktForma label {
   display: block;
   width: 380px;
   padding: 5px;
   margin-top: 30px;
   color: white;
-  }
+}
 
 
-  .KontaktForma input { 
-    display: block;
-    width: 380px;
-    padding: 10px;
-    border-radius:10px;
-    border: 1px solid gray;}
+.KontaktForma input { 
+  display: block;
+  width: 380px;
+  padding: 10px;
+  border-radius:10px;
+  border: 1px solid gray;
+}
 
-    .KontaktForma textarea {
-    display: block;
-    width: 380px;
-    height: 100px;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid gray;}
-
-
-
+.KontaktForma textarea {
+  display: block;
+  width: 380px;
+  height: 100px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid gray;
+}
     
 .KontaktForma button { 
   display: block;
@@ -82,7 +81,8 @@
   background-color: #ffffff;
   cursor: pointer;
 }
-  .required {
+
+.required {
   color:red;
   
 }

@@ -1,21 +1,36 @@
-function Contact(){
-    return(
-        <>
-        <h1>Kontaktirajte nas ako imate problema</h1>
+import React from 'react';
 
-        <ul className="KontaktBox">
-            <li>
-                <a href="/kontakt/1" className="linkKontakta"><img className="slikaPoziva" src={require('../assets/images/LC_hephaistos.jpg')} alt="Slika nase zgrade ili tako nes"/></a>
-                <br/>
-                <a href="/kontakt/1" className="linkKontakta">Hiperlink koji vodi na kontakt info ili radi tako nes</a>
-            </li>
-            <li>
-            <a href="/kontakt/999" className="linkKontakta"><img className="slikaPoziva" src={require('../assets/images/images.png')} alt="Slika firme ili tako nes"/></a>
-                <br/>
-                <a href="/kontakt/999" className="linkKontakta">Hiperlink koji vodi na kontakt info ili radi tako nes</a>
-            </li>
-        </ul>
-        </>
-    )
+
+function Contact() {
+    return (
+        <div className="contact-container">
+            <h1 className="contact-header">Kontaktirajte nas ako imate bilo kakvih problema</h1>
+
+            <p className="contact-description">
+                Ako imate bilo kakvih pitanja, problema ili želite dodatne informacije, slobodno nas kontaktirajte putem
+                dolje navedenih opcija. Naša ekipa će se potruditi da vam što prije odgovori.
+            </p>
+
+            <ul className="contact-list">
+                <li className="contact-item">
+                    <a href="/kontakt/1" className="contact-link">
+                        <img className="contact-image" src={require('../assets/images/LC_hephaistos.jpg')} alt="Slika zgrade" />
+                    </a>
+                    <p className="contact-info">
+                        <a href="/kontakt/1" className="contact-link">Kontakt informacije o našoj zgradi</a>
+                    </p>
+                </li>
+                <li className="contact-item">
+                    <a href="/kontakt/999" className="contact-link">
+                        <img className="contact-image" src={require('../assets/images/easyflatLogo.png')} alt="Slika firme" />
+                    </a>
+                    <p className="contact-info">
+                        <a href="/kontakt/999" className="contact-link">Kontakt informacije o našoj firmi</a>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    );
 }
+
 export default Contact;

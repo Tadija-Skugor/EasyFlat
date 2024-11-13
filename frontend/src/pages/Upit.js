@@ -1,108 +1,116 @@
 import { useState, useEffect } from "react";
-import axios from "axios"
-//U KODU e NIJE ERROR NEGO OBJEKT/ELEMENT
-export default function Upit(){
+import axios from "axios";
 
+export default function Upit() {
+    const [email, setEmail] = useState('');
+    const [poruka, setPoruka] = useState('');
+    const [error, setError] = useState('');
+    const [selectData, setSelectData] = useState([]);
+    const [selectValue, setSelectValue] = useState('');
+    const [protectedData, setProtectedData] = useState(null);
 
-    const [email,setEmail] =useState('')
-    const [poruka,setPoruka] =useState('')
-    const [error,setError] =useState('')
-    const [selectData,setselectData] =useState([])
-    const [selectValue,setselectValue] =useState('')
+    useEffect(() => {
+        let processing = true;
+        axiosFetchData(processing);
+        fetchProtectedData();
+        return () => { processing = false; }
+    }, []);
 
+    const axiosFetchData = async (processing) => {
+        try {
+            const response = await axios.get('http://localhost:4000/users', {
+                withCredentials: true,
+            });
 
-
-    useEffect(()=>{
-        let processsing=true
-        axiosFetchData(processsing)
-        return()=>{processsing=false}
-    },[])
-
-    const fetchData = async(processsing) =>{
-        const option={method:'GET'}
-        await fetch('https://jsonplaceholder.typicode.com/users',option)//OVDIJE CEMO SE KONEKTIRATI NA BAZU PODATAKA U POSTRES SQL
-        .then(res=>res.json())
-        .then(data=>{
-            if(processsing){//optimizacija
-            setselectData(data)
+            if (processing) {
+                setSelectData(response.data);
+            }
+        } catch (err) {
+            console.log(err);
         }
-        })
-        .catch(err=>console.log(err))
-    }
+    };
 
-
-    const axiosFetchData = async(processsing) =>{
-/*         const options={ //ovo je za post
-            email:email,
-            message:message
-        } */
-        await axios.get('http://localhost:4000/users')//OVDIJE CEMO SE KONEKTIRATI NA BAZU PODATAKA U POSTRES SQL
-        //.then(res=>res.json()) //nepotrebno za axios
-        .then(res=>{
-            if(processsing){//optimizacija
-            setselectData(res.data)
+    const fetchProtectedData = async () => {
+        try {
+            const response = await axios.get('http://localhost:4000/protected', {
+                withCredentials: true,
+            });
+            setProtectedData(response.data);
+        } catch (error) {
+            console.error("Error fetching protected data:", error);
         }
-        })
-        .catch(err=>console.log(err))
-    }
+    };
 
-
-    const SelectDropdown=()=>{
-        return(
-            <select value={selectValue} onChange={(e)=>setselectValue(e.target.value)}>
+    const SelectDropdown = () => {
+        return (
+            <select value={selectValue} onChange={(e) => setSelectValue(e.target.value)}>
                 {
-                    selectData?.map((item,index)=>(
-                        <option value={item.website} key={item.website}>{item.website}</option>
+                    selectData?.map((item) => (
+                        <option value={item.stan_id} key={item.stan_id}>
+                            {item.stan_id}
+                        </option>
                     ))
                 }
             </select>
-        )
-    }
-    const axiosPostData=async()=>{
-        console.log("Prvi")
+        );
+    };
 
-        console.log(email)
-        console.log("Drugi")
-
-        console.log(selectValue)
-        console.log("Treci")
-
-        console.log(poruka)
-
-        const postData={
+    const axiosPostData = async () => {
+        const postData = {
             email: email,
-            website:selectValue,
-            poruka:poruka
-        }
-        console.log("neki ispis")
-        await axios.post('http://localhost:4000/contact',postData)
-        .then(res=>setError(<p className="success">{res.data}</p>))
-    }
+            website: selectValue,
+            poruka: poruka
+        };
+        await axios.post('http://localhost:4000/contact', postData, {
+            withCredentials: true
+        })
+        .then(res => setError(<p className="success">{res.data}</p>))
+        .catch(err => {
+            console.error("Error submitting data:", err);
+            if (err.response && err.response.status === 401) {
+                setError(<p className="error">Unauthorized: You must log in first.</p>);
+            } else {
+                setError(<p className="error">Something went wrong. Please try again.</p>);
+            }
+        });
+    };
 
-
-    const posao=(e)=>{
+    const posao = (e) => {
         e.preventDefault();
-        console.log(email+' | '+poruka);
-        if(!poruka){setError(<p className="required">Poruka ne smije biti prazna</p>)}
-        else{setError('')}
-        setError('')
-        axiosPostData();
-    }
+        if (!poruka) {
+            setError(<p className="required">Poruka ne smije biti prazna</p>);
+        } else {
+            setError('');
+            axiosPostData();
+        }
+    };
+
     return (
         <>
-            <h1>FORMA / KONTAKTIRAJTE NAS</h1>
-            <form className="KontaktForma">
+            <h1 className="form-header">FORMA / KONTAKTIRAJTE NAS</h1>
+            <form className="kontakt-forma" onSubmit={posao}>
                 <label>Email</label>
-                <input type="text" id="email" name="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
-                <label>Koja je tema vaseg upita?</label>
+                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
-                <SelectDropdown/>
+                <label>Koja je tema vaseg upita?</label>
+                <SelectDropdown />
+
                 <label>Poruka</label>
-                <textarea id="poruka" name="poruka" value={poruka} onChange={(e)=>setPoruka(e.target.value)}></textarea>
+                <textarea id="poruka" name="poruka" value={poruka} onChange={(e) => setPoruka(e.target.value)} required></textarea>
+
                 {error}
-                <button type="submit" onClick={posao}>Posalji</button>
+
+                <button type="submit">Pošaljite</button>
             </form>
+
+            { /*{protectedData && (
+                <div>
+                    <h2>Protected Data:</h2>
+                    <pre>{JSON.stringify(protectedData, null, 2)}</pre>
+                </div>
+            )}*/ }
+            
+            
         </>
-    )
-    
-    } 
+    );
+}
