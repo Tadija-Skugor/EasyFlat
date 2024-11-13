@@ -46,10 +46,16 @@ router.get('/userVote', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
-// Ruta za slanje glasa
 router.post('/', async (req, res) => {
-    const { userId, discussionId, vote } = req.body;
+    let { userId, discussionId, vote } = req.body; // Use 'let' instead of 'const' to allow reassignment
+    console.log("Vrijednost vota je: " + vote);
+
+    if (vote === "da") {
+        vote = "yes";
+    } else {
+        vote = "no";
+    }
+    console.log("Vrijednost vota je: " + vote);
 
     if (!userId || !discussionId || !vote) {
         return res.status(400).send('Svi podaci (userId, discussionId, vote) moraju biti prisutni');
@@ -88,5 +94,6 @@ router.post('/', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
 
 module.exports = router;
