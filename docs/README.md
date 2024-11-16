@@ -10,6 +10,8 @@
 # Opis projekta
 Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
 
+Cilj projekta je razviti aplikaciju koja rješava specifičan problem u domeni upravljanja stanovima, a čiji je krajnji cilj pojednostaviti proces organizacije i komunikacije među korisnicima. Domena aplikacije je **[easyflat.ngrok.app](https://easyflat.ngrok.app)**.  
+
 Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije »Zato što je to bio zadatak i nismo imali ideje za drugo.«). Koji problem rješavate?
 > Obzirom da je ovo zadani projekt navedite i što želite/jeste novo  naučili.
 
