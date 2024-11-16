@@ -12,8 +12,9 @@ Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Progra
 
 Cilj projekta je razviti aplikaciju koja rješava specifičan problem u domeni upravljanja stanovima, a čiji je krajnji cilj pojednostaviti proces organizacije i komunikacije među korisnicima. Domena aplikacije je **[easyflat.ngrok.app](https://easyflat.ngrok.app)**.  
 
-Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije »Zato što je to bio zadatak i nismo imali ideje za drugo.«). Koji problem rješavate?
-> Obzirom da je ovo zadani projekt navedite i što želite/jeste novo  naučili.
+Za potrebe evaluacije projekta, možete se prijaviti koristeći sljedeći račun:  
+- **Email**: easyflatprogi@gmail.com  
+- **Šifra**: ProgiProjekt123  
 
 > Dobro izrađen opis omogućuje vam da pokažete svoj rad drugim programerima, kao i potencijalnim poslodavcima. Ne samo da prvi dojam na stranici opisa često razlikuje dobar projekt od lošeg projekta već i predstavlja dobru praksu koju morate savladati.
 
