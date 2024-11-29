@@ -1,41 +1,49 @@
-# Programsko inženjerstvo
-
-> Ime projekta u naslovu ima cilj opisati namjenu projekta te pomoći u podizanju početnog interesa za projekt prezentirajući osnovnu svrhu projekta.
-> Isključivo ovisi o Vama!
-> 
-> Naravno, nijedan predložak nije idealan za sve projekte jer su potrebe i ciljevi različiti. Ne bojte se naglasiti Vaš cilj u ovoj početnoj stranici projekta, podržat ćemo ga bez obzira usredotočili se Vi više na tenologiju ili marketing.
-> 
-> Zašto ovaj dokument? Samo manji dio timova je do sada propoznao potrebu (a i meni je lakše pratiti Vaš rad).  
+# EasyFlat
 
 # Opis projekta
 Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
 
-Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije »Zato što je to bio zadatak i nismo imali ideje za drugo.«). Koji problem rješavate?
-> Obzirom da je ovo zadani projekt navedite i što želite/jeste novo  naučili.
+Cilj ovog projekta je razviti web aplikaciju koja će omogućiti poboljšanje komunikacije i olakšanu koordinaciju inicijativa suvlasnika u zgradi. Često postoji potreba za međusobnom koordinacijom suvlasnika vezano za dijeljenje troškova, izvođenje građevinskih radova i ostalih poslova vezanih uz zgradu. Za ovu svrhu suvlasnici mogu koristiti razne aplikacije općenitije namjene kao što su Discord serveri i WhatsApp grupe ili pak koristiti samo fizičke poruke na oglasnoj ploči zgrade. Ovakva komunikacija se može pokazati izazovna zbog velikog broja suvlasnika. Prednost ove aplikacije je prilagođenost toj specifičnoj potrebi povezivanja suvlasnika pojedine zgrade. Glavni dio, a ujedno i početna stranica aplikacije je oglasna ploča. Na oglasnoj ploči korisnici imaju pristup diskusijama koje su stvorili ostali suvlasnici u zgradi kao i mogućnost iniciranja vlastite diskusije.
 
-> Dobro izrađen opis omogućuje vam da pokažete svoj rad drugim programerima, kao i potencijalnim poslodavcima. Ne samo da prvi dojam na stranici opisa često razlikuje dobar projekt od lošeg projekta već i predstavlja dobru praksu koju morate savladati.
+Domena aplikacije je **[easyflat.ngrok.app](https://easyflat.ngrok.app)**.  
+
+Za potrebe evaluacije projekta, možete se prijaviti koristeći sljedeći račun:  
+- **Email**: easyflatprogi@gmail.com  
+- **Šifra**: ProgiProjekt123  
 
 # Funkcijski zahtjevi
-> Navedite ključne zahtjeve Vašeg projekta.
 
+* Sustav omogućuje korisnicima prijavu preko Google korisničkog računa.
+* Sustav omogućuje korisnicima iniciranje javne i privatne diskusije.
+* Sustav omogućuje inicijatoru diskusije pokretanje glasanja unutar diskusije.
+* Sustav omogućuje sudionicima diskusije pristup glasanja i uvid u rezultate.
+* Sustav omogućuje korisnicima pregled liste dostupnih diskusija.
+* Sustav omogućuje korisnicima objavu komentara na diskusiju.
+* Sustav omogućuje inicijatoru diskusije kreiranje poziva na sastanak.
+* Sustav omogućuje korisnicima pregled i pretraživanje liste dostupnih diskusija.
 
 # Tehnologije
 
-#Instalcija
+* Javascript
+* React
+* Node.js
+* Express
+* PostgreSQL
+
 # Članovi tima 
->linkovi/ glavni doprinos
->Popis članova tima
-Đana Pavić	
-Marko Šarić	
-Dona Weiner	
-Filip Cvjetićanin	
-Tihomir Livaić	
-Mirta Krajačić	
-Tadija Škugor	
+
+Popis članova tima:
+* Filip Cvjetićanin	
+* Tihomir Livaić	
+* Đana Pavić	
+* Mirta Krajačić	
+* Marko Šarić	
+* Tadija Škugor	
+* Dona Weiner
 
 # Kontribucije
->Pravila ovise o organizaciji tima i su često izdvojena u CONTRIBUTING.md
 
+https://github.com/Tadija-Skugor/EasyFlat/blob/main/docs/Doprinosi.pdf
 
 
 # 📝 Kodeks ponašanja [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
