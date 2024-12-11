@@ -1,31 +1,44 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export default function Footer() {
-    
+    const [footerStyle, setFooterStyle] = useState({
+        position: "static",
+        marginTop: "20px",
+        width: "100%",
+        textAlign: "center",
+        backgroundColor: "#f1f1f1",
+        padding: "10px 0",
+    });
+
     const adjustFooterPosition = () => {
         const contentHeight = document.body.scrollHeight;
         const viewportHeight = window.innerHeight;
-        const footer = document.querySelector(".footer");
 
-        if (contentHeight < viewportHeight) {
-            footer.style.position = "fixed";
-            footer.style.bottom = "0";
-            footer.style.width = "98%";
+        if (contentHeight <= viewportHeight) {
+            setFooterStyle((prevStyle) => ({
+                ...prevStyle,
+                position: "fixed",
+                bottom: "0",
+                marginTop: "0",
+            }));
         } else {
-            footer.style.position = "static";
-            footer.style.marginTop = "20px";
+            setFooterStyle((prevStyle) => ({
+                ...prevStyle,
+                position: "static",
+                marginTop: "20px",
+            }));
         }
     };
 
     useLayoutEffect(() => {
         adjustFooterPosition();
         window.addEventListener("resize", adjustFooterPosition);
-        
+
         return () => window.removeEventListener("resize", adjustFooterPosition);
     }, []);
 
     return (
-        <div className="footer">
+        <div style={footerStyle}>
             <p>@EasyFlat FER 2024.</p>
         </div>
     );
