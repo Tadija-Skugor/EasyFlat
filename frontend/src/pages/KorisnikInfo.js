@@ -19,8 +19,7 @@ function ProfPodat({ info, onEdit, onSave, onCancel, editing, setEditingField })
             <div id='title'>Podatci o Korisniku</div>
             <div>Ime i Prezime</div>
             {editing ? (
-                <>
-                    <div className='inputs_form'>
+                <div className='inputs_form'>
                     <input
                         value={info.ime}
                         onChange={(e) => setEditingField('ime', e.target.value)}
@@ -31,8 +30,7 @@ function ProfPodat({ info, onEdit, onSave, onCancel, editing, setEditingField })
                         onChange={(e) => setEditingField('prezime', e.target.value)}
                         className="editing_input"
                     />
-                    </div>
-                </>
+                </div>
             ) : (
                 <div>{info.ime} {info.prezime}</div>
             )}
@@ -53,10 +51,16 @@ function ProfPodat({ info, onEdit, onSave, onCancel, editing, setEditingField })
                     <button onClick={onEdit}>Uredi</button>
                 )}
             </div>
+
+            {/* Conditional Rendering for Administrator Status */}
+            {info.status.toLowerCase() === 'suvlasnik' && (
+                <div className="admin-message">
+                    <p>OVDJE CE ICI SVE STVARI KOJIMA CE ADMINISTRATOR UPRAVLJATI POPUT DODAVANJA KORISNIKA ITD ITD.</p>
+                </div>
+            )}
         </div>
     );
 }
-
 
 function Profil({ info, onEdit, onSave, onCancel, editing, setEditingField }) {
     return (
@@ -135,13 +139,15 @@ export default function KorisnikInfo() {
     }
 
     return (
-        <Profil
-            info={editing ? editedInfo : info}
-            onEdit={handleEdit}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            editing={editing}
-            setEditingField={setEditingField}
-        />
+        <div style={{ paddingBottom: '15%' }}> {/* Added bottom padding */}
+            <Profil
+                info={editing ? editedInfo : info}
+                onEdit={handleEdit}
+                onSave={handleSave}
+                onCancel={handleCancel}
+                editing={editing}
+                setEditingField={setEditingField}
+            />
+        </div>
     );
 }

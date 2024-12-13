@@ -12,11 +12,11 @@ export default function Footer() {
             footer.style.bottom = "0";
             footer.style.width = "100%";
 
-            // Add bottom margin to prevent overlapping
-            document.body.style.marginBottom = `${footer.offsetHeight}px`;
+            // Add bottom padding to the body to ensure no overlap
+            document.body.style.paddingBottom = `${footer.offsetHeight}px`;
         } else {
             footer.style.position = "static";
-            document.body.style.marginBottom = "0";
+            document.body.style.paddingBottom = "0";
         }
     };
 

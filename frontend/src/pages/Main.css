@@ -40,7 +40,7 @@
 }
 
 
-.discussion-list {
+.Glasanje-list {
     width: 60%;
   }
   
@@ -84,3 +84,108 @@
   .vote-results {
     margin-top: 10px;
   }
+
+
+  /* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+/* Close Button */
+.close-modal-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submit-form-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-form-button:hover {
+  background-color: #0056b3;
+}
+
+
+.navigation-button {
+  position: fixed;
+  bottom: 10%;
+  right: 3%;
+  width: 50px;
+  height: 50px;
+  background-color: #45a049;
+  border: 3px solid #45a049;
+  border-radius: 50%;
+  color: black;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navigation-button:hover {
+  background-color: #3a8d3f;
+  color: white;
+}
+
+.admin-message {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f0f8ff;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #007bff;
+}

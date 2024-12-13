@@ -12,28 +12,28 @@ router.get('/userEmail', (req, res) => {
 });
 
 // Ruta za dohvaćanje svih diskusija
-router.get('/discussions', async (req, res) => {
+router.get('/Glasanjes', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM glasanje_forma');
         res.json(result.rows);  // Vraćanje svih diskusija
     } catch (error) {
-        console.error('Error fetching discussions:', error);
+        console.error('Error fetching Glasanjes:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
 // Ruta za provjeru je li korisnik već glasao
 router.get('/userVote', async (req, res) => {
-    const { email, discussionId } = req.query;
+    const { email, GlasanjeId } = req.query;
 
-    if (!email || !discussionId) {
-        return res.status(400).json({ message: 'Email and discussionId are required' });
+    if (!email || !GlasanjeId) {
+        return res.status(400).json({ message: 'Email and GlasanjeId are required' });
     }
 
     try {
         const result = await pool.query(
             'SELECT odgovor FROM glasanje WHERE mail_glasaca = $1 AND id_forme = $2',
-            [email, discussionId]
+            [email, GlasanjeId]
         );
         
         if (result.rows.length > 0) {
@@ -46,8 +46,9 @@ router.get('/userVote', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 router.post('/', async (req, res) => {
-    let { userId, discussionId, vote } = req.body; // Use 'let' instead of 'const' to allow reassignment
+    let { userId, GlasanjeId, vote } = req.body; // Use 'let' instead of 'const' to allow reassignment
     console.log("Vrijednost vota je: " + vote);
 
     if (vote === "da") {
@@ -57,14 +58,14 @@ router.post('/', async (req, res) => {
     }
     console.log("Vrijednost vota je: " + vote);
 
-    if (!userId || !discussionId || !vote) {
-        return res.status(400).send('Svi podaci (userId, discussionId, vote) moraju biti prisutni');
+    if (!userId || !GlasanjeId || !vote) {
+        return res.status(400).send('Svi podaci (userId, GlasanjeId, vote) moraju biti prisutni');
     }
 
     try {
         const result = await pool.query(
             'SELECT * FROM glasanje WHERE mail_glasaca = $1 AND id_forme = $2',
-            [userId, discussionId]
+            [userId, GlasanjeId]
         );
 
         if (result.rows.length > 0) {
@@ -73,18 +74,18 @@ router.post('/', async (req, res) => {
 
         await pool.query(
             'INSERT INTO glasanje (id_forme, mail_glasaca, odgovor) VALUES ($1, $2, $3)',
-            [discussionId, userId, vote]
+            [GlasanjeId, userId, vote]
         );
 
         if (vote === 'yes') {
             await pool.query(
                 'UPDATE glasanje_forma SET glasovanje_da = glasovanje_da + 1 WHERE id = $1',
-                [discussionId]
+                [GlasanjeId]
             );
         } else if (vote === 'no') {
             await pool.query(
                 'UPDATE glasanje_forma SET glasovanje_ne = glasovanje_ne + 1 WHERE id = $1',
-                [discussionId]
+                [GlasanjeId]
             );
         }
 
@@ -92,6 +93,53 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.error('Error submitting vote:', error);
         res.status(500).send('Server error');
+    }
+});
+
+
+router.post('/dodavanjeGlasovanja', async (req, res) => {
+    console.log("Backend se vrti kad prima ");
+    
+    let { naslov, opis, datum_isteko } = req.body;  
+    const Kreator = req.session.ime;  
+
+    console.log(req.body);
+    console.log(naslov);
+    console.log(opis);
+    console.log(datum_isteko);
+
+    if (!naslov || !opis || !datum_isteko || !Kreator) {
+        console.log("Greska pri verifikaciji podataka");
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
+
+    const datumStvoreno = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
+
+    const query = `
+        INSERT INTO glasanje_forma (datum_stvoreno, datum_isteko, glasovanje_da, glasovanje_ne, naslov, kreator)
+        VALUES ($1, $2, 0, 0, $3, $4)
+        RETURNING id
+    `;
+
+    // Execute the query using the pool
+    try {
+        const result = await pool.query(query, [datumStvoreno, datum_isteko, naslov, Kreator]);
+
+        console.log("Glasanje inserted successfully");
+
+        res.status(201).json({
+            success: true,
+            newGlasanje: {
+                id: result.rows[0].id,  
+                naslov: naslov,
+                opis: opis,
+                datum_isteko: datum_isteko,
+                kreator: Kreator,
+            },
+        });
+    } catch (err) {
+        console.error('Error inserting new Glasanje:', err);
+        return res.status(500).json({ message: 'Error inserting data into the database.' });
     }
 });
 
