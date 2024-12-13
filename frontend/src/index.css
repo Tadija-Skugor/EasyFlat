@@ -183,52 +183,6 @@ button:active {
   width: 100%;
 }
 
-.discussion-list {
-  width: 60%;
-}
-
-.discussion-item {
-  padding: 10px 0;
-}
-
-.voting-box {
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 15px;
-  margin: 15px 0;
-  background-color: #f4f7f6;
-}
-
-.radio-group {
-  margin: 10px 0;
-}
-
-.radio-group label {
-  display: block;
-}
-
-.vote-button {
-  padding: 10px 15px;
-  background-color: #4CAF50; 
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.vote-button:hover {
-  background-color: #45a049;
-}
-
-.vote-button:active {
-  background-color: #45a049;
-  transform: scaleY(0.95);
-  transform: scaleX(0.99);
-}
-
-.vote-results {
-  margin-top: 10px;
-}
 
 .responses-list {
   margin-top: 20px;

@@ -9,6 +9,7 @@ const podatciKorisnikaSignup = require('./routes/authentifikacija');
 const logout = require('./routes/logout');
 const adminRouter = require('./routes/admin');
 const dataRouter = require('./routes/discussionData');
+const glasanjeSlanje=require('./routes/glasanjeSlanje');
 //const userDataRouter = require('./routes/userData');
 const pool = require('./db');
 const userDataRouter = require('./routes/userData')(pool);
@@ -33,7 +34,7 @@ class Server {
   configureMiddleware() {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
-
+    this.app.use(express.json());
     const corsOptions = {
       origin: 'http://localhost:5000', 
       credentials: true,
@@ -58,6 +59,8 @@ class Server {
     this.app.use('/logout',logout);
 
     this.app.use('/signupAuth',podatciKorisnikaSignup);
+    this.app.use('/glasanje',glasanjeSlanje);
+
     this.app.use('/userInfo',userDataRouter);
     this.app.use('/check-auth', checkAuth);
     this.app.use('/oauth', authRouter);
