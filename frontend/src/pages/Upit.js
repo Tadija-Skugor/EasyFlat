@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-
 export default function Upit() {
     const [email, setEmail] = useState('');
     const [poruka, setPoruka] = useState('');
@@ -9,7 +8,6 @@ export default function Upit() {
     const [selectData, setSelectData] = useState([]);
     const [selectValue, setSelectValue] = useState('');
     const [protectedData, setProtectedData] = useState(null);
-
 
     useEffect(() => {
         let processing = true;
