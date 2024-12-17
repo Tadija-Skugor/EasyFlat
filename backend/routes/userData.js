@@ -3,31 +3,96 @@ const express = require('express');
 class UserController {
     constructor(pool) {
         console.log("Is pool defined? ", pool !== undefined);
-        this.pool = pool; //promjene u bazi
+        this.pool = pool; 
         this.router = express.Router();
         this.router.post('/', this.fetchUserData.bind(this));   
         this.router.post('/update', this.updateUserData.bind(this));   
+        this.router.get('/inactive-users', this.fetchInactiveUsers.bind(this));
+        this.router.post('/activate-user', this.activateUser.bind(this));
     }
 
-    getUserData(session) {
-        console.log("Njegov stanID je: ", session.stanBr);  
-        return { 
-            slika: session.picture,
-            ime: session.ime,
-            prezime: session.prezime,
-            status: session.status || 'Suvlasnik',
-            email: session.email,
-            stanBr: session.stanBr  
-        };
+    async activateUser(req, res) {
+        try {
+            const { email } = req.body;
+    
+            if (!email) {
+                return res.status(400).json({ message: 'Missing email.' });
+            }
+    
+            console.log(`Activating user with email: ${email}`);
+    
+            const result = await this.pool.query(
+                'UPDATE korisnik SET aktivan = true WHERE email = $1 RETURNING *',
+                [email]
+            );
+    
+            if (result.rowCount > 0) {
+                res.json({ message: 'User activated successfully.', user: result.rows[0] });
+            } else {
+                res.status(404).json({ message: 'User not found.' });
+            }
+        } catch (error) {
+            console.error('Error activating user:', error);
+            res.status(500).json({ message: 'Internal server error.' });
+        }
     }
 
-    fetchUserData(req, res) {
+    async fetchInactiveUsers(req, res) {
+        console.log("Fetching inactive users...");
+        try {
+            const result = await this.pool.query(
+                'SELECT ime, prezime, email, stan_id FROM korisnik WHERE aktivan = false'
+            );
+    
+            if (result.rows.length > 0) {
+                res.json(result.rows); 
+            } else {
+                res.json([]); 
+            }
+        } catch (error) {
+            console.error('Error fetching inactive users:', error);
+            res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    async getUserData(session) {
+        console.log("Fetching data for user with stanID:", session.stanBr);
+
+        try {
+            const result = await this.pool.query(
+                'SELECT ime, prezime, email, stan_id, aktivan FROM korisnik WHERE email = $1',
+                [session.email]
+            );
+
+            if (result.rows.length === 0) {
+                throw new Error('User not found in database');
+            }
+
+            const user = result.rows[0];
+
+            return {
+                slika: session.picture,  // Slika is fetched from the session
+                ime: user.ime,
+                prezime: user.prezime,
+                status: session.status || 'Suvlasnik',
+                email: user.email,
+                stanBr: user.stan_id  
+            };
+        } catch (error) {
+            console.error('Error fetching user data from database:', error);
+            throw new Error('Failed to fetch user data from database');
+        }
+    }
+
+    // fetch
+    async fetchUserData(req, res) {
         console.log("Fetching user data...");
         try {
             const userId = req.session.userId;
             if (!userId) return res.status(401).json({ message: 'Unauthorized' });
 
-            const userData = this.getUserData(req.session);
+        
+            const userData = await this.getUserData(req.session);
             res.json(userData);
         } catch (error) {
             console.error('Error fetching user info: ', error);
@@ -35,6 +100,7 @@ class UserController {
         }
     }
 
+    // azuriranje u db
     async updateUserData(req, res) {
         try {
             const { ime, prezime } = req.body; 
@@ -53,13 +119,11 @@ class UserController {
             );
     
             if (korisnikUpdate.rows.length > 0) {
-                // promjena
                 req.session.ime = ime;
                 req.session.prezime = prezime;
 
-                //sve salje nazad
                 const updatedUserData = {
-                    slika: req.session.picture,
+                    slika: req.session.picture,  
                     ime: req.session.ime,
                     prezime: req.session.prezime,
                     status: req.session.status || 'Suvlasnik',

@@ -188,4 +188,6 @@
   border-radius: 5px;
   font-size: 14px;
   color: #007bff;
+  width: 350%; /* Full viewport width */
+  box-sizing: border-box; /* Include padding and border in the width */
 }
