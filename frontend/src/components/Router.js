@@ -13,8 +13,8 @@ import PotvrdaSignupa from '../pages/additionalInfo';
 import UserPage from '../pages/KorisnikInfo';
 
 export default function Router() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // Initialize as null to track loading state
-  const [isEmailVerified, setIsEmailVerified] = useState(null); // Track email verification status
+  const [isAuthenticated, setIsAuthenticated] = useState(null); 
+  const [isEmailVerified, setIsEmailVerified] = useState(null); // Track email verifikaciju
 
   const checkAuth = async () => {
     try {
@@ -22,14 +22,14 @@ export default function Router() {
         withCredentials: true,
       });
       
-      // Update both authentication and email verification status
+      // Update autentifikaciju
       setIsAuthenticated(response.data.isAuthenticated);
       setIsEmailVerified(response.data.isEmailVerified);
       
     } catch (error) {
       console.error("Authentication check failed:", error);
-      setIsAuthenticated(false); // If there's an error, set as unauthenticated
-      setIsEmailVerified(false); // Set email verification status as false on error
+      setIsAuthenticated(false); //slanje signala o stanju
+      setIsEmailVerified(false); 
     }
   };
 
@@ -37,13 +37,21 @@ export default function Router() {
     checkAuth();
   }, []);
 
-  const Layout = () => (
-    <>
-      <Header />
-      <Outlet />
-      <Footer />
-    </>
-  );
+  const Layout = () => {
+    return (
+        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+            <Header />
+            <div style={{ flex: 1 }}>
+                <Outlet />
+            </div>
+            <Footer />
+        </div>
+    );
+};
+
+
+
+  
 
   const PrivateRoute = ({ children }) => {
     if (isAuthenticated === null || isEmailVerified === null) {
@@ -53,11 +61,10 @@ export default function Router() {
     console.log("------------------------");
     console.log(isEmailVerified);
 
-    // Redirect to signup if not authenticated or email is not verified
     if (!isAuthenticated || !isEmailVerified) {
       return <Navigate to="/signup" />;
     }
-    return children; // If authenticated and verified, render the children components
+    return children; 
   };
 
   const LoggedRoute = ({ children }) => {

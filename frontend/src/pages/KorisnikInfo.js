@@ -3,78 +3,96 @@ import axios from 'axios';
 
 function ProfPrev({ info }) {
     return (
-        <div id='card'>
+        <div id="card">
             <img src={info.slika} alt="Profile" />
-            <div id='title'>{info.ime} {info.prezime}</div>
-            <div id='status'>{info.status}</div>
+            <div id="title">{info.ime} {info.prezime}</div>
+            <div id="status">{info.status}</div>
             <div>{info.email}</div>
             <div>Stan {info.stanBr}</div>
         </div>
     );
 }
-function ProfPodat({ info, onEdit, onSave, onCancel, editing, setEditingField, inactiveUsers, onActivateUser }) {
+
+function ProfPodat({
+    info,
+    onEdit,
+    onSave,
+    onCancel,
+    editing,
+    setEditingField,
+    inactiveUsers,
+    onActivateUser
+}) {
     return (
-        <div id='data'>
-            <div id='title'>Podatci o Korisniku</div>
-            <div>Ime i Prezime</div>
-            {editing ? (
-                <div className='inputs_form'>
-                    <input
-                        value={info.ime}
-                        onChange={(e) => setEditingField('ime', e.target.value)}
-                        className="editing_input"
-                    />
-                    <input
-                        value={info.prezime}
-                        onChange={(e) => setEditingField('prezime', e.target.value)}
-                        className="editing_input"
-                    />
+        <div className="page-container">
+            {/* Main Content */}
+            <div className="main-content">
+                <div id="data">
+                    <div id="title">Podatci o Korisniku</div>
+                    <div>Ime i Prezime</div>
+                    {editing ? (
+                        <div className="inputs_form">
+                            <input
+                                value={info.ime}
+                                onChange={(e) => setEditingField('ime', e.target.value)}
+                                className="editing_input"
+                            />
+                            <input
+                                value={info.prezime}
+                                onChange={(e) => setEditingField('prezime', e.target.value)}
+                                className="editing_input"
+                            />
+                        </div>
+                    ) : (
+                        <div>
+                            {info.ime} {info.prezime}
+                        </div>
+                    )}
+                    <div>Status</div>
+                    <div>{info.status}</div>
+                    <div>E Pošta</div>
+                    <div>{info.email}</div>
+                    <div>Stan</div>
+                    <div>{info.stanBr}</div>
+                    <div className="button_row">
+                        {editing ? (
+                            <>
+                                <button onClick={onSave}>Save</button>
+                                <button onClick={onCancel}>Cancel</button>
+                            </>
+                        ) : (
+                            <button onClick={onEdit}>Uredi</button>
+                        )}
+                    </div>
                 </div>
-            ) : (
-                <div>{info.ime} {info.prezime}</div>
-            )}
-            <div>Status</div>
-            <div>{info.status}</div>
-            <div>E Pošta</div>
-            <div>{info.email}</div>
-            <div>Stan</div>
-            <div>{info.stanBr}</div>
-            <div className='button_row'>
-                {editing ? (
-                    <>
-                        <button onClick={onSave}>Save</button>
-                        <button onClick={onCancel}>Cancel</button>
-                    </>
-                ) : (
-                    <button onClick={onEdit}>Uredi</button>
+
+                {/* Admin Section */}
+                {info.email.startsWith("easyflatprogi@") && (
+                    <div className="admin-message">
+                        <p>
+                            OVDJE CE ICI SVE STVARI KOJIMA CE ADMINISTRATOR UPRAVLJATI POPUT
+                            DODAVANJA KORISNIKA ITD ITD.
+                        </p>
+                        <ul>
+                            {inactiveUsers.length > 0 ? (
+                                inactiveUsers.map((user, index) => (
+                                    <li key={index}>
+                                        {user.ime} {user.prezime} - {user.email} (Stan {user.stan_id}){' '}
+                                        <button onClick={() => onActivateUser(user.email)}>
+                                            Aktiviraj
+                                        </button>
+                                    </li>
+                                ))
+                            ) : (
+                                <li>Nema neaktivnih korisnika.</li>
+                            )}
+                        </ul>
+                    </div>
                 )}
             </div>
-            {/* Provjera jel admin, zadsad to radimo preko maila, ali kasnije bi mogli malo drukcije, who knows */}
-            {info.email.startsWith("easyflatprogi@") && (
-                <div className="admin-message">
-                    <p>OVDJE CE ICI SVE STVARI KOJIMA CE ADMINISTRATOR UPRAVLJATI POPUT DODAVANJA KORISNIKA ITD ITD.</p>
-                    <ul>
-                        {inactiveUsers.length > 0 ? (
-                            inactiveUsers.map((user, index) => (
-                                <li key={index}>
-                                    {user.ime} {user.prezime} - {user.email} (Stan {user.stan_id}){' '}
-                                    <button onClick={() => onActivateUser(user.email)}>
-                                        Aktiviraj
-                                    </button>
-                                </li>
-                            ))
-                        ) : (
-                            <li>Nema neaktivnih korisnika.</li>
-                        )}
-                    </ul>
-                </div>
-            )}
         </div>
     );
 }
-
-
-
 
 function Profil({
     info,
@@ -87,7 +105,7 @@ function Profil({
     onActivateUser
 }) {
     return (
-        <div id='contain'>
+        <div id="contain">
             <ProfPrev info={info} />
             <ProfPodat
                 info={info}
@@ -102,7 +120,6 @@ function Profil({
         </div>
     );
 }
-
 
 export default function KorisnikInfo() {
     const [info, setInfo] = useState(null);
@@ -171,19 +188,18 @@ export default function KorisnikInfo() {
     }
 
     return (
-        <div style={{ paddingBottom: '15%' }}>
-        <Profil
-            info={editing ? editedInfo : info}
-            onEdit={handleEdit}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            editing={editing}
-            setEditingField={setEditingField}
-            inactiveUsers={inactiveUsers}       
-            onActivateUser={handleActivateUser} 
-        />
+        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+            <Profil
+                info={editing ? editedInfo : info}
+                onEdit={handleEdit}
+                onSave={handleSave}
+                onCancel={handleCancel}
+                editing={editing}
+                setEditingField={setEditingField}
+                inactiveUsers={inactiveUsers}       
+                onActivateUser={handleActivateUser} 
+            />
 
         </div>
     );
 }
-

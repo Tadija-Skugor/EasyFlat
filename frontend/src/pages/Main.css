@@ -188,6 +188,20 @@
   border-radius: 5px;
   font-size: 14px;
   color: #007bff;
-  width: 350%; /* Full viewport width */
-  box-sizing: border-box; /* Include padding and border in the width */
+  max-width: 850px; 
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
 }
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
+/* For the main content area */
+.main-content {
+  flex: 1; 
+}
+
