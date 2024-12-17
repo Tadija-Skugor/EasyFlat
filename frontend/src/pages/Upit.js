@@ -41,19 +41,6 @@ export default function Upit() {
         }
     };
 
-    const SelectDropdown = () => {
-        return (
-            <select value={selectValue} onChange={(e) => setSelectValue(e.target.value)}>
-                {
-                    selectData?.map((item) => (
-                        <option value={item.stan_id} key={item.stan_id}>
-                            {item.stan_id}
-                        </option>
-                    ))
-                }
-            </select>
-        );
-    };
 
     const axiosPostData = async () => {
         const postData = {
@@ -89,11 +76,8 @@ export default function Upit() {
         <>
             <h1 className="form-header">FORMA / KONTAKTIRAJTE NAS</h1>
             <form className="kontakt-forma" onSubmit={posao}>
-                <label>Email</label>
+                <label>Email na koji želite odgovor</label>
                 <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-
-                <label>Koja je tema vaseg upita?</label>
-                <SelectDropdown />
 
                 <label>Poruka</label>
                 <textarea id="poruka" name="poruka" value={poruka} onChange={(e) => setPoruka(e.target.value)} required></textarea>

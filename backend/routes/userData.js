@@ -9,6 +9,10 @@ class UserController {
         this.router.post('/update', this.updateUserData.bind(this));   
         this.router.get('/inactive-users', this.fetchInactiveUsers.bind(this));
         this.router.post('/activate-user', this.activateUser.bind(this));
+        this.router.get('/nerjesen_upit', this.fetchNerjeseniUpiti.bind(this));
+
+
+        
     }
 
     async activateUser(req, res) {
@@ -38,10 +42,26 @@ class UserController {
     }
 
     async fetchInactiveUsers(req, res) {
-        console.log("Fetching inactive users...");
         try {
             const result = await this.pool.query(
                 'SELECT ime, prezime, email, stan_id FROM korisnik WHERE aktivan = false'
+            );
+    
+            if (result.rows.length > 0) {
+                res.json(result.rows); 
+            } else {
+                res.json([]); 
+            }
+        } catch (error) {
+            console.error('Error fetching inactive users:', error);
+            res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    async fetchNerjeseniUpiti(req, res) {
+        try {
+            const result = await this.pool.query(
+                'SELECT emailosobe,tekst FROM upit WHERE rjeseno = false'
             );
     
             if (result.rows.length > 0) {

@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); 
-const nodemailer=require('nodemailer');
 
 router.get('/users', async (req, res) => {
   try {
     const result = await pool.query('SELECT stan_id from stan WHERE zauzet = FALSE'); 
-    //console.log(result);
+    console.log(result);
     res.json(result.rows);
   } catch (err) {
     console.log("Keksic");
@@ -17,41 +16,15 @@ router.get('/users', async (req, res) => {
 
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {
-
-
   console.log("Received contact data");
+
   const { email, website, poruka } = req.body;
+  const slanjeUpita = await pool.query(`insert into UPIT (emailOsobe,Tekst) VALUES ('${email}','${poruka}')`); 
+  
 
-  const transpoter=nodemailer.createTransport({
-    service:'gmail',
-    host:"smtp.gmail.com",
-    port:587,
-    secure:false,
-    auth:{
-      user:process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASSWORD,
-    },
-  });
-
-  const mailOptions={
-    from:{
-      adress:process.env.GMAIL_USER
-    },
-    to:[email],
-    subject:`[UPIT] EasyFlat stranica od korisnika: ${req.session.user}`,
-    text:poruka
-
-  }
-  const sendMail =async (transpoter,mailOptions)=>{
-    try{
-      await transpoter.sendMail(mailOptions);
-      console.log("mail jeposlan");
-    }catch(error){
-      console.log(error);
-    }
-  }
-  sendMail(transpoter,mailOptions);
   try {
+
+
     //const query = 'INSERT INTO your_table_name (email, website, poruka) VALUES ($1, $2, $3) RETURNING *';
     //const values = [email, website, poruka];
 
