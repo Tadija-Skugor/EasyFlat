@@ -9,8 +9,12 @@ import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import KontaktDetalji from '../pages/KontaktDetalji';
+import CentarZaPoruke from '../pages/CentarZaPoruke';
 import PotvrdaSignupa from '../pages/additionalInfo';
 import UserPage from '../pages/KorisnikInfo';
+
+
+
 
 export default function Router() {
   const [isAuthenticated, setIsAuthenticated] = useState(null); 
@@ -142,6 +146,15 @@ export default function Router() {
               </AuthenticatedRoute>
             }
           />
+                    <Route
+            path="inbox"
+            element={
+              <AuthenticatedRoute>
+                <CentarZaPoruke />
+              </AuthenticatedRoute>
+            }
+          />
+
 
 
 
