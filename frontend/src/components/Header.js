@@ -38,7 +38,9 @@ export default function Header(){
               <li>
                 <a href="/signup">Ovo je link koji vodi na signup za stranicz</a>
               </li>
-
+              <li>
+                <a href="/inbox">Ovo je link koji vodi na inbox</a>
+              </li>
             </ul>
             
       </nav>

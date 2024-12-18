@@ -7,7 +7,48 @@ class SlanjePoruka {
         this.router = express.Router();
         this.router.get('/', this.getUserData.bind(this)); 
         this.router.get('/provjera', this.checkStatus.bind(this)); 
+        this.router.post('/obrisiRazgovor', this.obrisiRazgovor.bind(this));
+
     }
+
+
+
+    async obrisiRazgovor(req, res) {
+        try {
+            const { naslov, tekst } = req.body;
+    
+            const result = await pool.query(
+                'UPDATE upit SET rjeseno = true WHERE emailosobe = $1 AND tekst=$2  RETURNING *',
+                [naslov, tekst]
+            );
+    
+            res.status(200).json({ message: "delrtd", deletedMessage: result.rows[0] });
+    
+        } catch (error) {
+            console.error('Error deleting poruka:', error);
+            res.status(500).json({ message: 'Server se kuha.' });
+        }
+    }
+    
+    async obrisiRazgovor(req, res) {
+        try {
+            const { naslov, tekst } = req.body;
+    
+            // Query to delete the message from the database
+            const result = await pool.query(
+                'DELETE FROM upit WHERE emailosobe = $1 AND tekst = $2 RETURNING *',
+                [naslov, tekst]
+            );
+    
+            // Optionally, you can return the deleted message to confirm it was removed
+            res.status(200).json({ message: "Message deleted successfully", deletedMessage: result.rows[0] });
+    
+        } catch (error) {
+            console.error('Error deleting message:', error);
+            res.status(500).json({ message: 'Internal server error.' });
+        }
+    }
+    
 
     async getUserData(req, res) {
         try {
@@ -15,11 +56,6 @@ class SlanjePoruka {
                 'SELECT emailosobe, tekst FROM upit WHERE rjeseno = false'
             );
             console.log("nesto se vrti");
-
-            if (result.rows.length === 0) {
-                console.log('No unresolved messages found in the database.');
-                return res.status(200).json([]); 
-            }
 
             console.log('Unresolved messages:', result.rows);
 
