@@ -1,6 +1,7 @@
 // index.js
 const express = require('express');
 const cors = require('cors');
+const schedule = require('node-schedule');
 const bodyParser = require('body-parser');
 const router = require('./routes/router');
 const authRouter = require('./routes/oauth');
@@ -70,10 +71,26 @@ class Server {
     this.app.use('/', authMiddleware.isAuthenticated, router);
   }
 
+  async checkforArchiving() {
+    try {
+      const result = await pool.query('SELECT * FROM diskusija LIMIT 1');
+      console.log(result.rows);
+    } catch (err) {
+      console.error('Error executing query for archiving:', err.message);
+    }
+  }
+
   start() {
     this.app.listen(this.port, () => {
       console.log(`Server se pokreće na: http://localhost:${this.port}`);
     });
+    this.checkforArchiving()
+
+    schedule.scheduleJob('0 0 * * *', () => {
+      console.log('Running scheduled checkforArchiving at midnight...');
+      this.checkforArchiving();
+    });
+
   }
 }
 

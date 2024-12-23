@@ -20,6 +20,7 @@
     "google-auth-library": "^9.14.2",
     "js2xmlparser": "^5.0.0",
     "jsonwebtoken": "^9.0.2",
+    "node-schedule": "^2.1.1",
     "nodemon": "^3.1.7",
     "os": "^0.1.2",
     "pg": "^8.13.0"
