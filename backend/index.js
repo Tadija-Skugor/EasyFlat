@@ -74,15 +74,6 @@ class Server {
     this.app.use('/', authMiddleware.isAuthenticated, router);
   }
 
-  async checkforArchiving() {
-    try {
-      const result = await pool.query('SELECT * FROM diskusija LIMIT 1');
-      console.log(result.rows);
-    } catch (err) {
-      console.error('Error executing query for archiving:', err.message);
-    }
-  }
-
   start() {
     this.app.listen(this.port, () => {
       console.log(`Server se pokreće na: http://localhost:${this.port}`);

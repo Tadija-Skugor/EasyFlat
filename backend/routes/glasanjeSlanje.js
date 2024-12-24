@@ -52,13 +52,14 @@ router.post('/', async (req, res) => {
     console.log("Vrijednost vota je: " + vote);
 
     if (vote === "da") {
-        vote = "yes";
-    } else {
-        vote = "no";
+        vote = true;
+    } 
+    else if (vote === "ne") {
+        vote = false;
     }
     console.log("Vrijednost vota je: " + vote);
 
-    if (!userId || !GlasanjeId || !vote) {
+    if (!userId || !GlasanjeId) {
         return res.status(400).send('Svi podaci (userId, GlasanjeId, vote) moraju biti prisutni');
     }
 
@@ -77,12 +78,12 @@ router.post('/', async (req, res) => {
             [GlasanjeId, userId, vote]
         );
 
-        if (vote === 'yes') {
+        if (vote === true) {
             await pool.query(
                 'UPDATE glasanje_forma SET glasovanje_da = glasovanje_da + 1 WHERE id = $1',
                 [GlasanjeId]
             );
-        } else if (vote === 'no') {
+        } else if (vote === false) {
             await pool.query(
                 'UPDATE glasanje_forma SET glasovanje_ne = glasovanje_ne + 1 WHERE id = $1',
                 [GlasanjeId]
@@ -116,7 +117,7 @@ router.post('/dodavanjeGlasovanja', async (req, res) => {
     const datumStvoreno = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
 
     const query = `
-        INSERT INTO glasanje_forma (datum_stvoreno, datum_isteko, glasovanje_da, glasovanje_ne, naslov, kreator)
+        INSERT INTO glasanje_forma (datum_stvoreno, datum_istece, glasovanje_da, glasovanje_ne, naslov, kreator)
         VALUES ($1, $2, 0, 0, $3, $4)
         RETURNING id
     `;
@@ -125,7 +126,7 @@ router.post('/dodavanjeGlasovanja', async (req, res) => {
     try {
         const result = await pool.query(query, [datumStvoreno, datum_isteko, naslov, Kreator]);
 
-        console.log("Glasanje inserted successfully");
+        console.log("Glasanje inserted successfully; id = ", result.rows[0].id);
 
         res.status(201).json({
             success: true,

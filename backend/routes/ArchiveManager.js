@@ -7,7 +7,7 @@ class ArchiveManager {
     this.initializeRoutes();
   }
 
-  async checkforArchiving() {
+  async checkforArchiving() {         //funkcija koja se izvrsava jednom na dan i prebacuje stare diskusije u arhivu
     try {
       const result = await pool.query(`DELETE FROM diskusija WHERE zadnji_pristup <= CURRENT_DATE - INTERVAL '30 days' RETURNING *`);
 
@@ -38,12 +38,17 @@ class ArchiveManager {
     
   }
 
-  async archived(req, res) {
-    console.log("iz get /archive")
+  async getAllArchived(req, res) {
+    console.log("iz get /archive")      //funkcija za dohvat svih (ili prvih 10 kako vec) diskusija iz arhive
+  }
+
+  async getArchived(req, res){        //funkcija za dohvat svih podataka specificne diskusije iz arhive
+    console.log("iz post /archive")
   }
 
   initializeRoutes() {
-    this.router.get('/', this.archived.bind(this));
+    this.router.get('/', this.getAllArchived.bind(this));
+    this.router.post('/', this.getArchived.bind(this));
   }
 }
 
