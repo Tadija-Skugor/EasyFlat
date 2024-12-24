@@ -13,6 +13,8 @@ const adminRouter = require('./routes/admin');
 const dataRouter = require('./routes/discussionData');
 const glasanjeSlanje = require('./routes/glasanjeSlanje');
 const ucitavanjePoruka = require('./routes/ucitavanjePoruka'); // No need to pass pool anymore
+const archive = require('./routes/ArchiveManager')
+const archiveRouter = archive.router
 
 // Database connection
 const pool = require('./db');
@@ -64,6 +66,7 @@ class Server {
     this.app.use('/poruke', ucitavanjePoruka);  // No need for passing pool here
     this.app.use('/request', requestRouter);
     this.app.use('/admin', authMiddleware.isAuthenticated, adminRouter);
+    this.app.use('/archive', archiveRouter);
     this.app.use('/data', dataRouter);
     this.app.use('/protected', authMiddleware.isAuthenticated, authMiddleware.isVerifiedUser, (req, res) => {
       res.send({ message: 'You are authenticated and verified!' });
@@ -84,11 +87,11 @@ class Server {
     this.app.listen(this.port, () => {
       console.log(`Server se pokreće na: http://localhost:${this.port}`);
     });
-    this.checkforArchiving()
+    
+    archive.checkforArchiving()
 
     schedule.scheduleJob('0 0 * * *', () => {
-      console.log('Running scheduled checkforArchiving at midnight...');
-      this.checkforArchiving();
+      archive.checkforArchiving()
     });
 
   }
