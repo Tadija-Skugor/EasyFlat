@@ -17,7 +17,7 @@ class DiscussionRoutes {
 
       // Upit za dohvaćanje nedavnih diskusija
       const result = await pool.query(
-        'SELECT id, naslov, kreator, opis, datum, br_odgovora, id_forme FROM diskusija ORDER BY datum DESC LIMIT $1;',
+        'SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme FROM diskusija ORDER BY datum_stvorena DESC LIMIT $1;',
         [brojZatrazenihDiskusija]
       );
 
@@ -28,14 +28,14 @@ class DiscussionRoutes {
           naslov: row.naslov,
           kreator: row.kreator,
           opis: row.opis,
-          datum: row.datum,
+          datum_stvorena: row.datum_stvorena,
           br_odgovora: row.br_odgovora,
         };
 
         // Ako diskusija ima povezanu formu, dohvatite detalje forme
         if (row.id_forme !== null) {
           const formResult = await pool.query(
-            'SELECT id, naslov, glasova_da, glasova_ne, datum_isteklo FROM glasanje_forma WHERE id = $1',
+            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $1',
             [row.id_forme]
           );
           discussion.forma = formResult.rows[0];
