@@ -1,49 +1,69 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './Header.css'
 
-export default function Header(){
-  
-        return(
+export default function Header() {
+    return (
+        <nav className="nav-bar">
+            <div className="nav-left">
+                <Link to="/main">
+                    <img
+                        src={require('../assets/images/easyflatLogo.png')}
+                        alt="EasyFlat Logo"
+                        className="logo"
+                    />
+                </Link>
+                <p className="brand-name">EasyFlat</p>
+            </div>
 
+            <div className="nav-center">
+                <input type="text" placeholder="Search..." className="search-bar" />
+            </div>
 
-          <nav className="nav-bar">
-          <div className="nav-left">
-          <Link to="/main">
-            <img src={require('../assets/images/easyflatLogo.png')} alt="EasyFlat Logo" className="logo" />
-        </Link>
-              <p className="brand-name">EasyFlat</p>
-          </div>
-
-          <div className="nav-center">
-              <input type="text" placeholder="Search..." className="search-bar" />
-          </div>
-
-          <div className="nav-right">
-      <a href="/korisnikinfo">  
-        <img src={require('../assets/images/user.png')} alt="Profile" className="profile-image" />
-    </a>
-</div>
-
-
-          <ul>
-              <li>
-                <a href="/home">Ovo je univerzalno zaglavnje za starnice koje isto tako vodi na home</a>
-              </li>
-              <li>
-                <a href="/contact">Ovo je link koji vodi na kontakt stranicu</a>
-              </li>
-              <li>
-                <a href="/upit">Ovo je link koji vodi na upit za stranicz</a>
-              </li>
-              <li>
-                <a href="/signup">Ovo je link koji vodi na signup za stranicz</a>
-              </li>
-              <li>
-                <a href="/inbox">Ovo je link koji vodi na inbox</a>
-              </li>
-            </ul>
-            
-      </nav>
-
-        )
-        }
+            <div className="nav-right">
+                <Link to="/korisnikInfo">
+                    <img
+                        src={require('../assets/images/user.png')}
+                        alt="korisnikInfo"
+                        className="nav-icon"
+                    />
+                </Link>
+                <Link to="/inbox">
+                    <img
+                        src={require('../assets/images/mail-inbox-app.png')}
+                        alt="Inbox"
+                        className="nav-icon"
+                    />
+                </Link>
+                <Link to="/home">
+                    <img
+                        src={require('../assets/images/home.png')}
+                        alt="Home"
+                        className="nav-icon"
+                    />
+                </Link>
+                <Link to="/contact">
+                    <img
+                        src={require('../assets/images/phone-call.png')}
+                        alt="Contact"
+                        className="nav-icon"
+                    />
+                </Link>
+                <Link to="/upit">
+                    <img
+                        src={require('../assets/images/question.png')}
+                        alt="Upit"
+                        className="nav-icon"
+                    />
+                </Link>
+                <Link to="/signup">
+                    <img
+                        src={require('../assets/images/log-in.png')}
+                        alt="Sign Up"
+                        className="nav-icon"
+                    />
+                </Link>
+            </div>
+        </nav>
+    );
+}

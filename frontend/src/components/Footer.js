@@ -7,7 +7,7 @@ export default function Footer() {
             backgroundColor: "#f1f1f1",
             padding: "10px 0"
         }}>
-            <p>@EasyFlat FER 2024.</p>
+           <p> <a href="/contact">@EasyFlat FER 2024.</a> </p>
         </div>
     );
 }
