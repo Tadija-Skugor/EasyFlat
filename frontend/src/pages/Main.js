@@ -14,7 +14,7 @@ export default function Main() {
     const [newGlasanje, setNewGlasanje] = useState({
         naslov: '',
         opis: '',
-        datum_isteko: '',
+        datum_istece: '',
     });
 
     useEffect(() => {
@@ -128,7 +128,7 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
                 };
     
                 setGlasanjes((prev) => [...prev, newGlasanjeWithVotes]);  
-                setNewGlasanje({ naslov: '', opis: '', datum_isteko: '' });  
+                setNewGlasanje({ naslov: '', opis: '', datum_istece: '' });  
                 closeModal();  
     
                 // Optionally re-fetch Glasanjes or update specific fields if needed
@@ -155,7 +155,7 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
                         <p><strong>Kreator:</strong> {Glasanje.kreator}</p>
                         <div className="DatumIme">
                             <p>Datum kreiranja: {new Date(Glasanje.datum_stvoreno).toLocaleDateString()}</p>
-                            <p>Datum isteka: {new Date(Glasanje.datum_isteko).toLocaleDateString()}</p>
+                            <p>Datum isteka: {new Date(Glasanje.datum_istece).toLocaleDateString()}</p>
                         </div>
 
                         <div className="voting-box">
@@ -252,12 +252,12 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
                                 ></textarea>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="datum_isteko">Datum isteka:</label>
+                                <label htmlFor="datum_istece">Datum isteka:</label>
                                 <input
                                     type="date"
-                                    id="datum_isteko"
-                                    name="datum_isteko"
-                                    value={newGlasanje.datum_isteko}
+                                    id="datum_istece"
+                                    name="datum_istece"
+                                    value={newGlasanje.datum_istece}
                                     onChange={handleInputChange}
                                     required
                                 />
