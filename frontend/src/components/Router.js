@@ -1,5 +1,7 @@
 import Header from './Header';
 import Footer from './Footer';
+import NoHeader from './NoHeader';
+import NoFooter from './NoFooter';
 import Upit from '../pages/Upit';
 import Home from '../pages/Home';
 import Signup from '../pages/Signup';
@@ -13,27 +15,22 @@ import CentarZaPoruke from '../pages/CentarZaPoruke';
 import PotvrdaSignupa from '../pages/additionalInfo';
 import UserPage from '../pages/KorisnikInfo';
 
-
-
-
 export default function Router() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); 
-  const [isEmailVerified, setIsEmailVerified] = useState(null); // Track email verifikaciju
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isEmailVerified, setIsEmailVerified] = useState(null);
 
   const checkAuth = async () => {
     try {
       const response = await axios.get('http://localhost:4000/check-auth', {
         withCredentials: true,
       });
-      
-      // Update autentifikaciju
+
       setIsAuthenticated(response.data.isAuthenticated);
       setIsEmailVerified(response.data.isEmailVerified);
-      
     } catch (error) {
-      console.error("Authentication check failed:", error);
-      setIsAuthenticated(false); //slanje signala o stanju
-      setIsEmailVerified(false); 
+      console.error('Authentication check failed:', error);
+      setIsAuthenticated(false);
+      setIsEmailVerified(false);
     }
   };
 
@@ -41,87 +38,70 @@ export default function Router() {
     checkAuth();
   }, []);
 
-  const Layout = () => {
-    return (
-        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-            <Header />
-            <div style={{ flex: 1 }}>
-                <Outlet />
-            </div>
-            <Footer />
-        </div>
-    );
-};
+  const Layout = () => (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Header />
+      <div style={{ flex: 1 }}>
+        <Outlet />
+      </div>
+      <Footer />
+    </div>
+  );
 
-
-
-  
+  const NoLayout = () => (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <NoHeader />
+      <div style={{ flex: 1 }}>
+        <Outlet />
+      </div>
+      <NoFooter />
+    </div>
+  );
 
   const PrivateRoute = ({ children }) => {
     if (isAuthenticated === null || isEmailVerified === null) {
-      return <div>Loading...</div>; 
+      return <div>Loading...</div>;
     }
-    console.log(isAuthenticated);
-    console.log("------------------------");
-    console.log(isEmailVerified);
-
     if (!isAuthenticated || !isEmailVerified) {
       return <Navigate to="/signup" />;
     }
-    return children; 
+    return children;
   };
 
   const LoggedRoute = ({ children }) => {
     if (isAuthenticated === null || isEmailVerified === null) {
-      return <div>Loading...</div>; 
+      return <div>Loading...</div>;
     }
-
-    console.log(isAuthenticated);
-    console.log("------------------------");
-    console.log(isEmailVerified);
-
-    // Redirect to signup if not authenticated or email is not verified
     if (isAuthenticated && isEmailVerified) {
       return <Navigate to="/home" />;
     }
-    return children; // If authenticated and verified, render the children components
+    return children;
   };
+
   const AuthenticatedRoute = ({ children }) => {
-    if (isAuthenticated === null) {
+    if (isAuthenticated === null || isEmailVerified === null) {
       return <div>Loading...</div>;
     }
-    // If authenticated, render the children components; otherwise, redirect to signup
-    return isAuthenticated ? children : <Navigate to="/signup" />;
+    if (isAuthenticated && isEmailVerified) {
+      return <Navigate to="/home" />;
+    }
+    return children;
   };
+  
 
   const BrowserRouters = () => (
     <BrowserRouter>
       <Routes>
+        {/* Routes with Layout */}
         <Route path="/" element={<Layout />}>
-
-        <Route path="/" element={
-          <LoggedRoute>
-          <Signup />
-        </LoggedRoute>
-          } 
+        <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
           />
-          
-          
-          <Route 
-          path="signup" 
-          element={
-            <LoggedRoute>
-
-            <Signup />
-          </LoggedRoute>
-
-          } 
-          />
-          
-          
-
-
-          {/* Protected Routes */}
           <Route
             path="home"
             element={
@@ -130,7 +110,7 @@ export default function Router() {
               </PrivateRoute>
             }
           />
-                    <Route
+          <Route
             path="main"
             element={
               <PrivateRoute>
@@ -138,26 +118,6 @@ export default function Router() {
               </PrivateRoute>
             }
           />
-                    <Route
-            path="potvrda"
-            element={
-              <AuthenticatedRoute>
-                <PotvrdaSignupa />
-              </AuthenticatedRoute>
-            }
-          />
-                    <Route
-            path="inbox"
-            element={
-              <AuthenticatedRoute>
-                <CentarZaPoruke />
-              </AuthenticatedRoute>
-            }
-          />
-
-
-
-
           <Route
             path="contact"
             element={
@@ -188,6 +148,34 @@ export default function Router() {
               <PrivateRoute>
                 <UserPage />
               </PrivateRoute>
+            }
+          />
+          <Route
+            path="inbox"
+            element={
+              <AuthenticatedRoute>
+                <CentarZaPoruke />
+              </AuthenticatedRoute>
+            }
+          />
+        </Route>
+
+        {/* Tu cemo puknuti sve rute koje pocinju sa signup */}
+        <Route element={<NoLayout />}>
+          <Route
+            path="/signup"
+            element={
+              <LoggedRoute>
+                <Signup />
+              </LoggedRoute>
+            }
+          />
+          <Route
+            path="/potvrda"
+            element={
+              <AuthenticatedRoute>
+                <PotvrdaSignupa />
+              </AuthenticatedRoute>
             }
           />
         </Route>
