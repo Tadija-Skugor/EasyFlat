@@ -1,8 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Header.css'
+import './Header.css';
 
 export default function Header() {
+    const handleLogout = () => {
+        fetch('http://localhost:4000/logout', {
+            method: 'POST',
+            credentials: 'include', // kredencijali iako mislim da moze bez njih jer nema provjere na backendu
+        })
+            .then((response) => {
+                if (response.ok) {
+                    window.location.reload(); // Refresh jer te sam vrati na signup pa nema potrebe za redirekciju
+                } else {
+                    console.error('Logout failed');
+                }
+            })
+            .catch((error) => {
+                console.error('Error during logout:', error);
+            });
+    };
+
     return (
         <nav className="nav-bar">
             <div className="nav-left">
@@ -56,13 +73,14 @@ export default function Header() {
                         className="nav-icon"
                     />
                 </Link>
-                <Link to="/signup">
+                {/* Tipa za logout */}
+                <div onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     <img
                         src={require('../assets/images/log-in.png')}
-                        alt="Sign Up"
+                        alt="Log Out"
                         className="nav-icon"
                     />
-                </Link>
+                </div>
             </div>
         </nav>
     );
