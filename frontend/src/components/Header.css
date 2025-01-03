@@ -46,19 +46,18 @@
    outline: white 10px solid;
 }
 
-/* Add this section */
 .nav-right {
    display: flex;
-   gap: 15px; /* Space between icons */
+   gap: 15px; 
 }
 
 .nav-icon {
-   width: 32px; /* Adjust size as needed */
+   width: 32px; 
    height: 32px;
    cursor: pointer;
    transition: transform 0.2s ease;
 }
 
 .nav-icon:hover {
-   transform: scale(1.1); /* Slight zoom on hover */
+   transform: scale(1.1);
 }

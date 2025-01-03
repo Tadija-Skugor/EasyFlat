@@ -1,0 +1,178 @@
+#user-details {
+   width: 40%;
+   height:fit-content;
+   margin: 10px auto; 
+   padding: 20px;
+   border-radius: 12px;
+   background-color: #f4f7f6;
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+   font-size: large;
+   text-align: center;
+}
+
+.user-picture {
+   text-align: center;
+   margin-bottom: 20px;
+}
+
+.user-picture img {
+   border-radius: 100%;
+   border-color: #218838;
+   max-width: 100%;
+   max-height: 250px;
+   object-fit: cover;
+}
+
+.table-container {
+   width: 100%;
+   margin-bottom: 20px;
+   margin: 0 auto;
+}
+
+table {
+   width: 100%;
+   border-collapse: collapse;
+}
+
+table th, table td {
+   padding: 10px;
+   text-align: center;
+   border-bottom: 1px solid #ddd;
+}
+
+table th {
+   font-weight: bold;
+   color: #333;
+}
+
+.field {
+   display: flex;
+   justify-content: space-between;
+   padding: 10px 0;
+}
+
+.label {
+   font-weight: bold;
+   color: #333;
+}
+
+.inputs_form {
+   display: flex;
+   gap: 10px;
+}
+
+.editing_input {
+   width: 35%;
+   padding: 5px;
+   border-radius: 8px;
+   border: 1px solid #ddd;
+   font-size: 1em;
+   background-color: #fff;
+   box-sizing: border-box;
+}
+
+.button_row {
+   display: flex;
+   justify-content: flex-start;
+   gap: 10px;
+}
+
+button {
+   padding: 10px 15px;
+   border: none;
+   border-radius: 8px;
+   font-size: 1em;
+   cursor: pointer;
+   background-color: #4CAF50;
+   color: white;
+   text-align: center;
+}
+
+button:hover {
+   background-color: #45a049;
+}
+
+button:disabled {
+   background-color: #ccc;
+   cursor: not-allowed;
+}
+
+
+.admin-message {
+   width: 40%;
+   height: fit-content;
+   margin: 10px auto;
+   padding: 20px;
+   border-radius: 12px;
+   border-color: #218838;
+   background-color: #f4f7f6;
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.admin-message-header {
+   font-size: 1.25em;
+   font-weight: bold;
+   margin-bottom: 20px;
+   color: #333;
+}
+
+.admin-message-container {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+}
+
+.admin-message-item {
+   display: flex;
+   justify-content: space-between; 
+   align-items: center;
+   padding: 15px;
+   border-radius: 8px;
+   background-color: #fff;
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+   border: 1px solid #ddd;
+}
+
+.admin-message-left {
+   flex: 1; 
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   padding-left: 20px;
+   padding-right:  50px;
+}
+
+.admin-message-left p {
+   margin: 5px 0;
+}
+
+.admin-message-left strong {
+   font-size: 1.1em;
+   color: #333;
+}
+
+.admin-message-right {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 150px; 
+}
+
+.admin-message-right button {
+   padding: 8px 12px;
+   border: none;
+   border-radius: 8px;
+   background-color: #28a745;
+   color: white;
+   cursor: pointer;
+}
+
+.admin-message-right button:hover {
+   background-color: #218838;
+}
+
+.admin-message-right button:disabled {
+   background-color: #ccc;
+   cursor: not-allowed;
+}
+
