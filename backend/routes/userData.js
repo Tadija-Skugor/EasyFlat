@@ -8,11 +8,10 @@ class UserController {
         this.router.post('/', this.fetchUserData.bind(this));   
         this.router.post('/update', this.updateUserData.bind(this));   
         this.router.get('/inactive-users', this.fetchInactiveUsers.bind(this));
+        this.router.get('/active-users', this.fetchActiveUsers.bind(this));
         this.router.post('/activate-user', this.activateUser.bind(this));
+        this.router.post('/deactivate-user', this.deactivateUser.bind(this));
         this.router.get('/nerjesen_upit', this.fetchNerjeseniUpiti.bind(this));
-
-
-        
     }
 
     async activateUser(req, res) {
@@ -41,6 +40,32 @@ class UserController {
         }
     }
 
+    async deactivateUser(req, res) {
+        try {
+            const { email } = req.body;
+    
+            if (!email) {
+                return res.status(400).json({ message: 'Missing email.' });
+            }
+    
+            console.log(`Deactivating user with email: ${email}`);
+    
+            const result = await this.pool.query(
+                'UPDATE korisnik SET aktivan = false WHERE email = $1 RETURNING *',
+                [email]
+            );
+    
+            if (result.rowCount > 0) {
+                res.json({ message: 'User deactivated successfully.', user: result.rows[0] });
+            } else {
+                res.status(404).json({ message: 'User not found.' });
+            }
+        } catch (error) {
+            console.error('Error deactivating user:', error);
+            res.status(500).json({ message: 'Internal server error.' });
+        }
+    }
+
     async fetchInactiveUsers(req, res) {
         try {
             const result = await this.pool.query(
@@ -54,6 +79,23 @@ class UserController {
             }
         } catch (error) {
             console.error('Error fetching inactive users:', error);
+            res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    async fetchActiveUsers(req, res) {
+        try {
+            const result = await this.pool.query(
+                'SELECT ime, prezime, email, stan_id FROM korisnik WHERE aktivan = true'
+            );
+    
+            if (result.rows.length > 0) {
+                res.json(result.rows); 
+            } else {
+                res.json([]); 
+            }
+        } catch (error) {
+            console.error('Error fetching active users:', error);
             res.status(500).json({ message: 'Server error' });
         }
     }

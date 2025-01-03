@@ -180,19 +180,7 @@
   color: white;
 }
 
-.admin-message {
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #f0f8ff;
-  border: 1px solid #007bff;
-  border-radius: 5px;
-  font-size: 14px;
-  color: #007bff;
-  max-width: 850px; 
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-}
+
 
 .page-container {
   display: flex;

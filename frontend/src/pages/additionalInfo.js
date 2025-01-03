@@ -70,7 +70,7 @@ const AdditionalSignup = () => {
         withCredentials: true
       });
       alert("Your data has been sent for review.");
-      navigate('/home');
+      navigate('/home');  
     } catch (error) {
       console.error("Error during additional signup:", error);
     }
