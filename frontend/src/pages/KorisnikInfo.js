@@ -105,7 +105,7 @@ function AdminMessage({ inactiveUsers, activeUsers, onActivateUser, onDeactivate
                                     <p>Stan {user.stan_id}</p>
                                 </div>
                                 <div className="admin-message-right">
-                                    <button onClick={() => onDeactivateUser(user.email)}>Odbij</button>
+                                    <button onClick={() => onDeactivateUser(user.email)}>Deaktiviraj</button>
                                 </div>
                             </div>
                         ))}
