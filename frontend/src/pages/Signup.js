@@ -1,19 +1,10 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import za useNavigate
 import './SignUp.css';
 
 export default function Upit() {
-    const navigate = useNavigate(); // Inicijaliziraj useNavigate
-    const [ime, setIme] = useState('');
-    const [prezime, setPrezime] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordAgain, setPasswordAgain] = useState('');
-    const [poruka, setPoruka] = useState('');
+
     const [error, setError] = useState('');
-    const [selectValue, setSelectValue] = useState('');
-    const [selectData, setSelectData] = useState([]);
+
 
     useEffect(() => {
         document.body.classList.add('signup-body');
@@ -39,10 +30,6 @@ export default function Upit() {
         }
     };
     
-
-    const handleLoginRedirect = () => {
-        navigate('/login'); // Preusmjeri na /login
-    };
 
     return (
         <div className="signupdiv">

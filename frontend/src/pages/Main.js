@@ -120,23 +120,22 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
             });
     
             if (response.data.success) {
-                // Ensure the new Glasanje has correct vote counts initialized
                 const newGlasanjeWithVotes = {
                     ...response.data.newGlasanje,
-                    glasovanje_da: 0,  // Initialize vote counts to 0
+                    glasovanje_da: 0, // Initialize vote counts to 0
                     glasovanje_ne: 0,
+                    datum_stvoreno: response.data.newGlasanje.datum_stvoreno || new Date().toISOString(), // Set current date if not provided
                 };
     
-                setGlasanjes((prev) => [...prev, newGlasanjeWithVotes]);  
-                setNewGlasanje({ naslov: '', opis: '', datum_istece: '' });  
-                closeModal();  
-    
-                // Optionally re-fetch Glasanjes or update specific fields if needed
+                setGlasanjes((prev) => [...prev, newGlasanjeWithVotes]);
+                setNewGlasanje({ naslov: '', opis: '', datum_istece: '' });
+                closeModal();
             }
         } catch (error) {
             console.error('Greška prilikom dodavanja diskusije:', error);
         }
     };
+    
 
     if (loading) {
         return (
