@@ -74,10 +74,10 @@ export default function Upit() {
 
     return (
         <>
-            <h1 className="form-header">FORMA / KONTAKTIRAJTE NAS</h1>
+            <h1 className="form-header">Forma za obavijesti</h1>
             <form className="kontakt-forma" onSubmit={posao}>
-                <label>Email na koji želite odgovor</label>
-                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <label>Naslov</label>
+                <input type="text" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
                 <label>Poruka</label>
                 <textarea id="poruka" name="poruka" value={poruka} onChange={(e) => setPoruka(e.target.value)} required></textarea>

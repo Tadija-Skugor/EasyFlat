@@ -59,6 +59,13 @@ export default function Header() {
                         className="nav-icon"
                     />
                 </Link>
+                <Link to="/glasanje">
+                    <img
+                        src={'../assets/images/nekaslika.png'}
+                        alt="glasanje"
+                        className="nav-icon"
+                    />
+                </Link>
                 <Link to="/contact">
                     <img
                         src={require('../assets/images/phone-call.png')}

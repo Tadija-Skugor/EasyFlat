@@ -5,7 +5,9 @@ import NoFooter from './NoFooter';
 import Upit from '../pages/Upit';
 import Home from '../pages/Home';
 import Signup from '../pages/Signup';
+import Glasanje from '../pages/Glasanje';
 import Main from '../pages/Main';
+
 import Contact from '../pages/Contact';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -111,6 +113,14 @@ export default function Router() {
             }
           />
           <Route
+            path="glasanje"
+            element={
+              <PrivateRoute>
+                <Glasanje />
+              </PrivateRoute>
+            }
+          />
+                    <Route
             path="main"
             element={
               <PrivateRoute>
@@ -153,9 +163,9 @@ export default function Router() {
           <Route
             path="inbox"
             element={
-              <AuthenticatedRoute>
+              <PrivateRoute>
                 <CentarZaPoruke />
-              </AuthenticatedRoute>
+              </PrivateRoute>
             }
           />
         </Route>
