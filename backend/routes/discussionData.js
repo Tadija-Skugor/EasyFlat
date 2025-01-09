@@ -101,8 +101,10 @@ class DiscussionRoutes {
         updatedOdgovori = xmlData;
       }
 
+      const currentDate = new Date().toISOString().split('T')[0];
+
       await pool.query(
-        'UPDATE diskusija SET odgovori = $1 WHERE id = $2', [updatedOdgovori, id_diskusije]
+        'UPDATE diskusija SET odgovori = $1, zadnji_pristup = $3 WHERE id = $2', [updatedOdgovori, id_diskusije, currentDate]
       );
       
       // možda stavit drugi response
