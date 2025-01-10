@@ -4,45 +4,28 @@ import './Header.css';
 
 export default function Header() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
 
     const handleSearchKeyDown = (event) => {
         if (event.key === 'Enter') {
-            if (searchQuery.trim()) {
-                fetchSearchResults(searchQuery.trim());
-            }
-        }
-    };
-
-    const fetchSearchResults = async (query) => {
-        try {
-            const response = await fetch(`http://localhost:4000/search?query=${encodeURIComponent(query)}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                setSearchResults(data); // Save the results in the state
-                navigate('/search-results', { state: { results: data, query } }); // Redirect to results page
+            const trimmedQuery = searchQuery.trim();
+            if (trimmedQuery) {
+                navigate(`/home?search_query=${encodeURIComponent(trimmedQuery)}`);
             } else {
-                console.error('Error fetching search results:', response.statusText);
+                navigate('/home'); // Navigate to /home if the input is empty
             }
-        } catch (error) {
-            console.error('Error during fetch:', error);
+            setSearchQuery(''); // Clear the input field
         }
     };
 
     const handleLogout = () => {
         fetch('http://localhost:4000/logout', {
             method: 'POST',
-            credentials: 'include',
+            credentials: 'include', // kredencijali iako mislim da moze bez njih jer nema provjere na backendu
         })
             .then((response) => {
                 if (response.ok) {
-                    window.location.reload();
+                    window.location.reload(); // Refresh jer te sam vrati na signup pa nema potrebe za redirekciju
                 } else {
                     console.error('Logout failed');
                 }
@@ -119,6 +102,7 @@ export default function Header() {
                         className="nav-icon"
                     />
                 </Link>
+                {/* Tipa za logout */}
                 <div onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     <img
                         src={require('../assets/images/log-in.png')}
