@@ -1,16 +1,48 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 export default function Header() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const navigate = useNavigate();
+
+    const handleSearchKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            if (searchQuery.trim()) {
+                fetchSearchResults(searchQuery.trim());
+            }
+        }
+    };
+
+    const fetchSearchResults = async (query) => {
+        try {
+            const response = await fetch(`http://localhost:4000/search?query=${encodeURIComponent(query)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setSearchResults(data); // Save the results in the state
+                navigate('/search-results', { state: { results: data, query } }); // Redirect to results page
+            } else {
+                console.error('Error fetching search results:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+        }
+    };
+
     const handleLogout = () => {
         fetch('http://localhost:4000/logout', {
             method: 'POST',
-            credentials: 'include', // kredencijali iako mislim da moze bez njih jer nema provjere na backendu
+            credentials: 'include',
         })
             .then((response) => {
                 if (response.ok) {
-                    window.location.reload(); // Refresh jer te sam vrati na signup pa nema potrebe za redirekciju
+                    window.location.reload();
                 } else {
                     console.error('Logout failed');
                 }
@@ -34,7 +66,14 @@ export default function Header() {
             </div>
 
             <div className="nav-center">
-                <input type="text" placeholder="Search..." className="search-bar" />
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    className="search-bar"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleSearchKeyDown}
+                />
             </div>
 
             <div className="nav-right">
@@ -80,7 +119,6 @@ export default function Header() {
                         className="nav-icon"
                     />
                 </Link>
-                {/* Tipa za logout */}
                 <div onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     <img
                         src={require('../assets/images/log-in.png')}
