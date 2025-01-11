@@ -117,11 +117,23 @@ class DiscussionRoutes {
     }
   }
 
+  // Metoda za dodavanje novog glasanja diskusiji.
+  async bindNewForm(req, res) {
+    try {
+      
+    } catch (error) {
+
+      console.error("Greška u /data/bindNewForm", error.message);
+      res.status(500).send('Greška na serveru');
+    }
+  }
+
   // Inicijaliziraj rute
   initializeRoutes() {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
+    this.router.post('/bindNewForm', this.bindNewForm.bind(this));
   }
 }
 
