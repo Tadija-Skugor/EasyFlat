@@ -117,6 +117,40 @@ class DiscussionRoutes {
     }
   }
 
+  // Metoda za dodavanje diskusije
+  async addNewDiscussion(req, res) {
+    try{
+      // Dohvati podatke.
+      let {naslov,  opis, br_odgovora, id_forme} = req.query;
+
+      // Verificiraj podatke.
+      if (!naslov || !opis) { //ostali mogu biti null
+        console.log("Greska pri verifikaciji podataka");
+        return res.status(400).json({ message: 'All fields are required.' });
+      }
+
+      console.log("Primljen zahtjev za dodavanje diskusije");
+      console.log("    naslov: ", naslov);
+      console.log("    opis: ", opis);
+      console.log("    br_odgovora: ", br_odgovora);
+      console.log("    id_forme: ", id_forme);
+
+      res.status(201).json({
+        success: true,
+        newDiscussion : {
+            naslov: naslov,
+            opis: opis,
+            br_odgovora: br_odgovora,
+            id_forme: id_forme,
+        }
+      });
+    } catch (error) {
+
+      console.error("Greška u /data/addNewDiscussion", error.message);
+      res.status(500).send('Greška na serveru');
+    }
+  }
+
   // Metoda za dodavanje glasanja diskusiji.
   async bindNewForm(req, res) {
     try {
@@ -182,8 +216,11 @@ class DiscussionRoutes {
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
     this.router.post('/bindNewForm', this.bindNewForm.bind(this));
+    this.router.get('/addNewDiscussion', this.addNewDiscussion.bind(this));
   }
 }
+
+
 
 // Izvezi instancu DiscussionRoutes
 module.exports = new DiscussionRoutes().router;
