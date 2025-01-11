@@ -1,0 +1,44 @@
+/* Styles for the main discussion container */
+.discussions-wrapper {
+    margin: 20px;
+}
+
+/* Individual discussion box */
+.discussion-box {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 50px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Discussion title */
+.discussion-box h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+/* Discussion metadata */
+.discussion-box p {
+    margin: 5px 0;
+    color: #555;
+}
+
+/* Button for viewing responses */
+.discussion-box button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #196bb5; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.discussion-box button:hover {
+    background-color: #104675;
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Main.css';
 
 export default function Home() {
     const [discussions, setDiscussions] = useState([]);
@@ -61,20 +62,19 @@ export default function Home() {
     }
 
     return (
-        <div>
-            <div>
-                {discussions.map((discussion) => (
-                    <div key={discussion.id} style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '50px' }}>
-                        <h3>{discussion.naslov}</h3>
-                        <p><strong>Autor:</strong> {discussion.kreator}</p>
-                        <p><strong>Opis:</strong> {discussion.opis}</p>
-                        <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
-                        <button onClick={() => fetchResponses(discussion.id)}>Vidi odgovore</button>
+        <div className="discussions-wrapper">
+            {discussions.map((discussion) => (
+                <div key={discussion.id} className="discussion-box">
+                    <h3>{discussion.naslov}</h3>
+                    <p><strong>Autor:</strong> {discussion.kreator}</p>
+                    <p><strong>Opis:</strong> {discussion.opis}</p>
+                    <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
+                    <button onClick={() => fetchResponses(discussion.id)}>Vidi odgovore</button>
                     </div>
                 ))}
-            </div>
-
-            
         </div>
+
     );
 }
+
+
