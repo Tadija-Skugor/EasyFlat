@@ -148,11 +148,8 @@ class DiscussionRoutes {
         RETURNING id
       `;
 
-      console.log("FLAG1");
       const result = await pool.query(query, [naslov, opis, KreatorEmail, datum_stvorena, datum_stvorena, br_odgovora, id_forme]);
-      console.log("FLAG2");
       const id = result.rows[0].id;
-      console.log("FLAG3");
 
       // Posalji response.
       res.status(201).json({
