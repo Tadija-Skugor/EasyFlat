@@ -102,7 +102,11 @@ router.post('/dodavanjeGlasovanja', async (req, res) => {
     console.log("Backend se vrti kad prima ");
     
     let { naslov, opis, datum_istece } = req.body;  
-    const Kreator = req.session.ime;  
+    const KreatorEmail = req.session.email;  
+    let result = await pool.query(
+        'SELECT ime FROM korisnik WHERE email = $1', [KreatorEmail]
+    );
+    const Kreator = result.rows[0].ime;
 
     console.log(req.body);
     console.log(naslov);
