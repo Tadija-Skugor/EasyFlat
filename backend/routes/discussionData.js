@@ -117,10 +117,21 @@ class DiscussionRoutes {
     }
   }
 
-  // Metoda za dodavanje novog glasanja diskusiji.
+  // Metoda za dodavanje glasanja diskusiji.
   async bindNewForm(req, res) {
     try {
+
+      // DVA PRISTUPA: 1) vec znamo id diskusije i stvorenog glasanja      2) stvaramo novo glasanje pri pozivu ove metode
       
+      // PRISTUP 1;
+      // Samo dodaj u bazi u diskusiju s id-em id_diskusije id_glasanja
+
+      // PRISTUP 2:
+      // Stvori novo glasanje sa (Nasolovom, Opisom, DatumomIsteka)
+      // Iz baze procitaj id dodijeljen novom glasanju
+      // U bazu upisi procitani id glasanja u stupac id_forme diskusiji kojoj dodajemo glasanje
+
+      res.json("Diskusija i glasanje poezani");
     } catch (error) {
 
       console.error("Greška u /data/bindNewForm", error.message);
