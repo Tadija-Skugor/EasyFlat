@@ -120,16 +120,27 @@ class DiscussionRoutes {
   // Metoda za dodavanje glasanja diskusiji.
   async bindNewForm(req, res) {
     try {
+      // Dohvati podatke za glasanje.
+      let { naslov, opis, datum_istece } = req.query;  
+      const KreatorEmail = req.session.email;  
+      let result = await pool.query(
+        'SELECT ime FROM korisnik WHERE email = $1', [KreatorEmail]
+      );
+      const Kreator = result.rows[0].ime;
 
-      // DVA PRISTUPA: 1) vec znamo id diskusije i stvorenog glasanja      2) stvaramo novo glasanje pri pozivu ove metode
-      
-      // PRISTUP 1;
-      // Samo dodaj u bazi u diskusiju s id-em id_diskusije id_glasanja
+      console.log("primljen zahtjev za dodavanje glasabha diskuciji sa parametrima:");
+      console.log("    naslov: ", naslov);
+      console.log("    opis: ", opis);
+      console.log("    datum_istece: ", datum_istece);
+      console.log("    Kreator: ", Kreator);
 
-      // PRISTUP 2:
-      // Stvori novo glasanje sa (Nasolovom, Opisom, DatumomIsteka)
-      // Iz baze procitaj id dodijeljen novom glasanju
-      // U bazu upisi procitani id glasanja u stupac id_forme diskusiji kojoj dodajemo glasanje
+      // Verificiraj dohvacene podatke.
+      if (!naslov || !opis || !datum_istece || !Kreator) {
+        console.log("Greska pri verifikaciji podataka");
+        return res.status(400).json({ message: 'All fields are required.' });
+      }
+
+      const datumStvoreno = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
 
       res.json("Diskusija i glasanje poezani");
     } catch (error) {
@@ -144,7 +155,7 @@ class DiscussionRoutes {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
-    this.router.post('/bindNewForm', this.bindNewForm.bind(this));
+    this.router.get('/bindNewForm', this.bindNewForm.bind(this));
   }
 }
 
