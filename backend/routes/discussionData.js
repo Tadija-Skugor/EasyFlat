@@ -121,28 +121,54 @@ class DiscussionRoutes {
   async bindNewForm(req, res) {
     try {
       // Dohvati podatke za glasanje.
-      let { naslov, opis, datum_istece } = req.query;  
+      let { naslov, opis, datum_istece, id_diskusije } = req.body;  
       const KreatorEmail = req.session.email;  
-      let result = await pool.query(
+      const result = await pool.query(
         'SELECT ime FROM korisnik WHERE email = $1', [KreatorEmail]
       );
       const Kreator = result.rows[0].ime;
 
       console.log("primljen zahtjev za dodavanje glasabha diskuciji sa parametrima:");
       console.log("    naslov: ", naslov);
-      console.log("    opis: ", opis);
+      console.log("    opis: ", opis);              // Ovo bi mogao biti nepotreban podatak posto trenutno ne spremamo takvo nesto u bazu.
       console.log("    datum_istece: ", datum_istece);
+      console.log("    id_diskusije: ", id_diskusije);
       console.log("    Kreator: ", Kreator);
 
       // Verificiraj dohvacene podatke.
-      if (!naslov || !opis || !datum_istece || !Kreator) {
+      if (!naslov || !opis || !datum_istece || !Kreator || !id_diskusije) {
         console.log("Greska pri verifikaciji podataka");
         return res.status(400).json({ message: 'All fields are required.' });
       }
 
       const datumStvoreno = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
+      
+      // Dodaj glasanje u bazu.
+      const query = `
+        INSERT INTO glasanje_forma (datum_stvoreno, datum_istece, glasovanje_da, glasovanje_ne, naslov, kreator)
+        VALUES ($1, $2, 0, 0, $3, $4)
+        RETURNING id
+      `;
 
-      res.json("Diskusija i glasanje poezani");
+      const result2 = await pool.query(query, [datumStvoreno, datum_istece, naslov, Kreator]);
+      const idGlasanja = result2.rows[0].id;
+
+      console.log("Glasanje inserted successfully; id = ", idGlasanja);
+
+      // Zapisi id glasanja u diskusiju.
+      await pool.query('UPDATE diskusija SET id_forme = $1 WHERE id = $2', [idGlasanja, id_diskusije]);
+      
+      console.log("Diskusija i glasanje povezani");
+      res.status(201).json({
+        success: true,
+        newGlasanje: {
+            id: idGlasanja,  
+            naslov: naslov,
+            opis: opis,
+            datum_istece: datum_istece,
+            kreator: Kreator,
+        },
+    });
     } catch (error) {
 
       console.error("Greška u /data/bindNewForm", error.message);
@@ -155,7 +181,7 @@ class DiscussionRoutes {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
-    this.router.get('/bindNewForm', this.bindNewForm.bind(this));
+    this.router.post('/bindNewForm', this.bindNewForm.bind(this));
   }
 }
 
