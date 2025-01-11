@@ -121,10 +121,12 @@ class DiscussionRoutes {
   async addNewDiscussion(req, res) {
     try{
       // Dohvati podatke.
-      let {naslov,  opis, br_odgovora, id_forme} = req.query;
-
+      let {naslov,  opis, br_odgovora, id_forme} = req.body;
+      const KreatorEmail = req.session.email;
+      const datum_stvorena = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
+     
       // Verificiraj podatke.
-      if (!naslov || !opis) { //ostali mogu biti null
+      if (!naslov) { //ostali mogu biti null
         console.log("Greska pri verifikaciji podataka");
         return res.status(400).json({ message: 'All fields are required.' });
       }
@@ -134,14 +136,36 @@ class DiscussionRoutes {
       console.log("    opis: ", opis);
       console.log("    br_odgovora: ", br_odgovora);
       console.log("    id_forme: ", id_forme);
+      console.log("    datum_stvorena: ", datum_stvorena);
+      console.log("    zadnji_pristup: ", datum_stvorena);
+      console.log("    kreator: ", KreatorEmail);
 
+
+      // Upisi novu diskusiju u bazu.
+      const query = `
+        INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme)
+        VALUES ($1, $2, $3, $4, $5, $6, NULL, $7)
+        RETURNING id
+      `;
+
+      console.log("FLAG1");
+      const result = await pool.query(query, [naslov, opis, KreatorEmail, datum_stvorena, datum_stvorena, br_odgovora, id_forme]);
+      console.log("FLAG2");
+      const id = result.rows[0].id;
+      console.log("FLAG3");
+
+      // Posalji response.
       res.status(201).json({
         success: true,
         newDiscussion : {
+            id: id,
             naslov: naslov,
             opis: opis,
+            kreator: KreatorEmail,
             br_odgovora: br_odgovora,
             id_forme: id_forme,
+            datum_stvorena: datum_stvorena,
+            zadnji_pristup: datum_stvorena,
         }
       });
     } catch (error) {
@@ -216,7 +240,7 @@ class DiscussionRoutes {
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
     this.router.post('/bindNewForm', this.bindNewForm.bind(this));
-    this.router.get('/addNewDiscussion', this.addNewDiscussion.bind(this));
+    this.router.post('/addNewDiscussion', this.addNewDiscussion.bind(this));
   }
 }
 
