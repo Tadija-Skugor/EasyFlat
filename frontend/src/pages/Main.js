@@ -138,11 +138,13 @@ export default function Home() {
 
     return (
         <div className="home-container">
+            {/*
             <h1>HOME STRANICA</h1>
             <p>
                 Ovdje ce se nalaziti naša početna home stranica. U njoj ce biti diskusije.<br />
                 Neki message board i voting sustav
             </p>
+            */}
 
             {loading ? (
                 <p>Loading search results...</p>
@@ -164,7 +166,6 @@ export default function Home() {
                 {discussions.map((discussion) => (
                     <div key={discussion.id} className="discussion-box">
                         <h3>{discussion.naslov}</h3>
-                        <p><strong>Id:</strong> {discussion.id}</p> {/* ovo je samo za laksu provjeru jel sve radi: izbrisati */}
                         <p><strong>Autor:</strong> {discussion.kreator}</p>
                         <p><strong>Opis:</strong> {discussion.opis}</p>
                         <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
@@ -179,14 +180,13 @@ export default function Home() {
                                     <ul>
                                         {responses.map((response, index) => (
                                             <li key={index}>
-                                                <p><strong>Broj odgovora:</strong> {responses.length}</p> {/* ovo je samo za laksu provjeru jel sve radi: izbrisati */}
                                                 <p><strong>Korisnik:</strong> {response.korisnik}</p>
                                                 <p><strong>Tekst:</strong> {response.tekst}</p>
                                             </li>
                                         ))}
                                     </ul>
                                 ) : (
-                                    <p>No responses yet.</p>
+                                    <p>Još nema odgovora.</p>
                                 )}
                                 <form onSubmit={handleAddResponse}>
                                     <textarea
