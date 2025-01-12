@@ -93,6 +93,12 @@ export default function Home() {
         e.preventDefault();
         if (!selectedDiscussionId) return;
 
+        // ne moze se poslati odgovor ako je polje odgovora prazno 
+        if (!newResponse.trim()) {
+            console.log('The textarea is empty. Please enter a response before submitting.');
+            return; 
+        }
+
         try {
             const response = await axios.post('http://localhost:4000/data/discussionAddResponse', {
                 id_diskusije: selectedDiscussionId,
