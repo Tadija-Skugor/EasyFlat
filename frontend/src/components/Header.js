@@ -10,9 +10,11 @@ export default function Header() {
         if (event.key === 'Enter') {
             const trimmedQuery = searchQuery.trim();
             if (trimmedQuery) {
-                navigate(`/home?search_query=${encodeURIComponent(trimmedQuery)}`);
+                navigate(`/main?search_query=${encodeURIComponent(trimmedQuery)}`);
             } else {
-                navigate('/home'); // Navigate to /home if the input is empty
+                navigate('/main'); // Navigate to /home if the input is empty
+                window.location.reload();
+
             }
             setSearchQuery(''); // Clear the input field
         }
