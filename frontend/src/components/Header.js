@@ -76,7 +76,7 @@ export default function Header() {
                         className="nav-icon"
                     />
                 </Link>
-                <Link to="/home">
+                <Link to="/main">
                     <img
                         src={require('../assets/images/home.png')}
                         alt="Home"
@@ -85,7 +85,7 @@ export default function Header() {
                 </Link>
                 <Link to="/glasanje">
                     <img
-                        src={'../assets/images/nekaslika.png'}
+                        src={require('../assets/images/vote.png')}
                         alt="glasanje"
                         className="nav-icon"
                     />
