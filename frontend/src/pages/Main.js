@@ -66,11 +66,25 @@ export default function Home() {
                 params: { id_diskusije: discussionId },
             });
 
-            setResponses(response.data); // Set as a string, no array
+            // spremi sve odgovore u wrapper element 'odgovori' kako bi parseFromString kod radio ispravno
+            const wrappedXmlString = `<odgovori>${response.data}</odgovori>`;
+    
+            // parsiranje XMLa u DOM objekt
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(wrappedXmlString, "text/xml");
+    
+            // izdvajanje odgovora iz DOM objekta
+            const responseElements = xmlDoc.getElementsByTagName("odgovor");
+            const parsedResponses = Array.from(responseElements).map((responseElement) => ({
+                korisnik: responseElement.getElementsByTagName("korisnik")[0].textContent,
+                tekst: responseElement.getElementsByTagName("tekst")[0].textContent,
+            }));
+    
+            setResponses(parsedResponses);
             setSelectedDiscussionId(discussionId);
         } catch (error) {
-            console.error('Error fetching responses:', error);
-            setResponses(''); // Reset responses to empty string on error
+            console.error("Error fetching responses:", error);
+            setResponses([]); // Reset responses to empty string on error
         }
     };
 
@@ -144,6 +158,7 @@ export default function Home() {
                 {discussions.map((discussion) => (
                     <div key={discussion.id} className="discussion-box">
                         <h3>{discussion.naslov}</h3>
+                        <p><strong>Id:</strong> {discussion.id}</p> {/* ovo je samo za laksu provjeru jel sve radi: izbrisati */}
                         <p><strong>Autor:</strong> {discussion.kreator}</p>
                         <p><strong>Opis:</strong> {discussion.opis}</p>
                         <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
@@ -154,8 +169,16 @@ export default function Home() {
                         {selectedDiscussionId === discussion.id && (
                             <div className="responses-section">
                                 <h3>Odgovori na diskusiju</h3>
-                                {responses ? (
-                                    <p>{responses}</p> // If responses is a string, just display it
+                                {responses.length > 0 ? (
+                                    <ul>
+                                        {responses.map((response, index) => (
+                                            <li key={index}>
+                                                <p><strong>Broj odgovora:</strong> {responses.length}</p> {/* ovo je samo za laksu provjeru jel sve radi: izbrisati */}
+                                                <p><strong>Korisnik:</strong> {response.korisnik}</p>
+                                                <p><strong>Tekst:</strong> {response.tekst}</p>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 ) : (
                                     <p>No responses yet.</p>
                                 )}
