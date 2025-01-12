@@ -42,3 +42,18 @@
 .discussion-box button:hover {
     background-color: #104675;
 }
+
+.responses-section ul {
+    list-style-type: none; /* Remove default bullet points */
+    border: none; /* Removed unnecessary border from the <ul> */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Ensure consistent alignment */
+}
+
+.responses-section li {
+    border: 1px solid #ccc; /* Add a border around each <li> for separation */
+    margin-bottom: 10px; /* Add space between each list item */
+    padding: 10px; /* Add padding inside the <li> for better readability */
+    border-radius: 5px; /* Add rounded corners for a cleaner look */
+    background-color: #f9f9f9; /* Add a subtle background color */
+}
