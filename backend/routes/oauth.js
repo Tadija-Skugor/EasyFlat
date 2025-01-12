@@ -64,7 +64,7 @@ class OAuthRoutes {
 
       // Conditional redirection based on email status
       if (emailStatus === true) {
-        res.redirect('http://localhost:5000/home'); // Redirect to home if aktivan is true
+        res.redirect('http://localhost:5000/main'); // Redirect to home if aktivan is true
       } else if (emailStatus === false) {
         // If the user is inactive, destroy the session and display a message
         req.session.destroy((err) => {
