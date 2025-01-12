@@ -53,7 +53,7 @@ export default function Header() {
             <div className="nav-center">
                 <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder="Pretraži diskusije..."
                     className="search-bar"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
