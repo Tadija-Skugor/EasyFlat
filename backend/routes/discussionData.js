@@ -12,12 +12,13 @@ class DiscussionRoutes {
   // Metoda za dohvaćanje nedavnih diskusija
   async fetchAllDiscussions(req, res) {
     try {
+      console.log(req.session);
       // Dobij broj diskusija za dohvatiti iz tijela zahtjeva ili zadano postavi na 10
       const brojZatrazenihDiskusija = req.query.brojZatrazenihDiskusija || 10;
 
       // Upit za dohvaćanje nedavnih diskusija
       const result = await pool.query(
-        'SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme FROM diskusija ORDER BY datum_stvorena DESC LIMIT $1;',
+        'SELECT id, naslov, kreator, opis, datum_stvorenja, br_odgovora, id_forme FROM diskusija ORDER BY datum_stvorenja DESC LIMIT $1;',
         [brojZatrazenihDiskusija]
       );
 
@@ -28,7 +29,7 @@ class DiscussionRoutes {
           naslov: row.naslov,
           kreator: row.kreator,
           opis: row.opis,
-          datum_stvorena: row.datum_stvorena,
+          datum_stvorenja: row.datum_stvorenja,
           br_odgovora: row.br_odgovora,
         };
 
@@ -175,13 +176,15 @@ class DiscussionRoutes {
     }
   }
 
+
+
   // Metoda za dodavanje diskusije
   async addNewDiscussion(req, res) {
     try{
       // Dohvati podatke.
       let {naslov,  opis, br_odgovora, id_forme} = req.body;
       const KreatorEmail = req.session.email;
-      const datum_stvorena = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
+      const datum_stvorenja = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
      
       // Verificiraj podatke.
       if (!naslov) { //ostali mogu biti null
@@ -194,19 +197,19 @@ class DiscussionRoutes {
       console.log("    opis: ", opis);
       console.log("    br_odgovora: ", br_odgovora);
       console.log("    id_forme: ", id_forme);
-      console.log("    datum_stvorena: ", datum_stvorena);
-      console.log("    zadnji_pristup: ", datum_stvorena);
+      console.log("    datum_stvorenja: ", datum_stvorenja);
+      console.log("    zadnji_pristup: ", datum_stvorenja);
       console.log("    kreator: ", KreatorEmail);
 
 
       // Upisi novu diskusiju u bazu.
       const query = `
-        INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme)
+        INSERT INTO diskusija (naslov, opis, kreator, datum_stvorenja, zadnji_pristup, br_odgovora, odgovori, id_forme)
         VALUES ($1, $2, $3, $4, $5, $6, NULL, $7)
         RETURNING id
       `;
 
-      const result = await pool.query(query, [naslov, opis, KreatorEmail, datum_stvorena, datum_stvorena, br_odgovora, id_forme]);
+      const result = await pool.query(query, [naslov, opis, KreatorEmail, datum_stvorenja, datum_stvorenja, br_odgovora, id_forme]);
       const id = result.rows[0].id;
 
       // Posalji response.
@@ -219,8 +222,8 @@ class DiscussionRoutes {
             kreator: KreatorEmail,
             br_odgovora: br_odgovora,
             id_forme: id_forme,
-            datum_stvorena: datum_stvorena,
-            zadnji_pristup: datum_stvorena,
+            datum_stvorenja: datum_stvorenja,
+            zadnji_pristup: datum_stvorenja,
         }
       });
     } catch (error) {
@@ -289,6 +292,64 @@ class DiscussionRoutes {
     }
   }
 
+  async addDiscussion(req, res) {
+    console.log("Doslo je do tu:", req.session)
+    try{
+      // Dohvati podatke.
+      let {naslov,  opis} = req.body;
+      const KreatorEmail = req.session.ime;
+      console.log("Ovo je ime: ",req.session.ime);
+      console.log(KreatorEmail);
+      const datum_stvorenja = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
+     
+      // Verificiraj podatke.
+      if (!naslov) { //ostali mogu biti null
+        console.log("Greska pri verifikaciji podataka");
+        return res.status(400).json({ message: 'All fields are required.' });
+      }
+
+      console.log("Primljen zahtjev za dodavanje diskusije");
+      console.log("    naslov: ", naslov);
+      console.log("    opis: ", opis);
+      console.log("    datum_stvorenja: ", datum_stvorenja);
+      console.log("    zadnji_pristup: ", datum_stvorenja);
+      console.log("    kreator: ", KreatorEmail);
+
+
+      const query = `
+      INSERT INTO diskusija (naslov, opis, kreator, datum_stvorenja, zadnji_pristup, br_odgovora, odgovori, id_forme)
+      VALUES ($1, $2, $3, $4, $5, 0, NULL, NULL)
+      RETURNING id
+    `;
+    const result = await pool.query(query, [
+      naslov,
+      opis,
+      KreatorEmail,
+      datum_stvorenja,
+      datum_stvorenja
+    ]);
+    
+      const id = result.rows[0].id;
+
+      // Posalji response.
+      res.status(201).json({
+        success: true,
+        newDiscussion : {
+            id: id,
+            naslov: naslov,
+            opis: opis,
+            kreator: KreatorEmail,
+            datum_stvorenja: datum_stvorenja,
+            zadnji_pristup: datum_stvorenja,
+        }
+      });
+    } catch (error) {
+
+      console.error("Greška u /data/addDiscussion", error.message);
+      res.status(500).send('Greška na serveru');
+    }
+  }
+
   // Inicijaliziraj rute
   initializeRoutes() {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
@@ -297,6 +358,8 @@ class DiscussionRoutes {
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
     this.router.post('/bindNewForm', this.bindNewForm.bind(this));
     this.router.post('/addNewDiscussion', this.addNewDiscussion.bind(this));
+    this.router.post('/addDiscussion', this.addDiscussion.bind(this)); //dodavanje nove diskusije preko forme
+    
   }
 }
 
