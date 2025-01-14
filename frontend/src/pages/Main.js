@@ -111,6 +111,7 @@ export default function Home() {
         }
     };
 
+    // ova funkcija jos ne radi dobro, treba se popraviti
     const handleVoteSubmit = async (formaId, vote) => {
         try {
             const response = await axios.post(
