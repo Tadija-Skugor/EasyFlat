@@ -64,11 +64,19 @@ class DiscussionRoutes {
       }
 
       console.log("Split keywords:\n", keyWords);
-      
+      // Dynamically build the WHERE clause
+      const whereClauses = keyWords.map(keyword => `naslov ILIKE '%${keyword}%'`).join(' OR ');
+      console.log(whereClauses);
+
+      const query = `
+        SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme
+        FROM diskusija
+        WHERE ${whereClauses}
+        ORDER BY datum_stvorena DESC
+        LIMIT 10;`;
+
       // Upit za dohvaćanje nedavnih diskusija
-      const result = await pool.query(
-        'SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme FROM diskusija ORDER BY datum_stvorena DESC LIMIT 10',
-      );
+      const result = await pool.query(query);
 
       // Kreiraj i popuni listu diskusija
       const discussionList = await Promise.all(result.rows.map(async (row) => {
