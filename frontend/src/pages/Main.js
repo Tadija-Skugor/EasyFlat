@@ -9,6 +9,7 @@ export default function Home() {
     const [responses, setResponses] = useState(''); // Initialize as a string
     const [selectedDiscussionId, setSelectedDiscussionId] = useState(null);
     const [newResponse, setNewResponse] = useState('');
+    const [remainingResponses, setRemainingResponses] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
@@ -69,6 +70,11 @@ export default function Home() {
             // spremi sve odgovore u wrapper element 'odgovori' kako bi parseFromString kod radio ispravno
             const wrappedXmlString = `<odgovori>${response.data.odgovori}</odgovori>`;
             const broj_preostalih_odgovora = response.data.br_odgovora;
+            setRemainingResponses((prev) => ({
+                ...prev,
+                [discussionId]: broj_preostalih_odgovora,
+            }));
+
             // parsiranje XMLa u DOM objekt
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(wrappedXmlString, "text/xml");
@@ -194,7 +200,7 @@ export default function Home() {
                                         onChange={(e) => setNewResponse(e.target.value)}
                                         placeholder="Dodaj odgovor..."
                                     />
-                                    <button type="submit">Pošaljite odgovor</button>
+                                    <button type="submit" disabled={remainingResponses[selectedDiscussionId] === 0}>Pošaljite odgovor</button>
                                 </form>
                             </div>
                         )}
