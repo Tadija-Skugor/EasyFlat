@@ -13,9 +13,7 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
-    const [userVotes, setUserVotes] = useState({});
-    const [hasVoted, setHasVoted] = useState({});
-    const [selectedVotes, setSelectedVotes] = useState({});
+
 
     const [showAddDiscussion, setShowAddDiscussion] = useState(false); // Manage add discussion form visibility
     const [newDiscussion, setNewDiscussion] = useState({
@@ -93,9 +91,6 @@ export default function Home() {
         }
     };
 
-    const handleRadioChange = (GlasanjeId, value) => {
-        setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [GlasanjeId]: value }));
-    };
 
     const toggleInfo = (GlasanjeId) => {
         setExpandedInfo((prev) => ({ ...prev, [GlasanjeId]: !prev[GlasanjeId] }));
@@ -145,44 +140,6 @@ export default function Home() {
         }
     };
 
-    const handleVoteSubmit = async (GlasanjeId, vote) => {
-        if (!userEmail) {
-            alert('Morate biti prijavljeni da biste glasali');
-            return;
-        }
-    
-        try {
-            const response = await axios.post(
-                'http://localhost:4000/glasanje',
-                { userId: userEmail, GlasanjeId, vote },
-                { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
-            );
-    
-            if (response.data.success) {
-                console.log("USPJESNO UPISALI U BAZU");
-                // Update the specific Glasanje state after voting
-                setGlasanjes((prevGlasanjes) =>
-                    prevGlasanjes.map((Glasanje) =>
-                        Glasanje.id === GlasanjeId
-                            ? {
-                                  ...Glasanje,
-                                  glasovanje_da: vote === 'da' ? Glasanje.glasovanje_da + 1 : Glasanje.glasovanje_da,
-                                  glasovanje_ne: vote === 'ne' ? Glasanje.glasovanje_ne + 1 : Glasanje.glasovanje_ne,
-                              }
-                            : Glasanje
-                            
-                        
-                    )
-                );
-                
-                setUserVotes((prevVotes) => ({ ...prevVotes, [GlasanjeId]: vote }));
-                setHasVoted((prevHasVoted) => ({ ...prevHasVoted, [GlasanjeId]: true }));
-                setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [GlasanjeId]: '' }));
-            }
-        } catch (error) {
-            console.error('Greška prilikom slanja glasa:', error);
-        }
-    };
 
     // Handle adding a new response
     const handleAddResponse = async (e) => {
