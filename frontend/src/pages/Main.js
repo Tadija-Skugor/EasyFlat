@@ -13,27 +13,15 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
-
-
-    const [showAddDiscussion, setShowAddDiscussion] = useState(false); // Manage add discussion form visibility
+    const [showAddDiscussion, setShowAddDiscussion] = useState(false); 
+    const [userEmail, setUserEmail] = useState('');
+    const [userVotes, setUserVotes] = useState({});
+    const [selectedVotes, setSelectedVotes] = useState({});
     const [newDiscussion, setNewDiscussion] = useState({
         naslov: '',
         opis: '',
     });
-    const [Glasanjes, setGlasanjes] = useState([]);
-    const [userEmail, setUserEmail] = useState('');
-        const [userVotes, setUserVotes] = useState({});
-        const [selectedVotes, setSelectedVotes] = useState({});
-        const [hasVoted, setHasVoted] = useState({});
-        
-        const [expandedInfo, setExpandedInfo] = useState({});
-        const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-        const [newGlasanje, setNewGlasanje] = useState({
-            naslov: '',
-            opis: '',
-            datum_istece: '',
-        });
-    
+
 
     const fetchDiscussions = async (searchQuery) => {
         try {
@@ -91,19 +79,14 @@ export default function Home() {
         }
     };
 
-
     const toggleInfo = (GlasanjeId) => {
         setExpandedInfo((prev) => ({ ...prev, [GlasanjeId]: !prev[GlasanjeId] }));
     };
-
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewGlasanje((prev) => ({ ...prev, [name]: value }));
     };
-    
 
     // Fetch responses to a selected discussion
     const fetchResponses = async (discussionId) => {
@@ -140,7 +123,6 @@ export default function Home() {
         }
     };
 
-
     // Handle adding a new response
     const handleAddResponse = async (e) => {
         e.preventDefault();
@@ -169,7 +151,7 @@ export default function Home() {
         }
     };
 
-    // ova funkcija jos ne radi dobro, treba se popraviti
+    // Handle voting
     const handleVoteSubmit = async (formaId, vote) => {
         try {
             const response = await axios.post(
@@ -208,7 +190,6 @@ export default function Home() {
         setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [formaId]: value }));
     };
     
-
     // Effect for loading search query or fetching all discussions
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -216,8 +197,6 @@ export default function Home() {
 
         fetchDiscussions(searchQuery); // Pass the searchQuery to filter discussions
     }, [location.search]);
-
-
     
     const handleAddDiscussion = async (e) => {
         e.preventDefault();
@@ -260,14 +239,6 @@ export default function Home() {
 
     return (
         <div className="home-container">
-            {/*
-            <h1>HOME STRANICA</h1>
-            <p>
-                Ovdje ce se nalaziti naša početna home stranica. U njoj ce biti diskusije.<br />
-                Neki message board i voting sustav
-            </p>
-            */}
-
             {loading ? (
                 <p>Učitavanje podataka...</p>
             ) : error ? (
