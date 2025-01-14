@@ -52,6 +52,20 @@ class DiscussionRoutes {
     }
   }
 
+  // Metoda za dohvacaje specificnih diskusija (onih koje se poklapaju sa searchom)
+  // fetchSpecificDiscussions
+
+  async specificDiscussions(req, res) {
+    try {
+      const search_query = req.query.search_query;
+
+    } catch (error) {
+      console.error("Greška u /data/specificDiscussions", error.message);
+      res.status(500).send('Greška na serveru');
+
+    } 
+  }
+
   // Metoda za dohvacanje svih odgovora neke diskusije
   async fetchDiscussionResponses(req, res) {
     try {
@@ -234,6 +248,7 @@ class DiscussionRoutes {
   // Inicijaliziraj rute
   initializeRoutes() {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
+    this.router.post('/specificDiscussions', this.specificDiscussions.bind(this));
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
     this.router.post('/bindNewForm', this.bindNewForm.bind(this));
