@@ -53,11 +53,55 @@ class DiscussionRoutes {
   }
 
   // Metoda za dohvacaje specificnih diskusija (onih koje se poklapaju sa searchom)
-  // fetchSpecificDiscussions
-
   async specificDiscussions(req, res) {
     try {
+      console.log("Pokusavam dohvatit rutu specificDiscussions");
+
       const search_query = req.query.search_query;
+      let keyWords = [];
+      if (search_query) {
+        keyWords = search_query.split("%20");
+      }
+
+      console.log("Split keywords:\n", keyWords);
+      // Dynamically build the WHERE clause
+      const whereClauses = keyWords.map(keyword => `naslov ILIKE '%${keyword}%'`).join(' OR ');
+      console.log(whereClauses);
+
+      const query = `
+        SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme
+        FROM diskusija
+        WHERE ${whereClauses}
+        ORDER BY datum_stvorena DESC
+        LIMIT 10;`;
+
+      // Upit za dohvaćanje nedavnih diskusija
+      const result = await pool.query(query);
+
+      // Kreiraj i popuni listu diskusija
+      const discussionList = await Promise.all(result.rows.map(async (row) => {
+        const discussion = {
+          id: row.id,
+          naslov: row.naslov,
+          kreator: row.kreator,
+          opis: row.opis,
+          datum_stvorena: row.datum_stvorena,
+          br_odgovora: row.br_odgovora,
+        };
+
+        // Ako diskusija ima povezanu formu, dohvatite detalje forme
+        if (row.id_forme !== null) {
+          const formResult = await pool.query(
+            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $1',
+            [row.id_forme]
+          );
+          discussion.forma = formResult.rows[0];
+        }
+
+        return discussion;
+      }));
+      
+      res.status(200).json(discussionList);
 
     } catch (error) {
       console.error("Greška u /data/specificDiscussions", error.message);
@@ -259,7 +303,7 @@ class DiscussionRoutes {
   // Inicijaliziraj rute
   initializeRoutes() {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
-    this.router.post('/specificDiscussions', this.specificDiscussions.bind(this));
+    this.router.get('/specificDiscussions', this.specificDiscussions.bind(this));
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
     this.router.post('/bindNewForm', this.bindNewForm.bind(this));
