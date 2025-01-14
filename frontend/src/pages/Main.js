@@ -108,9 +108,10 @@ export default function Home() {
         try {
             const response = await axios.post('http://localhost:4000/data/discussionAddResponse', {
                 id_diskusije: selectedDiscussionId,
-                korisnik: 'User1', // Replace with dynamic user data if needed
+                //korisnik: 'User1', // Replace with dynamic user data if needed
                 tekst: newResponse,
-            });
+                
+            }, {withCredentials: true});
             console.log('Response added:', response.data);
             setNewResponse(''); // Clear the input
             fetchResponses(selectedDiscussionId); // Refresh responses

@@ -140,8 +140,11 @@ class DiscussionRoutes {
   // Metoda za dodavanje odgovora na neku diskusiju
   async sendDiscussionResponse(req, res) {
     try {
-      const {id_diskusije, korisnik, tekst} = req.body;
-
+      const {id_diskusije, tekst} = req.body;
+      const kreator = await pool.query(
+        'SELECT ime FROM korisnik WHERE email = $1', [req.session.email]
+      );
+      const korisnik = kreator.rows[0].ime;
       const jsonData = {
           korisnik,
           tekst
