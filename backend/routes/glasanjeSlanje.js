@@ -14,7 +14,9 @@ router.get('/userEmail', (req, res) => {
 // Ruta za dohvaćanje svih diskusija
 router.get('/Glasanjes', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM glasanje_forma');
+        const result = await pool.query(`SELECT * FROM glasanje_forma gf 
+                                        WHERE NOT EXISTS (SELECT 1 FROM diskusija d WHERE d.id_forme = gf.id)
+                                        AND CURRENT_DATE <= gf.datum_istece;`);
         res.json(result.rows);  // Vraćanje svih diskusija
     } catch (error) {
         console.error('Error fetching Glasanjes:', error);
