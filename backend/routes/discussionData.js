@@ -17,7 +17,7 @@ class DiscussionRoutes {
 
       // Upit za dohvaćanje nedavnih diskusija
       const result = await pool.query(
-        'SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme FROM diskusija ORDER BY datum_stvorena DESC LIMIT $1;',
+        'SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme FROM diskusija ORDER BY zadnji_pristup DESC LIMIT $1;',
         [brojZatrazenihDiskusija]
       );
 
@@ -115,7 +115,7 @@ class DiscussionRoutes {
         updatedOdgovori = xmlData;
       }
 
-      const currentDate = new Date().toISOString().split('T')[0];
+      const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
       await pool.query(
         'UPDATE diskusija SET odgovori = $1, zadnji_pristup = $3 WHERE id = $2', [updatedOdgovori, id_diskusije, currentDate]
