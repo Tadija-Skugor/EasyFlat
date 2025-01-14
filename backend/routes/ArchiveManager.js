@@ -9,7 +9,7 @@ class ArchiveManager {
 
   async checkforArchiving() {         // funkcija koja se izvrsava jednom na dan i prebacuje stare diskusije u arhivu
     try {
-      const result = await pool.query(`DELETE FROM diskusija WHERE zadnji_pristup <= CURRENT_DATE - INTERVAL '30 days' RETURNING *`);
+      const result = await pool.query(`DELETE FROM diskusija WHERE zadnji_pristup <= CURRENT_TIMESTAMP - INTERVAL '30 days' RETURNING *`);
 
       result.rows.map(async (row) => {
         
