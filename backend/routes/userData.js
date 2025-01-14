@@ -148,6 +148,8 @@ class UserController {
 
     // fetch
     async fetchUserData(req, res) {
+        console.log(req.session);
+
         console.log("Fetching user data...");
         try {
             const userId = req.session.userId;
