@@ -18,6 +18,19 @@ export default function Home() {
         naslov: '',
         opis: '',
     });
+    const [Glasanjes, setGlasanjes] = useState([]);
+    const [userEmail, setUserEmail] = useState('');
+        const [userVotes, setUserVotes] = useState({});
+        const [selectedVotes, setSelectedVotes] = useState({});
+        const [hasVoted, setHasVoted] = useState({});
+        
+        const [expandedInfo, setExpandedInfo] = useState({});
+        const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+        const [newGlasanje, setNewGlasanje] = useState({
+            naslov: '',
+            opis: '',
+            datum_istece: '',
+        });
     
 
     const fetchDiscussions = async (searchQuery) => {
@@ -26,7 +39,7 @@ export default function Home() {
                 withCredentials: true,  // Ensures cookies are sent with the request if needed
             });
             let filteredDiscussions = response.data;
-    
+            console.log(filteredDiscussions);
             // If searchQuery exists, filter discussions based on title (naslov)
             if (searchQuery) {
                 filteredDiscussions = filteredDiscussions.filter((discussion) =>
@@ -34,13 +47,62 @@ export default function Home() {
                 );
             }
     
+            const [userEmailResponse, GlasanjesResponse] = await Promise.all([
+                axios.get('http://localhost:4000/glasanje/userEmail', { withCredentials: true }),
+                axios.get('http://localhost:4000/glasanje/Glasanjes'),
+            ]);
+
+            setUserEmail(userEmailResponse.data.email);
+            //setGlasanjes(GlasanjesResponse.data);
             setDiscussions(filteredDiscussions);
+            if (userEmailResponse.data.email) {
+                const votes = {};
+                const votedGlasanjes = {};
+
+                for (let discussion of filteredDiscussions) {
+                    if (discussion.forma){
+                    console.log("forma: ", discussion.forma);
+                    const user_glasanje = await axios.get('http://localhost:4000/glasanje/userVote', {
+                        params: { email: userEmailResponse.data.email, GlasanjeId: discussion.forma.id },
+                        withCredentials: true,
+                    });
+                    console.log(user_glasanje);
+                    if (user_glasanje.data.voted) {
+                        votes[discussion.forma.id] = user_glasanje.data.vote ? "da" : "ne";
+                        votedGlasanjes[discussion.forma.id] = true;
+                    }
+                    }
+                }
+                console.log("votes: ", votes);
+                console.log("votedGlasanjes: ",votedGlasanjes);
+                setUserVotes(votes);
+                setHasVoted(votedGlasanjes);
+            }
+
+            
+            
         } catch (error) {
             console.error('Error fetching discussions:', error);
             setError('Failed to fetch discussions');
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleRadioChange = (GlasanjeId, value) => {
+        setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [GlasanjeId]: value }));
+    };
+
+    const toggleInfo = (GlasanjeId) => {
+        setExpandedInfo((prev) => ({ ...prev, [GlasanjeId]: !prev[GlasanjeId] }));
+    };
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewGlasanje((prev) => ({ ...prev, [name]: value }));
     };
     
 
@@ -76,6 +138,45 @@ export default function Home() {
         } catch (error) {
             console.error("Error fetching responses:", error);
             setResponses([]); // Reset responses to empty string on error
+        }
+    };
+
+    const handleVoteSubmit = async (GlasanjeId, vote) => {
+        if (!userEmail) {
+            alert('Morate biti prijavljeni da biste glasali');
+            return;
+        }
+    
+        try {
+            const response = await axios.post(
+                'http://localhost:4000/glasanje',
+                { userId: userEmail, GlasanjeId, vote },
+                { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
+            );
+    
+            if (response.data.success) {
+                console.log("USPJESNO UPISALI U BAZU");
+                // Update the specific Glasanje state after voting
+                setGlasanjes((prevGlasanjes) =>
+                    prevGlasanjes.map((Glasanje) =>
+                        Glasanje.id === GlasanjeId
+                            ? {
+                                  ...Glasanje,
+                                  glasovanje_da: vote === 'da' ? Glasanje.glasovanje_da + 1 : Glasanje.glasovanje_da,
+                                  glasovanje_ne: vote === 'ne' ? Glasanje.glasovanje_ne + 1 : Glasanje.glasovanje_ne,
+                              }
+                            : Glasanje
+                            
+                        
+                    )
+                );
+                
+                setUserVotes((prevVotes) => ({ ...prevVotes, [GlasanjeId]: vote }));
+                setHasVoted((prevHasVoted) => ({ ...prevHasVoted, [GlasanjeId]: true }));
+                setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [GlasanjeId]: '' }));
+            }
+        } catch (error) {
+            console.error('Greška prilikom slanja glasa:', error);
         }
     };
 
@@ -224,6 +325,75 @@ export default function Home() {
                         <button onClick={() => toggleResponsesVisibility(discussion.id)}>
                             {selectedDiscussionId === discussion.id ? 'Sakrij odgovore' : 'Vidi odgovore'}
                         </button>
+
+                        {discussion.forma && (
+                            <div key={discussion.forma.id} className="Glasanje-item">
+                            <h3>{discussion.forma.naslov}</h3>
+                            <p><strong>Kreator:</strong> {discussion.forma.kreator}</p>
+                            <div className="DatumIme">
+                                <p>Datum kreiranja: {new Date(discussion.forma.datum_stvoreno).toLocaleDateString()}</p>
+                                <p>Datum isteka: {new Date(discussion.forma.datum_istece).toLocaleDateString()}</p>
+                            </div>
+    
+                            <div className="voting-box">
+                                <h4>Slažete li se?</h4>
+                                {hasVoted[discussion.forma.id] ? (
+                                    <div className="vote-results">
+                                        <p>Vaš glas: {userVotes[discussion.forma.id]}</p>
+                                        <p>Da: {discussion.forma.glasovanje_da}</p>
+                                        <p>Ne: {discussion.forma.glasovanje_ne}</p>
+                                    </div>
+                                ) : (
+                                    <div className="radio-group">
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name={`vote_${discussion.forma.id}`}
+                                                value="da"
+                                                checked={selectedVotes[discussion.forma.id] === 'da'}
+                                                onChange={() => handleRadioChange(discussion.forma.id, 'da')}
+                                                disabled={hasVoted[discussion.forma.id]}
+                                            />
+                                            Da
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name={`vote_${discussion.forma.id}`}
+                                                value="ne"
+                                                checked={selectedVotes[discussion.forma.id] === 'ne'}
+                                                onChange={() => handleRadioChange(discussion.forma.id, 'ne')}
+                                                disabled={hasVoted[discussion.forma.id]}
+                                            />
+                                            Ne
+                                        </label>
+                                        <button
+                                            className="submit-vote-button"
+                                            onClick={() => handleVoteSubmit(discussion.forma.id, selectedVotes[discussion.forma.id])}
+                                            disabled={!selectedVotes[discussion.forma.id] || hasVoted[discussion.forma.id]}
+                                        >
+                                            Pošaljite glas
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+    
+                            <button
+                                className="toggle-info-button"
+                                onClick={() => toggleInfo(discussion.forma.id)}
+                            >
+                                {expandedInfo[discussion.forma.id] ? 'Sakrij dodatne informacije' : 'Prikaži dodatne informacije'}
+                            </button>
+    
+                            {expandedInfo[discussion.forma.id] && (
+                                <div className="additional-info">
+                                    <p>Ovo su dodatne informacije o diskusiji: {discussion.forma.opis || 'Nema dodatnih informacija.'}</p>
+                                </div>
+                            )}
+    
+                            <hr className="Glasanje-separator" />
+                        </div>
+                        )}
 
                         {selectedDiscussionId === discussion.id && (
                             <div className="responses-section">
