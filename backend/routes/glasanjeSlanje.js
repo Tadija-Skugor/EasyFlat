@@ -50,9 +50,10 @@ router.get('/userVote', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    let { userId, GlasanjeId, vote } = req.body; // Use 'let' instead of 'const' to allow reassignment
+    let {  GlasanjeId, vote } = req.body; // Use 'let' instead of 'const' to allow reassignment
     console.log("Vrijednost vota je: " + vote);
-
+    userId=req.session.email;
+    console.log("Ovo je email i preko njega radimo verifikaciju: ",userId);
     if (vote === "da") {
         vote = true;
     } 
@@ -62,6 +63,7 @@ router.post('/', async (req, res) => {
     console.log("Vrijednost vota je: " + vote);
 
     if (!userId || !GlasanjeId) {
+        console.log("Doslo je do errora tu: 1.");
         return res.status(400).send('Svi podaci (userId, GlasanjeId, vote) moraju biti prisutni');
     }
 
@@ -73,6 +75,8 @@ router.post('/', async (req, res) => {
 
         if (result.rows.length > 0) {
             return res.status(400).send('Već ste glasovali za ovu diskusiju');
+            console.log("Doslo je do errora tu: 2.")
+
         }
 
         await pool.query(
