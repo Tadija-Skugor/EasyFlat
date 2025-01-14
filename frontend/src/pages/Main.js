@@ -13,60 +13,45 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
+    const [showAddDiscussion, setShowAddDiscussion] = useState(false); // Manage add discussion form visibility
+    const [newDiscussion, setNewDiscussion] = useState({
+        naslov: '',
+        opis: '',
+    });
+    
 
-    // Fetch search results based on the query string
-    const fetchSearchResults = async (query) => {
-        try {
-            setLoading(true);
-            setError(null);
-
-            const url = query
-                ? `http://localhost:4000/fetchDiscusion/search`
-                : `http://localhost:4000/fetchDiscusion/all`;
-
-            const response = await axios.get(url, {
-                params: query ? { query } : {},
-            });
-
-            setSearchResults(response.data);
-        } catch (err) {
-            setError(
-                `Fali backend za rezultat; ${
-                    query ? `Upit koji je poslan je ovaj: ${query}` : 'Svi rezultati nisu dostupni'
-                }`
-            );
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Fetch discussions with optional filtering based on the search query
     const fetchDiscussions = async (searchQuery) => {
         try {
-            const response = await axios.get('http://localhost:4000/data/allDiscussions');
+            const response = await axios.get('http://localhost:4000/data/allDiscussions', {
+                withCredentials: true,  // Ensures cookies are sent with the request if needed
+            });
             let filteredDiscussions = response.data;
-
+    
             // If searchQuery exists, filter discussions based on title (naslov)
             if (searchQuery) {
                 filteredDiscussions = filteredDiscussions.filter((discussion) =>
                     discussion.naslov.toLowerCase().includes(searchQuery.toLowerCase())
                 );
             }
-
+    
             setDiscussions(filteredDiscussions);
         } catch (error) {
             console.error('Error fetching discussions:', error);
+            setError('Failed to fetch discussions');
+        } finally {
+            setLoading(false);
         }
     };
+    
 
     // Fetch responses to a selected discussion
     const fetchResponses = async (discussionId) => {
         try {
             const response = await axios.get('http://localhost:4000/data/discussionResponses', {
                 params: { id_diskusije: discussionId },
-            });
-            console.log(response);
+            },                {withCredentials: true} 
+        );
+
             // spremi sve odgovore u wrapper element 'odgovori' kako bi parseFromString kod radio ispravno
             const wrappedXmlString = `<odgovori>${response.data.odgovori}</odgovori>`;
             const broj_preostalih_odgovora = response.data.br_odgovora;
@@ -110,8 +95,11 @@ export default function Home() {
                 id_diskusije: selectedDiscussionId,
                 //korisnik: 'User1', // Replace with dynamic user data if needed
                 tekst: newResponse,
-                
-            }, {withCredentials: true});
+            },{                withCredentials: true
+            }
+
+        
+        );
             console.log('Response added:', response.data);
             setNewResponse(''); // Clear the input
             fetchResponses(selectedDiscussionId); // Refresh responses
@@ -125,17 +113,43 @@ export default function Home() {
         const params = new URLSearchParams(location.search);
         const searchQuery = params.get('search_query');
 
-        fetchSearchResults(searchQuery);
         fetchDiscussions(searchQuery); // Pass the searchQuery to filter discussions
     }, [location.search]);
 
-    // Toggle responses visibility
+
+    
+    const handleAddDiscussion = async (e) => {
+        e.preventDefault();
+
+        const { naslov, opis } = newDiscussion;
+
+        if (!naslov.trim() || !opis.trim()) {
+            console.log('All fields are required.');
+            return;
+        }
+
+        try {
+            await axios.post('http://localhost:4000/data/addDiscussion', {
+                naslov,
+                opis
+            }, {
+                withCredentials: true  // Ensure cookies are sent with the request
+            });
+            
+
+            setNewDiscussion({ naslov: '', opis: ''});
+            setShowAddDiscussion(false);
+            fetchDiscussions();
+        } catch (error) {
+            console.error('Error adding discussion:', error);
+        }
+    };
     const toggleResponsesVisibility = (discussionId) => {
         if (selectedDiscussionId === discussionId) {
-            setSelectedDiscussionId(null); // Hide responses if the same discussion is clicked again
-            setResponses(''); // Reset the responses if they are hidden
+            setSelectedDiscussionId(null);
+            setResponses(''); 
         } else {
-            fetchResponses(discussionId); // Fetch responses if a different discussion is selected
+            fetchResponses(discussionId);
         }
     };
 
@@ -154,7 +168,7 @@ export default function Home() {
             */}
 
             {loading ? (
-                <p>Loading search results...</p>
+                <p>Učitavanje podataka...</p>
             ) : error ? (
                 <p>{error}</p>
             ) : (
@@ -170,12 +184,44 @@ export default function Home() {
 
             <div className="discussions-wrapper">
                 <h2>Diskusije</h2>
+
+                <button onClick={() => setShowAddDiscussion(!showAddDiscussion)}>
+                    {showAddDiscussion ? 'Zatvori formu' : 'Dodaj novu diskusiju'}
+                </button>
+
+                {showAddDiscussion && (
+                    <form className="add-discussion-form" onSubmit={handleAddDiscussion}>
+                        <h3>Dodaj novu diskusiju</h3>
+                        <label>
+                            Naslov:
+                            <input
+                                type="text"
+                                value={newDiscussion.naslov}
+                                onChange={(e) =>
+                                    setNewDiscussion({ ...newDiscussion, naslov: e.target.value })
+                                }
+                            />
+                        </label>
+                        <label>
+                            Opis:
+                            <textarea
+                                value={newDiscussion.opis}
+                                onChange={(e) =>
+                                    setNewDiscussion({ ...newDiscussion, opis: e.target.value })
+                                }
+                            />
+                        </label>
+
+                        <button type="submit">Dodaj diskusiju</button>
+                    </form>
+                )}
+
                 {discussions.map((discussion) => (
                     <div key={discussion.id} className="discussion-box">
                         <h3>{discussion.naslov}</h3>
                         <p><strong>Autor:</strong> {discussion.kreator}</p>
                         <p><strong>Opis:</strong> {discussion.opis}</p>
-                        <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
+                        <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorenja).toLocaleDateString()}</p>
                         <button onClick={() => toggleResponsesVisibility(discussion.id)}>
                             {selectedDiscussionId === discussion.id ? 'Sakrij odgovore' : 'Vidi odgovore'}
                         </button>

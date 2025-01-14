@@ -13,13 +13,13 @@ const checkAuth = require('./routes/checkAuth');
 const podatciKorisnikaSignup = require('./routes/authentifikacija');
 const logout = require('./routes/logout');
 const adminRouter = require('./routes/admin');
-const dataRouter = require('./routes/discussionData');
 const glasanjeSlanje = require('./routes/glasanjeSlanje');
 const ucitavanjePoruka = require('./routes/ucitavanjePoruka');
 const archive = require('./routes/ArchiveManager')
 const archiveRouter = archive.router
 const pool = require('./db');
 const userDataRouter = require('./routes/userData')(pool);
+const dataRouter = require('./routes/discussionData');
 
 const authMiddleware = require('./middleware/auth');
 const session = require('express-session');
@@ -111,17 +111,20 @@ class Server {
     this.app.use('/logout', logout);
     this.app.use('/signupAuth', podatciKorisnikaSignup);
     this.app.use('/glasanje', glasanjeSlanje);
-
     this.app.use('/userInfo', userDataRouter);
+    this.app.use('/data', (req, res, next) => {
+      console.log('Session Data:', req.session); // Check if session is available here
+      next();
+    }, dataRouter);
+    
+    
     this.app.use('/check-auth',  checkAuth);
-
     this.app.use('/oauth', authRouter);
     this.app.use('/poruke', ucitavanjePoruka);
     this.app.use('/request', requestRouter);
 
     this.app.use('/admin', authMiddleware.isAuthenticated, adminRouter);
     this.app.use('/archive', archiveRouter);
-    this.app.use('/data', dataRouter);
 
     this.app.use('/protected', authMiddleware.isAuthenticated, authMiddleware.isVerifiedUser,  (req, res) => {
       res.send({ 

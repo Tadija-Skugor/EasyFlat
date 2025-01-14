@@ -3,7 +3,7 @@ import Footer from './Footer';
 import NoHeader from './NoHeader';
 import NoFooter from './NoFooter';
 import Upit from '../pages/Upit';
-import Home from '../pages/Home';
+import Home from '../pages/Main';
 import Signup from '../pages/Signup';
 import Glasanje from '../pages/Glasanje';
 import Main from '../pages/Main';
@@ -104,14 +104,7 @@ export default function Router() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="home"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
+
           <Route
             path="glasanje"
             element={
