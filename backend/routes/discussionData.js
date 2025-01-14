@@ -332,7 +332,7 @@ class DiscussionRoutes {
 
       const query = `
       INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme)
-      VALUES ($1, $2, $3, $4, $5, 0, NULL, NULL)
+      VALUES ($1, $2, $3, $4, $5, 100, NULL, NULL)
       RETURNING id
     `;
     const result = await pool.query(query, [

@@ -65,48 +65,66 @@ class Server {
   setupRoutes() {
     //OVO POSLATI U TERMINAL
     
-    //curl -H "Authorization: ApiKey key" -H "custom-header-1: Primjer" -H "custom-header-2: Primjer" http://localhost:4000/slanjeRazgovoraPrekoApi
+    //curl -H "Authorization: ApiKey key" -H "Naslov-diskusije: Primjer" http://localhost:4000/slanjeRazgovoraPrekoApi
+//curl -X GET http://localhost:4000/slanjeRazgovoraPrekoApi -H "Naslov-diskusije: React" -H "Authorization: key"
 
     this.app.use('/slanjeRazgovoraPrekoApi', apiKeyAuth, async (req, res) => {
       const { apiKeyInfo } = req;
+    console.log(req.headers)
+      // Define custom header
+      const Naslov = req.headers['naslov-diskusije'];
     
-      // definiraj custom headere
-      const customHeader1 = req.headers['custom-header-1'];
-      const customHeader2 = req.headers['custom-header-2'];
-    
-      // provjeri headere
-      if (!customHeader1 || !customHeader2) {
-        return res.status(400).send({
-          error: 'Nedostaje jedan ili oba custom headera!',
-          missingHeaders: {
-            customHeader1: !customHeader1 ? 'Nije predan' : undefined,
-            customHeader2: !customHeader2 ? 'Nije predan' : undefined,
-          },
-        });
+      // Check if the header is provided
+      if (!Naslov) {
+          return res.status(400).send({
+              error: 'Nedostaje jedan ili oba custom headera!',
+              missingHeaders: {
+                  Naslov: !Naslov ? 'Nije predan' : undefined,
+              },
+          });
       }
     
       try {
-        console.log(`Predano je ${customHeader1} ${customHeader2}`);
-        const result = await pool.query(`SELECT ime FROM korisnik LIMIT 1`);
-        const userName = result.rows[0] ? result.rows[0].ime : 'Fali sadrzaj u bazi'; // tekst neki
-        
-        res.send({
-          message: 'Pristup dan preko api kljuca!',
-          apiKeyInfo,
-          receivedHeaders: {
-            customHeader1,
-            customHeader2,
-          },
-          firstUserName: userName,
-        });
-      } catch (err) {
-        console.error('Error u db:', err);
-        res.status(500).send({
-          error: 'Database query propo',
-          message: err.message,
-        });
-      }
-    });
+          console.log(`Predano je ${Naslov}`);
+  
+          const result = await pool.query(`SELECT naslov, odgovori FROM diskusija WHERE naslov LIKE '%${Naslov}%'`);
+          
+          if (result.rows.length === 0) {
+              return res.status(404).send({
+                  message: 'No discussions found matching the title.',
+              });
+          }
+  
+          const foundNaslovi = result.rows.map(row => row.naslov);
+  
+          const firstDiscussion = result.rows[0];
+          const odgovori = firstDiscussion.odgovori || 'Nema odgovora'; // Default message if no odgovori found
+  
+          const encodedNaslov = encodeURIComponent(Naslov);
+
+          // Construct the site link with the encoded Naslov
+          const siteLink = `http://localhost:5000/main?search_query=${encodedNaslov}`;
+      
+          res.send({
+            message: 'Pristup dan preko api kljuca!',
+            apiKeyInfo,
+            receivedHeaders: {
+              Naslov
+            },
+            foundNaslovi,
+            prviOdgovori: odgovori,
+            siteLink,  // Add the link to the response
+          });
+      
+        } catch (err) {
+          console.error('Error u db:', err);
+          res.status(500).send({
+            error: 'Database query failed',
+            message: err.message,
+          });
+        }
+      });
+  
     
     this.app.use('/logout', logout);
     this.app.use('/signupAuth', podatciKorisnikaSignup);

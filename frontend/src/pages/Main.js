@@ -95,8 +95,7 @@ export default function Home() {
                 id_diskusije: selectedDiscussionId,
                 //korisnik: 'User1', // Replace with dynamic user data if needed
                 tekst: newResponse,
-            },{                withCredentials: true
-            }
+            },{withCredentials: true}
 
         
         );
@@ -247,7 +246,16 @@ export default function Home() {
                                         onChange={(e) => setNewResponse(e.target.value)}
                                         placeholder="Dodaj odgovor..."
                                     />
-                                    <button type="submit" disabled={remainingResponses[selectedDiscussionId] === 0}>Pošaljite odgovor</button>
+                                    <button 
+                                    type="submit" 
+                                    disabled={remainingResponses[selectedDiscussionId] === 0}
+                                    >
+                                    Pošaljite odgovor
+                                    </button>
+
+                                    {remainingResponses[selectedDiscussionId] === 0 && (
+                                    <span style={{ color: 'red', marginLeft: '10px' }}>Diskusija nema više dostupnih poruka</span>
+                                    )}
                                 </form>
                             </div>
                         )}
