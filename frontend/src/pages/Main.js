@@ -65,10 +65,10 @@ export default function Home() {
             const response = await axios.get('http://localhost:4000/data/discussionResponses', {
                 params: { id_diskusije: discussionId },
             });
-
+            console.log(response);
             // spremi sve odgovore u wrapper element 'odgovori' kako bi parseFromString kod radio ispravno
-            const wrappedXmlString = `<odgovori>${response.data}</odgovori>`;
-    
+            const wrappedXmlString = `<odgovori>${response.data.odgovori}</odgovori>`;
+            const broj_preostalih_odgovora = response.data.br_odgovora;
             // parsiranje XMLa u DOM objekt
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(wrappedXmlString, "text/xml");

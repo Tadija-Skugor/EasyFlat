@@ -72,12 +72,17 @@ class DiscussionRoutes {
       const id_diskusije = req.query.id_diskusije;
       
       const result = await pool.query(
-        'SELECT odgovori FROM diskusija WHERE id=$1;', [id_diskusije]
+        'SELECT odgovori, br_odgovora FROM diskusija WHERE id=$1;', [id_diskusije]
       );
 
       if (result.rows[0]) {
         const odgovori = result.rows[0].odgovori;
-        res.json(odgovori);
+        const br_odgovora = result.rows[0].br_odgovora;
+        const response = {
+          odgovori: odgovori,
+          br_odgovora: br_odgovora
+        };
+        res.json(response);
       } else {
         res.json('Polje odgovora je prazno');
       }
@@ -103,11 +108,17 @@ class DiscussionRoutes {
 
       // spremanje XML u bazu
       const result = await pool.query(
-        'SELECT odgovori FROM diskusija WHERE id = $1', [id_diskusije]
+        'SELECT odgovori, br_odgovora FROM diskusija WHERE id = $1', [id_diskusije]
       );
 
       let rows = result.rows;
-
+      let br_odgovora = rows[0].br_odgovora
+      if (br_odgovora === 0){
+        res.status(403).send({message: "Ova diskusija je došla do ograničenja u broju odgovora"});
+      }
+      else if(br_odgovora !== null){
+        br_odgovora--;
+      }
       let updatedOdgovori;
       if (rows[0] && rows[0].odgovori) {
         updatedOdgovori = rows[0].odgovori + xmlData;
@@ -118,7 +129,7 @@ class DiscussionRoutes {
       const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
       await pool.query(
-        'UPDATE diskusija SET odgovori = $1, zadnji_pristup = $3 WHERE id = $2', [updatedOdgovori, id_diskusije, currentDate]
+        'UPDATE diskusija SET odgovori = $1, zadnji_pristup = $3, br_odgovora = $4 WHERE id = $2', [updatedOdgovori, id_diskusije, currentDate, br_odgovora]
       );
       
       // možda stavit drugi response
