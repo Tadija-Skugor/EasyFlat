@@ -13,6 +13,10 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
+    const [userVotes, setUserVotes] = useState({});
+    const [hasVoted, setHasVoted] = useState({});
+    const [selectedVotes, setSelectedVotes] = useState({});
+
     const [showAddDiscussion, setShowAddDiscussion] = useState(false); // Manage add discussion form visibility
     const [newDiscussion, setNewDiscussion] = useState({
         naslov: '',
@@ -208,6 +212,46 @@ export default function Home() {
         }
     };
 
+    // ova funkcija jos ne radi dobro, treba se popraviti
+    const handleVoteSubmit = async (formaId, vote) => {
+        try {
+            const response = await axios.post(
+                'http://localhost:4000/glasanje',
+                { GlasanjeId: formaId, vote },
+                { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
+            );
+    
+            if (response.data.success) {
+                // Update state after a successful vote
+                setDiscussions((prevDiscussions) =>
+                    prevDiscussions.map((discussion) =>
+                        discussion.forma && discussion.forma.id === formaId
+                            ? {
+                                  ...discussion,
+                                  forma: {
+                                      ...discussion.forma,
+                                      glasovanje_da: vote === 'da' ? discussion.forma.glasovanje_da + 1 : discussion.forma.glasovanje_da,
+                                      glasovanje_ne: vote === 'ne' ? discussion.forma.glasovanje_ne + 1 : discussion.forma.glasovanje_ne,
+                                  },
+                              }
+                            : discussion
+                    )
+                );
+    
+                setUserVotes((prevVotes) => ({ ...prevVotes, [formaId]: vote }));
+                setHasVoted((prevHasVoted) => ({ ...prevHasVoted, [formaId]: true }));
+                setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [formaId]: '' }));
+            }
+        } catch (error) {
+            console.error('Error submitting vote:', error);
+        }
+    };
+    
+    const handleRadioChange = (formaId, value) => {
+        setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [formaId]: value }));
+    };
+    
+
     // Effect for loading search query or fetching all discussions
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -322,78 +366,63 @@ export default function Home() {
                         <p><strong>Autor:</strong> {discussion.kreator}</p>
                         <p><strong>Opis:</strong> {discussion.opis}</p>
                         <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
+                        
+
+                        {discussion.forma && (
+                            <div className="forma-section">
+                                <h4><strong></strong> {discussion.forma.naslov}</h4>
+                                <p><strong>Glasova 'Da':</strong> {discussion.forma.glasovanje_da}</p>
+                                <p><strong>Glasova 'Ne':</strong> {discussion.forma.glasovanje_ne}</p>
+                                <p><strong>Datum stvoreno:</strong> {new Date(discussion.forma.datum_stvoreno).toLocaleDateString()}</p>
+                                <p><strong>Datum ističe:</strong> {new Date(discussion.forma.datum_istece).toLocaleDateString()}</p>
+                                <p><strong>Kreator forme:</strong> {discussion.forma.kreator}</p>
+
+                                <div className="voting-box">
+                                    <h4>Slažete li se?</h4>
+                                    {hasVoted[discussion.forma.id] ? (
+                                        <div className="vote-results">
+                                            <p>Vaš glas: {userVotes[discussion.forma.id]}</p>
+                                            <p>Da: {discussion.forma.glasovanje_da}</p>
+                                            <p>Ne: {discussion.forma.glasovanje_ne}</p>
+                                        </div>
+                                    ) : (
+                                        <div className="radio-group">
+                                            <label>
+                                                <input
+                                                    type="radio"
+                                                    name={`vote_${discussion.forma.id}`}
+                                                    value="da"
+                                                    checked={selectedVotes[discussion.forma.id] === 'da'}
+                                                    onChange={() => handleRadioChange(discussion.forma.id, 'da')}
+                                                />
+                                                Da
+                                            </label>
+                                            <label>
+                                                <input
+                                                    type="radio"
+                                                    name={`vote_${discussion.forma.id}`}
+                                                    value="ne"
+                                                    checked={selectedVotes[discussion.forma.id] === 'ne'}
+                                                    onChange={() => handleRadioChange(discussion.forma.id, 'ne')}
+                                                />
+                                                Ne
+                                            </label>
+                                            <button
+                                                className="submit-vote-button"
+                                                onClick={() => handleVoteSubmit(discussion.forma.id, selectedVotes[discussion.forma.id])}
+                                                disabled={!selectedVotes[discussion.forma.id]}
+                                            >
+                                                Pošaljite glas
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         <button onClick={() => toggleResponsesVisibility(discussion.id)}>
                             {selectedDiscussionId === discussion.id ? 'Sakrij odgovore' : 'Vidi odgovore'}
                         </button>
-
-                        {discussion.forma && (
-                            <div key={discussion.forma.id} className="Glasanje-item">
-                            <h3>{discussion.forma.naslov}</h3>
-                            <p><strong>Kreator:</strong> {discussion.forma.kreator}</p>
-                            <div className="DatumIme">
-                                <p>Datum kreiranja: {new Date(discussion.forma.datum_stvoreno).toLocaleDateString()}</p>
-                                <p>Datum isteka: {new Date(discussion.forma.datum_istece).toLocaleDateString()}</p>
-                            </div>
-    
-                            <div className="voting-box">
-                                <h4>Slažete li se?</h4>
-                                {hasVoted[discussion.forma.id] ? (
-                                    <div className="vote-results">
-                                        <p>Vaš glas: {userVotes[discussion.forma.id]}</p>
-                                        <p>Da: {discussion.forma.glasovanje_da}</p>
-                                        <p>Ne: {discussion.forma.glasovanje_ne}</p>
-                                    </div>
-                                ) : (
-                                    <div className="radio-group">
-                                        <label>
-                                            <input
-                                                type="radio"
-                                                name={`vote_${discussion.forma.id}`}
-                                                value="da"
-                                                checked={selectedVotes[discussion.forma.id] === 'da'}
-                                                onChange={() => handleRadioChange(discussion.forma.id, 'da')}
-                                                disabled={hasVoted[discussion.forma.id]}
-                                            />
-                                            Da
-                                        </label>
-                                        <label>
-                                            <input
-                                                type="radio"
-                                                name={`vote_${discussion.forma.id}`}
-                                                value="ne"
-                                                checked={selectedVotes[discussion.forma.id] === 'ne'}
-                                                onChange={() => handleRadioChange(discussion.forma.id, 'ne')}
-                                                disabled={hasVoted[discussion.forma.id]}
-                                            />
-                                            Ne
-                                        </label>
-                                        <button
-                                            className="submit-vote-button"
-                                            onClick={() => handleVoteSubmit(discussion.forma.id, selectedVotes[discussion.forma.id])}
-                                            disabled={!selectedVotes[discussion.forma.id] || hasVoted[discussion.forma.id]}
-                                        >
-                                            Pošaljite glas
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-    
-                            <button
-                                className="toggle-info-button"
-                                onClick={() => toggleInfo(discussion.forma.id)}
-                            >
-                                {expandedInfo[discussion.forma.id] ? 'Sakrij dodatne informacije' : 'Prikaži dodatne informacije'}
-                            </button>
-    
-                            {expandedInfo[discussion.forma.id] && (
-                                <div className="additional-info">
-                                    <p>Ovo su dodatne informacije o diskusiji: {discussion.forma.opis || 'Nema dodatnih informacija.'}</p>
-                                </div>
-                            )}
-    
-                            <hr className="Glasanje-separator" />
-                        </div>
-                        )}
 
                         {selectedDiscussionId === discussion.id && (
                             <div className="responses-section">
