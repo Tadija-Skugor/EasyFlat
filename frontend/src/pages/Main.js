@@ -138,13 +138,12 @@ export default function Home() {
             console.error('Error adding discussion:', error);
         }
     };
-    // Toggle responses visibility
     const toggleResponsesVisibility = (discussionId) => {
         if (selectedDiscussionId === discussionId) {
-            setSelectedDiscussionId(null); // Hide responses if the same discussion is clicked again
-            setResponses(''); // Reset the responses if they are hidden
+            setSelectedDiscussionId(null);
+            setResponses(''); 
         } else {
-            fetchResponses(discussionId); // Fetch responses if a different discussion is selected
+            fetchResponses(discussionId);
         }
     };
 
@@ -216,7 +215,7 @@ export default function Home() {
                         <h3>{discussion.naslov}</h3>
                         <p><strong>Autor:</strong> {discussion.kreator}</p>
                         <p><strong>Opis:</strong> {discussion.opis}</p>
-                        <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
+                        <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorenja).toLocaleDateString()}</p>
                         <button onClick={() => toggleResponsesVisibility(discussion.id)}>
                             {selectedDiscussionId === discussion.id ? 'Sakrij odgovore' : 'Vidi odgovore'}
                         </button>
