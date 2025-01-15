@@ -33,8 +33,6 @@ export default function Home() {
             opis: '',
             datum_istece: '',
         });
-    
-
     const fetchDiscussions = async (searchQuery) => {
         try {
             const response = await axios.get('http://localhost:4000/data/allDiscussions', {
@@ -254,6 +252,8 @@ export default function Home() {
         }
     };
 
+
+
     if (loading) {
         return <div>Učitavanje podataka...</div>;
     }
@@ -286,36 +286,50 @@ export default function Home() {
             <div className="discussions-wrapper">
                 <h2>Diskusije</h2>
 
-                <button onClick={() => setShowAddDiscussion(!showAddDiscussion)}>
-                    {showAddDiscussion ? 'Zatvori formu' : 'Dodaj novu diskusiju'}
-                </button>
+                <button
+                className="add-discussion-button"
+                onClick={() => setShowAddDiscussion(!showAddDiscussion)}
+            >
+                +
+            </button>
 
-                {showAddDiscussion && (
-                    <form className="add-discussion-form" onSubmit={handleAddDiscussion}>
-                        <h3>Dodaj novu diskusiju</h3>
-                        <label>
-                            Naslov:
-                            <input
-                                type="text"
-                                value={newDiscussion.naslov}
-                                onChange={(e) =>
-                                    setNewDiscussion({ ...newDiscussion, naslov: e.target.value })
-                                }
-                            />
-                        </label>
-                        <label>
-                            Opis:
-                            <textarea
-                                value={newDiscussion.opis}
-                                onChange={(e) =>
-                                    setNewDiscussion({ ...newDiscussion, opis: e.target.value })
-                                }
-                            />
-                        </label>
+            {showAddDiscussion && (
+                <div className="overlay">
+                    <div className="overlay-content">
+                        <form className="add-discussion-form" onSubmit={handleAddDiscussion}>
+                            <h3>Dodaj novu diskusiju</h3>
+                            <label>
+                                Naslov:
+                                <input
+                                    type="text"
+                                    value={newDiscussion.naslov}
+                                    onChange={(e) =>
+                                        setNewDiscussion({ ...newDiscussion, naslov: e.target.value })
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Opis:
+                                <textarea
+                                    value={newDiscussion.opis}
+                                    onChange={(e) =>
+                                        setNewDiscussion({ ...newDiscussion, opis: e.target.value })
+                                    }
+                                />
+                            </label>
+                            <button type="submit">Dodaj diskusiju</button>
+                            <button
+                                type="button"
+                                onClick={() => setShowAddDiscussion(false)}
+                                className="close-button"
+                            >
+                                Zatvori
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
 
-                        <button type="submit">Dodaj diskusiju</button>
-                    </form>
-                )}
 
                 {discussions.map((discussion) => (
                     <div key={discussion.id} className="discussion-box">
