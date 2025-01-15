@@ -19,7 +19,7 @@ router.post('/contact', async (req, res) => {
   console.log("Received contact data");
 
   const { email, website, poruka } = req.body;
-  const slanjeUpita = await pool.query(`insert into UPIT (emailOsobe,Tekst) VALUES ('${email}','${poruka}')`); 
+  const slanjeUpita = await pool.query(`insert into UPIT (emailOsobe,Tekst,zgrada_id) VALUES ('${email}','${poruka}',$1)`,[req.session.zgrada_id]); 
   
 
   try {

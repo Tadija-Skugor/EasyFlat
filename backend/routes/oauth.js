@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const { OAuth2Client } = require('google-auth-library');
 const fetch = require('node-fetch');
 const pool = require('../db'); // Import your database connection
+const { runInNewContext } = require('vm');
 
 dotenv.config();
 
@@ -28,6 +29,12 @@ class OAuthRoutes {
     const result = await pool.query('SELECT stan_id FROM korisnik WHERE email = $1', [email]);
     return result.rows.length > 0 ? result.rows[0].stan_id  : null;
   }
+  async getZgradaBr(email) {
+    console.log("Doslo je do OATUH I GLEDA QUERY ZA EMAIL----------------------------------------------", email)
+    const result = await pool.query('SELECT zgrada_id FROM korisnik WHERE email = $1', [email]);
+    console.log(result)
+    return result.rows.length > 0 ? result.rows[0].zgrada_id  : null;
+  }
   // OAuth route handler
   async handleOAuth(req, res) {
     const code = req.query.code;
@@ -49,7 +56,6 @@ class OAuthRoutes {
       // Retrieve user data
       const userData = await this.getUserData(tokenResponse.tokens.access_token);
       console.log('User data:', userData);
-
       // Store user data in session
       req.session.userId = userData.sub;
       req.session.userName = userData.name;
@@ -58,6 +64,8 @@ class OAuthRoutes {
       req.session.picture = userData.picture;
       req.session.email = userData.email;
       req.session.stanBr= await this.getStanBr(userData.email);
+      req.session.zgrada_id= await this.getZgradaBr(userData.email);
+
       console.log("ovo je u oauth"+ req.session.stanBr);
       // Check the activation status of the email
       const emailStatus = await this.getEmailStatusInDatabase(userData.email);

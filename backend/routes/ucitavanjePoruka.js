@@ -30,30 +30,11 @@ class SlanjePoruka {
         }
     }
     
-    async obrisiRazgovor(req, res) {
-        try {
-            const { naslov, tekst } = req.body;
-    
-            // Query to delete the message from the database
-            const result = await pool.query(
-                'DELETE FROM upit WHERE emailosobe = $1 AND tekst = $2 RETURNING *',
-                [naslov, tekst]
-            );
-    
-            // Optionally, you can return the deleted message to confirm it was removed
-            res.status(200).json({ message: "Message deleted successfully", deletedMessage: result.rows[0] });
-    
-        } catch (error) {
-            console.error('Error deleting message:', error);
-            res.status(500).json({ message: 'Internal server error.' });
-        }
-    }
-    
 
     async getUserData(req, res) {
         try {
             const result = await pool.query(
-                'SELECT emailosobe, tekst FROM upit WHERE rjeseno = false'
+                'SELECT emailosobe, tekst FROM upit WHERE rjeseno = false AND zgrada_id=$1',[req.session.zgrada_id]
             );
             console.log("nesto se vrti");
 

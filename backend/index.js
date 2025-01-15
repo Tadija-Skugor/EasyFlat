@@ -65,29 +65,26 @@ class Server {
   setupRoutes() {
     //OVO POSLATI U TERMINAL
     
-    //curl -H "Authorization: ApiKey key" -H "Naslov-diskusije: Primjer" http://localhost:4000/slanjeRazgovoraPrekoApi
-//curl -X GET http://localhost:4000/slanjeRazgovoraPrekoApi -H "Naslov-diskusije: React" -H "Authorization: key"
+    //curl -H "Authorization: ApiKey key" -H "Naslov-diskusije: Primjer" -H "ID-zgrade:1" http://localhost:4000/slanjeRazgovoraPrekoApi
 
     this.app.use('/slanjeRazgovoraPrekoApi', apiKeyAuth, async (req, res) => {
       const { apiKeyInfo } = req;
     console.log(req.headers)
       // Define custom header
       const Naslov = req.headers['naslov-diskusije'];
-    
+      const zgrada_id = req.headers['id-zgrade'];
+console.log(zgrada_id)
       // Check if the header is provided
-      if (!Naslov) {
+      if (!Naslov||!zgrada_id) {
           return res.status(400).send({
-              error: 'Nedostaje jedan ili oba custom headera!',
-              missingHeaders: {
-                  Naslov: !Naslov ? 'Nije predan' : undefined,
-              },
+              error: 'Nedostaje jedan ili oba headera!',
           });
       }
     
       try {
           console.log(`Predano je ${Naslov}`);
   
-          const result = await pool.query(`SELECT naslov, odgovori FROM diskusija WHERE naslov LIKE '%${Naslov}%'`);
+          const result = await pool.query(`SELECT naslov, odgovori FROM diskusija WHERE zgrada_id=${zgrada_id} AND naslov LIKE '%${Naslov}%'`);
           
           if (result.rows.length === 0) {
               return res.status(404).send({

@@ -14,9 +14,14 @@ router.get('/userEmail', (req, res) => {
 // Ruta za dohvaćanje svih diskusija
 router.get('/Glasanjes', async (req, res) => {
     try {
-        const result = await pool.query(`SELECT * FROM glasanje_forma gf 
-                                        WHERE NOT EXISTS (SELECT 1 FROM diskusija d WHERE d.id_forme = gf.id)
-                                        AND CURRENT_DATE <= gf.datum_istece;`);
+        const result = await pool.query(
+            `SELECT * FROM glasanje_forma gf 
+             WHERE NOT EXISTS (SELECT 1 FROM diskusija d WHERE d.id_forme = gf.id)
+             AND CURRENT_DATE <= gf.datum_istece 
+             AND gf.zgrada_id = $1;`,
+            [req.session.zgrada_id]  // Parameterized input
+          );
+          
         res.json(result.rows);  // Vraćanje svih diskusija
     } catch (error) {
         console.error('Error fetching Glasanjes:', error);
@@ -127,14 +132,14 @@ router.post('/dodavanjeGlasovanja', async (req, res) => {
     const datumStvoreno = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
 
     const query = `
-        INSERT INTO glasanje_forma (datum_stvoreno, datum_istece, glasovanje_da, glasovanje_ne, naslov, kreator)
-        VALUES ($1, $2, 0, 0, $3, $4)
+        INSERT INTO glasanje_forma (datum_stvoreno, datum_istece, glasovanje_da, glasovanje_ne, naslov, kreator,zgrada_id)
+        VALUES ($1, $2, 0, 0, $3, $4,$5)
         RETURNING id
     `;
 
     // Execute the query using the pool
     try {
-        const result = await pool.query(query, [datumStvoreno, datum_istece, naslov, Kreator]);
+        const result = await pool.query(query, [datumStvoreno, datum_istece, naslov, Kreator,req.session.zgrada_id]);
 
         console.log("Glasanje inserted successfully; id = ", result.rows[0].id);
 

@@ -8,7 +8,6 @@ class DiscussionRoutes {
     this.router = express.Router();
     this.initializeRoutes();
   }
-
   // Metoda za dohvaćanje nedavnih diskusija
   async fetchAllDiscussions(req, res) {
     try {
@@ -18,9 +17,10 @@ class DiscussionRoutes {
 
       // Upit za dohvaćanje nedavnih diskusija
       const result = await pool.query(
-        'SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme FROM diskusija ORDER BY zadnji_pristup DESC LIMIT $1;',
-        [brojZatrazenihDiskusija]
+        'SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme FROM diskusija WHERE zgrada_id=$1 ORDER BY zadnji_pristup DESC LIMIT $2;',
+        [req.session.zgrada_id,brojZatrazenihDiskusija]
       );
+      console.log("Zgrada id je:", req.session.zgrada_id);
 
       // Kreiraj i popuni listu diskusija
       const discussionList = await Promise.all(result.rows.map(async (row) => {
@@ -36,8 +36,8 @@ class DiscussionRoutes {
         // Ako diskusija ima povezanu formu, dohvatite detalje forme
         if (row.id_forme !== null) {
           const formResult = await pool.query(
-            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $1',
-            [row.id_forme]
+            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $2 AND zgrada_id=$2',
+            [req.session.zgrada_id,row.id_forme]
           );
           discussion.forma = formResult.rows[0];
         }
@@ -72,12 +72,12 @@ class DiscussionRoutes {
       const query = `
         SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme
         FROM diskusija
-        WHERE ${whereClauses}
+        WHERE ${whereClauses} AND zgrada_id=$1
         ORDER BY datum_stvorena DESC
         LIMIT 10;`;
 
       // Upit za dohvaćanje nedavnih diskusija
-      const result = await pool.query(query);
+      const result = await pool.query(query,[req.session.zgrada_id]);
 
       // Kreiraj i popuni listu diskusija
       const discussionList = await Promise.all(result.rows.map(async (row) => {
@@ -93,8 +93,8 @@ class DiscussionRoutes {
         // Ako diskusija ima povezanu formu, dohvatite detalje forme
         if (row.id_forme !== null) {
           const formResult = await pool.query(
-            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $1',
-            [row.id_forme]
+            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $1 AND zgrada_id=$2',
+            [row.id_forme,req.session.zgrada_id]
           );
           discussion.forma = formResult.rows[0];
         }
@@ -194,57 +194,7 @@ class DiscussionRoutes {
 
   // Metoda za dodavanje diskusije
   async addNewDiscussion(req, res) {
-    try{
-      // Dohvati podatke.
-      let {naslov,  opis, br_odgovora, id_forme} = req.body;
-      const KreatorEmail = req.session.email;
-      const datum_stvorena = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
-     
-      // Verificiraj podatke.
-      if (!naslov) { //ostali mogu biti null
-        console.log("Greska pri verifikaciji podataka");
-        return res.status(400).json({ message: 'All fields are required.' });
-      }
-
-      console.log("Primljen zahtjev za dodavanje diskusije");
-      console.log("    naslov: ", naslov);
-      console.log("    opis: ", opis);
-      console.log("    br_odgovora: ", br_odgovora);
-      console.log("    id_forme: ", id_forme);
-      console.log("    datum_stvorena: ", datum_stvorena);
-      console.log("    zadnji_pristup: ", datum_stvorena);
-      console.log("    kreator: ", KreatorEmail);
-
-
-      // Upisi novu diskusiju u bazu.
-      const query = `
-        INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme)
-        VALUES ($1, $2, $3, $4, $5, $6, NULL, $7)
-        RETURNING id
-      `;
-
-      const result = await pool.query(query, [naslov, opis, KreatorEmail, datum_stvorena, datum_stvorena, br_odgovora, id_forme]);
-      const id = result.rows[0].id;
-
-      // Posalji response.
-      res.status(201).json({
-        success: true,
-        newDiscussion : {
-            id: id,
-            naslov: naslov,
-            opis: opis,
-            kreator: KreatorEmail,
-            br_odgovora: br_odgovora,
-            id_forme: id_forme,
-            datum_stvorena: datum_stvorena,
-            zadnji_pristup: datum_stvorena,
-        }
-      });
-    } catch (error) {
-
-      console.error("Greška u /data/addNewDiscussion", error.message);
-      res.status(500).send('Greška na serveru');
-    }
+    
   }
 
   // Metoda za dodavanje glasanja diskusiji.
@@ -275,12 +225,12 @@ class DiscussionRoutes {
       
       // Dodaj glasanje u bazu.
       const query = `
-        INSERT INTO glasanje_forma (datum_stvoreno, datum_istece, glasovanje_da, glasovanje_ne, naslov, kreator)
-        VALUES ($1, $2, 0, 0, $3, $4)
+        INSERT INTO glasanje_forma (datum_stvoreno, datum_istece, glasovanje_da, glasovanje_ne, naslov, kreator,zgrada_id)
+        VALUES ($1, $2, 0, 0, $3, $4,$5)
         RETURNING id
       `;
 
-      const result2 = await pool.query(query, [datumStvoreno, datum_istece, naslov, Kreator]);
+      const result2 = await pool.query(query, [datumStvoreno, datum_istece, naslov, Kreator,req.session.zgrada_id]);
       const idGlasanja = result2.rows[0].id;
 
       console.log("Glasanje inserted successfully; id = ", idGlasanja);
@@ -307,13 +257,10 @@ class DiscussionRoutes {
   }
 
   async addDiscussion(req, res) {
-    console.log("Doslo je do tu:", req.session)
     try{
       // Dohvati podatke.
-      let {naslov,  opis} = req.body;
-      const KreatorEmail = req.session.ime;
-      console.log("Ovo je ime: ",req.session.ime);
-      console.log(KreatorEmail);
+      let {naslov,  opis, br_odgovora, id_forme} = req.body;
+      const KreatorEmail = req.session.email;
       const datum_stvorena = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
      
       // Verificiraj podatke.
@@ -325,24 +272,21 @@ class DiscussionRoutes {
       console.log("Primljen zahtjev za dodavanje diskusije");
       console.log("    naslov: ", naslov);
       console.log("    opis: ", opis);
+      console.log("    br_odgovora: ", br_odgovora);
+      console.log("    id_forme: ", id_forme);
       console.log("    datum_stvorena: ", datum_stvorena);
       console.log("    zadnji_pristup: ", datum_stvorena);
       console.log("    kreator: ", KreatorEmail);
 
-
+      const idZgradeKorisnika=req.session.zgrada_id;
+      console.log("Pri dodavanju smo koristili:........................................................ ",req.session.zgrada_id)
+      // Upisi novu diskusiju u bazu.
       const query = `
-      INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme)
-      VALUES ($1, $2, $3, $4, $5, 100, NULL, NULL)
-      RETURNING id
-    `;
-    const result = await pool.query(query, [
-      naslov,
-      opis,
-      KreatorEmail,
-      datum_stvorena,
-      datum_stvorena
-    ]);
-    
+        INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme,zgrada_id)
+        VALUES ($1, $2, $3, $4, $5, $6, NULL, $7,$8)
+        RETURNING id
+      `;
+      const result = await pool.query(query, [naslov, opis, KreatorEmail, datum_stvorena, datum_stvorena, br_odgovora, id_forme, idZgradeKorisnika]);
       const id = result.rows[0].id;
 
       // Posalji response.
@@ -353,13 +297,15 @@ class DiscussionRoutes {
             naslov: naslov,
             opis: opis,
             kreator: KreatorEmail,
+            br_odgovora: br_odgovora,
+            id_forme: id_forme,
             datum_stvorena: datum_stvorena,
             zadnji_pristup: datum_stvorena,
         }
       });
     } catch (error) {
 
-      console.error("Greška u /data/addDiscussion", error.message);
+      console.error("Greška u /data/addNewDiscussion", error.message);
       res.status(500).send('Greška na serveru');
     }
   }

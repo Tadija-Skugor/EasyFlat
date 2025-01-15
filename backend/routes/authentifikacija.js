@@ -26,6 +26,7 @@ class UserRoutes {
         email: req.session.email,
         picture: req.session.picture,
         stanBr:req.session.stanBr,
+        zgradaId:req.session.zgradaId
       } 
     });
   }
@@ -68,7 +69,7 @@ class UserRoutes {
       req.session.prezime = lastName;
       req.session.email = email;
       req.session.stanBr = apartmentNumber;
-  
+      req.session.zgradaId=building;
       res.json({
         message: 'User data successfully stored in the database.',
         user: result.rows[0]

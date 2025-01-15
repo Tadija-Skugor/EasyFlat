@@ -22,7 +22,7 @@ export default function Main() {
             try {
                 const [userEmailResponse, GlasanjesResponse] = await Promise.all([
                     axios.get('http://localhost:4000/glasanje/userEmail', { withCredentials: true }),
-                    axios.get('http://localhost:4000/glasanje/Glasanjes'),
+                    axios.get('http://localhost:4000/glasanje/Glasanjes',{ withCredentials: true }),
                 ]);
 
                 setUserEmail(userEmailResponse.data.email);
