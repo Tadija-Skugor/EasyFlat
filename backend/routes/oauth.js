@@ -121,7 +121,7 @@ class OAuthRoutes {
                 <div class="container">
                   <h1>Već ste poslali zahtijev za pristup ovoj email adresi.</h1>
                   <p>Moći ćete pristupiti sustavu kada vas Administrator mreže odbori.</p>
-                  <button onclick="window.location.href='http://localhost:5000/home'">Go to Home</button>
+                  <button onclick="window.location.href='http://localhost:5000/main'">Go to Home</button>
                 </div>
               </body>
             </html>

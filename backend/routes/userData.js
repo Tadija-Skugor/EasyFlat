@@ -12,6 +12,8 @@ class UserController {
         this.router.post('/activate-user', this.activateUser.bind(this));
         this.router.post('/deactivate-user', this.deactivateUser.bind(this));
         this.router.get('/nerjesen_upit', this.fetchNerjeseniUpiti.bind(this));
+        this.router.get('/buildings', this.fetchBuildingNames.bind(this));
+
     }
 
     async activateUser(req, res) {
@@ -116,7 +118,15 @@ class UserController {
             res.status(500).json({ message: 'Server error' });
         }
     }
-
+    async fetchBuildingNames(req, res) {
+        try {
+            const result = await this.pool.query('SELECT id, naziv_zgrade FROM zgrade');
+            res.json(result.rows);
+        } catch (error) {
+            console.error('Error fetching building names:', error);
+            res.status(500).json({ message: 'Internal server error.' });
+        }
+    }
     async getUserData(session) {
         console.log("Fetching data for user with stanID:", session.stanBr);
 

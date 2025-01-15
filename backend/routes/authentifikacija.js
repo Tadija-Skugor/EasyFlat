@@ -31,12 +31,21 @@ class UserRoutes {
   }
 
   async additionalSignup(req, res) {
-    const { firstName, lastName, email, apartmentNumber } = req.body;
-
+    const { firstName, lastName, email, apartmentNumber, building } = req.body;
+  
     try {
+      // Log the received data
+  
+      // Check if all fields are provided
+      if (!firstName || !lastName || !email || !apartmentNumber || !building) {
+        return res.status(400).json({ message: 'All fields are required.' });
+      }
+  
+  
+      // Insert or update user in the korisnik table
       const insertQuery = `
-        INSERT INTO korisnik (ime, prezime, lozinka, email, stan_id, aktivan)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO korisnik (ime, prezime, lozinka, email, stan_id, aktivan, zgrada_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         ON CONFLICT (email) DO UPDATE SET
             ime = EXCLUDED.ime,
             prezime = EXCLUDED.prezime,
@@ -45,21 +54,40 @@ class UserRoutes {
             aktivan = EXCLUDED.aktivan
         RETURNING *;
       `;
-      const result = await pool.query(insertQuery, [firstName, lastName, 'test', email, apartmentNumber, false]);
-      console.log("podatci---------------------------------"+apartmentNumber);
+  
+      const result = await pool.query(insertQuery, [
+        firstName, 
+        lastName, 
+        'test',       // Placeholder for lozinka
+        email, 
+        apartmentNumber, 
+        false,        // Default aktivan status
+        building    // Use the building ID
+      ]);
+  
+      // Log the result of the insert operation
+      console.log("Insert result:", result.rows[0]);
+  
+      // Update the session with user details
       req.session.ime = firstName;
       req.session.prezime = lastName;
       req.session.email = email;
-      req.session.stanBr=apartmentNumber;
+      req.session.stanBr = apartmentNumber;
+  
+      // Send the response back to the frontend
       res.json({
         message: 'User data successfully stored in the database.',
         user: result.rows[0]
       });
     } catch (error) {
+      // Log the error for debugging
       console.error("Error inserting data into database:", error);
       res.status(500).json({ message: 'Server error' });
     }
   }
+  
+  
+  
 
   initializeRoutes() {
     this.router.get('/', this.isAuthenticated.bind(this), this.getProtectedData.bind(this));
