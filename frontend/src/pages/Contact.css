@@ -1,0 +1,18 @@
+.building-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .building-item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+  }
+  
+  .building-item img {
+    max-width: 100%;
+    height: auto;
+  }
+  

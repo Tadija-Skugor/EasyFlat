@@ -13,7 +13,17 @@ router.get('/users', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+router.get('/zgrade', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, naziv_zgrade, slika_link FROM zgrade');  // Query your database for buildings
 
+    // Send only the rows (building data) as the response
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {
   console.log("Received contact data");
