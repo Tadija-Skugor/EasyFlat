@@ -74,7 +74,6 @@
     font-size: 1.2em;
 }
 
-/* Text Styling */
 .forma-section p {
     margin: 5px 0;
     color: #555;
@@ -82,7 +81,7 @@
 
 
 
-/* AddDiscussion.css */
+/* Diskusija forma css U MAIN */
 .add-discussion-button {
     position: fixed;
     bottom: 20px;
@@ -126,38 +125,36 @@
     max-width: 500px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-/* Centering the form content */
+/* centriranje forme */
 .add-discussion-form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%; /* Ensures the form width adapts to its container */
+    width: 100%;
 }
 
 /* Center-align text inputs and textarea */
 .add-discussion-form label {
     width: 100%;
-    max-width: 400px; /* Ensures a consistent width */
-    text-align: left; /* Align labels to the left */
+    max-width: 400px; 
+    text-align: left; 
     margin-bottom: 10px;
 }
 
 .add-discussion-form input,
 .add-discussion-form textarea {
-    width: 100%; /* Makes the input fields stretch within the form width */
-    max-width: 400px; /* Sets a maximum width */
+    width: 100%; 
     padding: 8px;
     margin-top: 5px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Prevents padding from affecting total width */
+    box-sizing: border-box; 
 }
 
-/* Buttons alignment */
 .add-discussion-form button {
-    width: 100%; /* Makes buttons stretch to the full width */
-    max-width: 400px; /* Matches the width of input fields */
+    width: 100%;
+    max-width: 400px;
     padding: 10px;
     margin-top: 10px;
 }
