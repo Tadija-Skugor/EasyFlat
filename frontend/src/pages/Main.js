@@ -286,12 +286,7 @@ export default function Home() {
             <div className="discussions-wrapper">
                 <h2>Diskusije</h2>
 
-                <button
-                className="add-discussion-button"
-                onClick={() => setShowAddDiscussion(!showAddDiscussion)}
-            >
-                +
-            </button>
+                <button className="add-discussion-button" onClick={() => setShowAddDiscussion(!showAddDiscussion)}>+</button>
 
             {showAddDiscussion && (
                 <div className="overlay">

@@ -60,7 +60,7 @@ function CentarZaPoruke() {
 
     return (
         <div className="message-center">
-            <h2>Centar za Poruke</h2>
+            <h2>Centar za poruke</h2>
             
             {/* Provjera je li admin */}
             {info && info.email.startsWith("easyflatprogi@") ? (
@@ -77,12 +77,12 @@ function CentarZaPoruke() {
                                 <div className="message-field" key={index}>
                                     <div className="message-header">
                                         <span className="sender">{message.senderEmail}</span>
+                                        <button  onClick={() => deleteFunction(message.senderEmail, message.messageText)}>
+                                            
+                                        </button>
                                     </div>
                                     <div className="message-body">
                                         <p>{message.messageText}</p>
-                                        <button onClick={() => deleteFunction(message.senderEmail, message.messageText)}>
-                                            Obriši obavijest
-                                        </button>
                                     </div>
                                 </div>
                             ))

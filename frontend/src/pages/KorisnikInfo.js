@@ -84,7 +84,7 @@ function AdminMessage({ inactiveUsers, activeUsers, onActivateUser, onDeactivate
                                     <p>{user.email}</p>
                                     <p>Stan {user.stan_id}</p>
                                 </div>
-                                <div className="admin-message-right">
+                                <div className="admin-message-right1">
                                     <button onClick={() => onActivateUser(user.email)}>Prihvati</button>
                                 </div>
                             </div>
@@ -104,7 +104,7 @@ function AdminMessage({ inactiveUsers, activeUsers, onActivateUser, onDeactivate
                                     <p>{user.email}</p>
                                     <p>Stan {user.stan_id}</p>
                                 </div>
-                                <div className="admin-message-right">
+                                <div className="admin-message-right2">
                                     <button onClick={() => onDeactivateUser(user.email)}>Deaktiviraj</button>
                                 </div>
                             </div>

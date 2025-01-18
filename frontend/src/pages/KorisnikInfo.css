@@ -158,7 +158,7 @@ button:disabled {
    width: 150px; 
 }
 
-.admin-message-right button {
+.admin-message-right1 button {
    padding: 8px 12px;
    border: none;
    border-radius: 8px;
@@ -167,11 +167,29 @@ button:disabled {
    cursor: pointer;
 }
 
-.admin-message-right button:hover {
+.admin-message-right1 button:hover {
    background-color: #218838;
 }
 
-.admin-message-right button:disabled {
+.admin-message-right1 button:disabled {
+   background-color: #ccc;
+   cursor: not-allowed;
+}
+
+.admin-message-right2 button {
+   padding: 8px 12px;
+   border: none;
+   border-radius: 8px;
+   background-color: #dc3545;
+   color: white;
+   cursor: pointer;
+}
+
+.admin-message-right2 button:hover {
+   background-color: #a71d2a;
+}
+
+.admin-message-right2 button:disabled {
    background-color: #ccc;
    cursor: not-allowed;
 }

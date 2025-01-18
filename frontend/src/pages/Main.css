@@ -1,38 +1,38 @@
-/* Styles for the main discussion container */
 .discussions-wrapper {
     margin: 20px;
+    border-radius: 8px;
+    background: #ffffff;
 }
 
-/* Individual discussion box */
+
 .discussion-box {
     margin-bottom: 20px;
     border: 1px solid #ccc;
-    padding: 50px;
+    width: 65%;
+    margin-inline: auto;
+    padding: 40px;
     border-radius: 8px;
     background-color: #f9f9f9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Discussion title */
 .discussion-box h3 {
     margin-top: 0;
     font-size: 1.5em;
     color: #333;
 }
 
-/* Discussion metadata */
 .discussion-box p {
     margin: 5px 0;
     color: #555;
 }
 
-/* Button for viewing responses */
 .discussion-box button {
     margin-top: 10px;
     padding: 10px 15px;
     font-size: 1em;
     color: #fff;
-    background-color: #196bb5; 
+    background-color: #45a049; 
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -40,25 +40,24 @@
 }
 
 .discussion-box button:hover {
-    background-color: #104675;
+    background-color: #27792b;
 }
 
 .responses-section ul {
-    list-style-type: none; /* Remove default bullet points */
-    border: none; /* Removed unnecessary border from the <ul> */
-    padding: 0; /* Remove default padding */
-    margin: 0; /* Ensure consistent alignment */
+    list-style-type: none; 
+    border: none; 
+    padding: 0; 
+    margin: 0; 
 }
 
 .responses-section li {
-    border: 1px solid #ccc; /* Add a border around each <li> for separation */
-    margin-bottom: 10px; /* Add space between each list item */
-    padding: 10px; /* Add padding inside the <li> for better readability */
-    border-radius: 5px; /* Add rounded corners for a cleaner look */
-    background-color: #f9f9f9; /* Add a subtle background color */
+    border: 1px solid #ccc; 
+    margin-bottom: 10px; 
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
 
-/* Forma Section */
 .forma-section {
     margin-top: 20px;
     padding: 15px;
@@ -86,7 +85,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #007bff;
+    background-color: #45a049;
     color: white;
     border: none;
     border-radius: 50%;
@@ -101,7 +100,7 @@
 }
 
 .add-discussion-button:hover {
-    background-color: #0056b3;
+    background-color: #27792b;
 }
 
 .overlay {
@@ -125,7 +124,7 @@
     max-width: 500px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-/* centriranje forme */
+
 .add-discussion-form {
     display: flex;
     flex-direction: column;
@@ -133,7 +132,6 @@
     width: 100%;
 }
 
-/* Center-align text inputs and textarea */
 .add-discussion-form label {
     width: 100%;
     max-width: 400px; 
