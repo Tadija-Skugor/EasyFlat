@@ -1,18 +1,32 @@
 .building-list {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 20px;
   }
   
   .building-item {
     border: 1px solid #ccc;
     padding: 20px;
-    text-align: center;
-    width: 200px;
+    width: 75%;
+    display: flex;
+    flex-direction: row;
+    margin-inline: auto;
+  }
+
+  h2{
+    text-align: start;
   }
   
   .building-item img {
-    max-width: 100%;
+    height: fit-content;
     height: auto;
   }
+
+  .users-list {
+    list-style-type: disc; 
+    padding-left: 20px;    
+  }
   
+  .users-list li {
+    margin-bottom: 10px;
+  }

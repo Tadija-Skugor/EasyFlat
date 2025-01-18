@@ -13,17 +13,34 @@ router.get('/users', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
 router.get('/zgrade', async (req, res) => {
   try {
-    const result = await pool.query('SELECT id, naziv_zgrade, slika_link FROM zgrade');  // Query your database for buildings
-
-    // Send only the rows (building data) as the response
+    const result = await pool.query(`
+      SELECT
+        z.id AS zgrada_id,
+        z.naziv_zgrade,
+        z.slika_link,
+        ARRAY_AGG(k.Ime || ' ' || k.Prezime || ' ' || k.email) AS korisnici
+      FROM
+        zgrade z
+      LEFT JOIN
+        korisnik k ON z.id = k.zgrada_id
+      WHERE
+        k.email NOT LIKE '%easyflatprogi@gmail.com%'
+      GROUP BY
+        z.id, z.naziv_zgrade, z.slika_link
+    `);  // join `zgrade` and `korisnik`
+    result.rows.forEach(building => {
+      console.log(building.korisnici); // provjera korisnika
+    });
     res.json(result.rows);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
+
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {
   console.log("Received contact data");
