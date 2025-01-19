@@ -13,8 +13,6 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
-
-
     const [showAddDiscussion, setShowAddDiscussion] = useState(false); // Manage add discussion form visibility
     const [newDiscussion, setNewDiscussion] = useState({
         naslov: '',
@@ -22,17 +20,18 @@ export default function Home() {
     });
     const [Glasanjes, setGlasanjes] = useState([]);
     const [userEmail, setUserEmail] = useState('');
-        const [userVotes, setUserVotes] = useState({});
-        const [selectedVotes, setSelectedVotes] = useState({});
-        const [hasVoted, setHasVoted] = useState({});
-        
-        const [expandedInfo, setExpandedInfo] = useState({});
-        const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-        const [newGlasanje, setNewGlasanje] = useState({
-            naslov: '',
-            opis: '',
-            datum_istece: '',
-        });
+    const [userVotes, setUserVotes] = useState({});
+    const [selectedVotes, setSelectedVotes] = useState({});
+    const [hasVoted, setHasVoted] = useState({});
+    const [expandedInfo, setExpandedInfo] = useState({});
+    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+    const [newGlasanje, setNewGlasanje] = useState({
+        naslov: '',
+        opis: '',
+        datum_istece: '',
+    });
+
+
     const fetchDiscussions = async (searchQuery) => {
         try {
             const response = await axios.get('http://localhost:4000/data/allDiscussions', {
@@ -219,30 +218,51 @@ export default function Home() {
     
     const handleAddDiscussion = async (e) => {
         e.preventDefault();
-
+    
         const { naslov, opis } = newDiscussion;
-
-        if (!naslov.trim() || !opis.trim()) {
+        const { naslov: naslovGlasanja, opis: opisGlasanja, datum_istece } = newGlasanje;
+    
+        if (!naslov.trim() || !opis.trim() || !naslovGlasanja.trim() || !opisGlasanja.trim() || !datum_istece.trim()) {
             console.log('All fields are required.');
             return;
         }
-
+    
         try {
-            await axios.post('http://localhost:4000/data/addDiscussion', {
+            // Step 1: Add the discussion and get the ID
+            const response = await axios.post('http://localhost:4000/data/addDiscussion', {
                 naslov,
-                opis
+                opis,
             }, {
-                withCredentials: true  // Ensure cookies are sent with the request
+                withCredentials: true,
             });
-            
-
-            setNewDiscussion({ naslov: '', opis: ''});
+    
+            const newDiscussion = response.data.newDiscussion; // Accessing newDiscussion object from response
+            const id_diskusije = newDiscussion.id; // Extracting the id of the new discussion
+            console.log('New discussion ID:', id_diskusije);
+    
+            // Step 2: Add the glasanje with id_diskusije
+            await axios.post('http://localhost:4000/data/bindNewForm', {
+                id_diskusije,
+                naslov: naslovGlasanja,
+                opis: opisGlasanja,
+                datum_istece,
+            }, {
+                withCredentials: true,
+            });
+    
+            // Reset form fields
+            setNewDiscussion({ naslov: '', opis: '' });
+            setNewGlasanje({ naslov: '', opis: '', datum_istece: '' });
             setShowAddDiscussion(false);
             fetchDiscussions();
         } catch (error) {
-            console.error('Error adding discussion:', error);
+            console.error('Error adding discussion and glasanje:', error);
         }
     };
+    
+    
+
+
     const toggleResponsesVisibility = (discussionId) => {
         if (selectedDiscussionId === discussionId) {
             setSelectedDiscussionId(null);
@@ -260,13 +280,6 @@ export default function Home() {
 
     return (
         <div className="home-container">
-            {/*
-            <h1>HOME STRANICA</h1>
-            <p>
-                Ovdje ce se nalaziti naša početna home stranica. U njoj ce biti diskusije.<br />
-                Neki message board i voting sustav
-            </p>
-            */}
 
             {loading ? (
                 <p>Učitavanje podataka...</p>
@@ -309,6 +322,35 @@ export default function Home() {
                                     value={newDiscussion.opis}
                                     onChange={(e) =>
                                         setNewDiscussion({ ...newDiscussion, opis: e.target.value })
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Naslov glasanja:
+                                <input
+                                    type="text"
+                                    value={newGlasanje.naslov}
+                                    onChange={(e) =>
+                                        setNewGlasanje({ ...newGlasanje, naslov: e.target.value })
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Opis glasanja:
+                                <textarea
+                                    value={newGlasanje.opis}
+                                    onChange={(e) =>
+                                        setNewGlasanje({ ...newGlasanje, opis: e.target.value })
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Datum isteka:
+                                <input
+                                    type="date"
+                                    value={newGlasanje.datum_istece}
+                                    onChange={(e) =>
+                                        setNewGlasanje({ ...newGlasanje, datum_istece: e.target.value })
                                     }
                                 />
                             </label>
