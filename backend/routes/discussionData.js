@@ -189,14 +189,7 @@ class DiscussionRoutes {
       res.status(500).send('Greška na serveru');
     }
   }
-
-
-
-  // Metoda za dodavanje diskusije
-  async addNewDiscussion(req, res) {
-    
-  }
-
+   
   // Metoda za dodavanje glasanja diskusiji.
   async bindNewForm(req, res) {
     try {
@@ -282,7 +275,7 @@ class DiscussionRoutes {
       console.log("Pri dodavanju smo koristili:........................................................ ",req.session.zgrada_id)
       // Upisi novu diskusiju u bazu.
       const query = `
-        INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme,zgrada_id)
+        INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme, zgrada_id)
         VALUES ($1, $2, $3, $4, $5, $6, NULL, $7,$8)
         RETURNING id
       `;
@@ -317,7 +310,6 @@ class DiscussionRoutes {
     this.router.get('/discussionResponses', this.fetchDiscussionResponses.bind(this));
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
     this.router.post('/bindNewForm', this.bindNewForm.bind(this));
-    this.router.post('/addNewDiscussion', this.addNewDiscussion.bind(this));
     this.router.post('/addDiscussion', this.addDiscussion.bind(this)); //dodavanje nove diskusije preko forme
     
   }
