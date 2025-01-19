@@ -249,6 +249,7 @@ class DiscussionRoutes {
     }
   }
 
+  // Metoda za dodavanje diskusije
   async addDiscussion(req, res) {
     try{
       // Dohvati podatke.
