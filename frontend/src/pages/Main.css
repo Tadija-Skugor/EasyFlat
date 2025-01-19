@@ -4,7 +4,6 @@
     background: #ffffff;
 }
 
-
 .discussion-box {
     margin-bottom: 20px;
     border: 1px solid #ccc;
@@ -77,8 +76,6 @@
     margin: 5px 0;
     color: #555;
 }
-
-
 
 /* Diskusija forma css U MAIN */
 .add-discussion-button {
@@ -159,6 +156,59 @@
 
 .close-button {
     background-color: #dc3545;
+}
+
+.close-button:hover {
+    background-color: #a71d2a;
+}
+
+.overlay-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.add-discussion-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; 
+    gap: 10px;
+    width: 100%;
+}
+
+.add-discussion-form label {
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+    margin-bottom: 5px; 
+}
+
+.add-discussion-form input,
+.add-discussion-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.add-discussion-form textarea {
+    resize: vertical; 
+    min-height: 60px; 
+}
+
+.add-discussion-form button {
+    width: 100%;
+    padding: 8px;
+    font-size: 1em;
+}
+
+.close-button {
+    background-color: #dc3545;
+    margin-top: 5px; 
 }
 
 .close-button:hover {
