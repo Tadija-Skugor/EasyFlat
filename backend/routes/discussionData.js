@@ -2,7 +2,6 @@
 const express = require('express');
 const pool = require('../db'); // Uvezi svoju vezu na bazu podataka
 const js2xmlparser = require('js2xmlparser');
-const { type } = require('os');
 
 class DiscussionRoutes {
   constructor() {
@@ -17,11 +16,11 @@ class DiscussionRoutes {
       const brojZatrazenihDiskusija = req.query.brojZatrazenihDiskusija || 10;
 
       // Upit za dohvaćanje nedavnih diskusija
-      const formResult = await pool.query(
-        'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $1 AND zgrada_id=$2',
-        [row.id_forme, req.session.zgrada_id]
+      const result = await pool.query(
+        'SELECT id, naslov, kreator, opis, datum_stvorena, br_odgovora, id_forme FROM diskusija WHERE zgrada_id=$1 ORDER BY zadnji_pristup DESC LIMIT $2;',
+        [req.session.zgrada_id,brojZatrazenihDiskusija]
       );
-      console.log("fetchAllDiscussions, zgrada id je:", req.session.zgrada_id);
+      console.log("Zgrada id je:", req.session.zgrada_id);
 
       // Kreiraj i popuni listu diskusija
       const discussionList = await Promise.all(result.rows.map(async (row) => {
@@ -37,7 +36,7 @@ class DiscussionRoutes {
         // Ako diskusija ima povezanu formu, dohvatite detalje forme
         if (row.id_forme !== null) {
           const formResult = await pool.query(
-            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $1 AND zgrada_id=$2',
+            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $2 AND zgrada_id=$2',
             [req.session.zgrada_id,row.id_forme]
           );
           discussion.forma = formResult.rows[0];
