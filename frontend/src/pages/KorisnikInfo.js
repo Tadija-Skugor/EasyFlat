@@ -48,8 +48,16 @@ function UserDetails({
                             <td>{info.email}</td>
                         </tr>
                         <tr>
+                            <th>Broj zgrade</th>
+                            <td>{info.zgrada_id}</td>
+                        </tr>
+                        <tr>
                             <th>Broj stana</th>
                             <td>{info.stanBr}</td>
+                        </tr>
+                        <tr>
+                            <th>Suvlasnik</th>
+                            <td>{info.suvlasnik ? "Da" : "Ne"}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -68,8 +76,39 @@ function UserDetails({
         </div>
     );
 }
+function SuvlasnikMessage({ coOwners }) {
+    return (
+        <div className="suvlasnik-message">
+            <p className="suvlasnik-message-header">Suvlasnici zgrada</p>
+            {coOwners.length > 0 ? (
+                <div className="suvlasnik-list">
+                    {coOwners
+                        .sort((a, b) => a.zgrada_id - b.zgrada_id)
+                        .filter((user) => user.email !== "easyflatprogi@gmail.com")
+                        .map((owner, index) => (
+                            <div className="suvlasnik-item" key={index}>
+                                <p><strong>{owner.suvlasnik.ime} {owner.suvlasnik.prezime}</strong></p>
+                                <p>Email: {owner.suvlasnik.email}</p>
+                                <p>Zgrada: {owner.zgrada_id}</p>
+                                <p>Stan: {owner.suvlasnik.stan_id}</p>
+                            </div>
+                        ))}
+                </div>
+            ) : (
+                <p>Nema suvlasnika u ovom trenutku.</p>
+            )}
+        </div>
+    );
+}
 
-function AdminMessage({ inactiveUsers, activeUsers, onActivateUser, onDeactivateUser }) {
+function AdminMessage({
+    inactiveUsers,
+    activeUsers,
+    onActivateUser,
+    onDeactivateUser,
+    onSetCoOwner,
+    onRemoveCoowner
+}) {
     return (
         <div className="admin-message">
             <p className="admin-message-header">Administracija</p>
@@ -77,12 +116,16 @@ function AdminMessage({ inactiveUsers, activeUsers, onActivateUser, onDeactivate
                 {inactiveUsers.length > 0 ? (
                     <>
                         <p className="section-header">Neprihvaćeni korisnici</p>
-                        {inactiveUsers.map((user, index) => (
+                        {inactiveUsers
+                        .sort((a, b) => Number(a.zgrada_id) - Number(b.zgrada_id))
+                        .sort((a, b) => Number(a.stanBr) - Number(b.stanBr))
+                        .map((user, index) => (
                             <div className="admin-message-item" key={index}>
                                 <div className="admin-message-left">
                                     <p><strong>{user.ime} {user.prezime}</strong></p>
                                     <p>{user.email}</p>
                                     <p>Stan {user.stan_id}</p>
+                                    <p>Zgrada {user.zgrada_id}</p>
                                 </div>
                                 <div className="admin-message-right1">
                                     <button onClick={() => onActivateUser(user.email)}>Prihvati</button>
@@ -97,15 +140,26 @@ function AdminMessage({ inactiveUsers, activeUsers, onActivateUser, onDeactivate
                 {activeUsers.length > 0 && (
                     <>
                         <p className="section-header">Aktivni korisnici</p>
-                        {activeUsers.map((user, index) => (
+                        {activeUsers
+                        .filter((user) => user.email !== "easyflatprogi@gmail.com")
+                        .sort((a, b) => Number(a.zgrada_id) - Number(b.zgrada_id))
+                        .sort((a, b) => Number(a.stanBr) - Number(b.stanBr))
+                        .map((user, index) => (
                             <div className="admin-message-item" key={index}>
                                 <div className="admin-message-left">
                                     <p><strong>{user.ime} {user.prezime}</strong></p>
                                     <p>{user.email}</p>
                                     <p>Stan {user.stan_id}</p>
+                                    <p>Zgrada {user.zgrada_id}</p>
+                                    <p>Suvlasnik: {user.suvlasnik ? "Da" : "Ne"}</p>
                                 </div>
                                 <div className="admin-message-right2">
-                                    <button onClick={() => onDeactivateUser(user.email)}>Deaktiviraj</button>
+                                <button onClick={() => 
+                                        user.suvlasnik ? onRemoveCoowner(user.email) : onSetCoOwner(user.email)
+                                        }>
+                                        {user.suvlasnik ? "Ukloni suvlasnika" : "Postavi suvlasnika"}
+                                        </button>
+                                    <button onClick={() => {console.log("Button clicked!"); onDeactivateUser(user.email)}}>Deaktiviraj</button>
                                 </div>
                             </div>
                         ))}
@@ -122,6 +176,7 @@ export default function KorisnikInfo() {
     const [editedInfo, setEditedInfo] = useState({});
     const [inactiveUsers, setInactiveUsers] = useState([]);
     const [activeUsers, setActiveUsers] = useState([]);
+    const [coOwners, setCoOwners] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -135,10 +190,13 @@ export default function KorisnikInfo() {
 
                 const activeResponse = await axios.get('http://localhost:4000/userInfo/active-users', { withCredentials: true });
                 setActiveUsers(activeResponse.data);
+
+                const ownersResponse = await axios.get('http://localhost:4000/userInfo/active-suvlasnici', { withCredentials: true });
+                setCoOwners(ownersResponse.data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
-        };
+        };        
 
         fetchData();
     }, []);
@@ -170,7 +228,6 @@ export default function KorisnikInfo() {
     const handleActivateUser = async (email) => {
         try {
             await axios.post('http://localhost:4000/userInfo/activate-user', { email }, { withCredentials: true });
-
             setInactiveUsers((prev) => prev.filter((user) => user.email !== email));
 
             const activatedUser = inactiveUsers.find((user) => user.email === email);
@@ -183,7 +240,6 @@ export default function KorisnikInfo() {
     const handleDeactivateUser = async (email) => {
         try {
             await axios.post('http://localhost:4000/userInfo/deactivate-user', { email }, { withCredentials: true });
-
             setActiveUsers((prev) => prev.filter((user) => user.email !== email));
 
             const deactivatedUser = activeUsers.find((user) => user.email === email);
@@ -193,6 +249,29 @@ export default function KorisnikInfo() {
         }
     };
 
+    const handleSetSuvlasnik = async (email) => {
+        try {
+            console.log("handlaem set suvlasnik");
+            await axios.post('http://localhost:4000/userInfo/setSuvlasnik-user', { email }, { withCredentials: true });
+            setActiveUsers((users) =>
+                users.map((user) => (user.email === email ? { ...user, suvlasnik: true } : user))
+            );
+        } catch (error) {
+            console.error('Error setting suvlasnik:', error);
+        }
+    };
+    
+    const handleRemoveSuvlasnik = async (email) => {
+        try {
+            await axios.post('http://localhost:4000/userInfo/removeSuvlasnik-user', { email }, { withCredentials: true });
+            setActiveUsers((users) =>
+                users.map((user) => (user.email === email ? { ...user, suvlasnik: false } : user))
+            );
+        } catch (error) {
+            console.error('Error removing suvlasnik:', error);
+        }
+    };
+    
     const setEditingField = (field, value) => {
         setEditedInfo((prev) => ({ ...prev, [field]: value }));
     };
@@ -202,23 +281,30 @@ export default function KorisnikInfo() {
     }
 
     return (
-        <div style={{ display: "flex", flexDirection: "row" }}>
-            {info && (
-                <UserDetails
-                    info={editing ? editedInfo : info}
-                    onEdit={handleEdit}
-                    onSave={handleSave}
-                    onCancel={handleCancel}
-                    editing={editing}
-                    setEditingField={setEditingField}
-                />
-            )}
+        <div style={{ display: "flex"}}>
+            <div style={{display:'flex', flexFlow:"column"}}>
+                {info && (
+                    <UserDetails
+                        info={editing ? editedInfo : info}
+                        onEdit={handleEdit}
+                        onSave={handleSave}
+                        onCancel={handleCancel}
+                        editing={editing}
+                        setEditingField={setEditingField}
+                    />
+                )}
+                {info.email.startsWith("easyflatprogi@") && (
+                    <SuvlasnikMessage coOwners={coOwners} />
+                )}
+            </div>
             {info.email.startsWith("easyflatprogi@") && (
                 <AdminMessage
                     inactiveUsers={inactiveUsers}
                     activeUsers={activeUsers}
                     onActivateUser={handleActivateUser}
                     onDeactivateUser={handleDeactivateUser}
+                    onSetCoOwner={handleSetSuvlasnik}
+                    onRemoveCoowner = {handleRemoveSuvlasnik}
                 />
             )}
         </div>
