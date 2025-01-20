@@ -88,20 +88,23 @@
  .form-group {
    display: flex;
    flex-direction: column;
-   width: 100%; 
+   width: 100%;
    margin-bottom: 15px; 
+   overflow: hidden;
  }
  
  input[type="text"],
  input[type="email"],
  option,
  select {
+  background-color: white;
    padding: 10px;
    border: 1px solid #ccc;
    border-radius: 5px;
    font-size: 16px;
    transition: border-color 0.3s;
    width: 100%;
+   box-sizing: border-box;
  }
  
  input[type="text"]:focus,
@@ -149,4 +152,34 @@
 .benefits-list li {
    margin-bottom: 10px;
    font-size: 16px;
+}
+
+
+@media only screen and (max-width: 680px) {
+
+  .signup-container {
+    width: 90%;
+    padding: 10px;
+    margin: 10px auto;
+  }
+
+  .signup-form-container{
+    width: 90%;
+    padding: 10px;
+    margin: 10px auto;
+  }
+
+  .signup-content {
+    margin-bottom: 0px;
+  }
+
+  .benefits-section {
+    padding: 10px;
+    margin-bottom: 10px;
+ }
+
+ .form-group{
+    margin-bottom: 10px;
+ }
+
 }
