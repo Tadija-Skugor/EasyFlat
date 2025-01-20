@@ -16,7 +16,6 @@ class UserController {
         this.router.get('/nerjesen_upit', this.fetchNerjeseniUpiti.bind(this));
         this.router.get('/buildings', this.fetchBuildingNames.bind(this));
         this.router.get('/active-suvlasnici', this.fetchActiveSuvlasnik.bind(this));
-
     }
 
     async activateUser(req, res) {
@@ -26,14 +25,11 @@ class UserController {
             if (!email) {
                 return res.status(400).json({ message: 'Missing email.' });
             }
-    
             console.log(`Activating user with email: ${email}`);
-    
             const result = await this.pool.query(
-                'UPDATE korisnik SET aktivan = true WHERE email = $1 RETURNING *',
+                'UPDATE korisnik SET aktivan = true, suvlasnik = false WHERE email = $1 RETURNING *',
                 [email]
             );
-    
             if (result.rowCount > 0) {
                 res.json({ message: 'User activated successfully.', user: result.rows[0] });
             } else {
@@ -52,23 +48,19 @@ class UserController {
             if (!email) {
                 return res.status(400).json({ message: 'Missing email.' });
             }
-    
             console.log(`Setting as Suvlasnik user with email: ${email}`);
             const buildingResult = await this.pool.query(
                 'SELECT zgrada_id FROM korisnik WHERE email = $1',
                 [email]
             );
-    
             if (buildingResult.rowCount === 0) {
                 return res.status(404).json({ message: 'User not found.' });
             }
-    
             const zgrada_id = buildingResult.rows[0].zgrada_id;
             const existingSuvlasnik = await this.pool.query(
-                'SELECT * FROM korisnik WHERE zgrada_id = $1 AND suvlasnik = true',
-                [zgrada_id]
+                'SELECT * FROM korisnik WHERE zgrada_id = $1 AND suvlasnik = true AND email != $2',
+                [zgrada_id, 'easyflatprogi@gmail.com']
             );
-    
             if (existingSuvlasnik.rowCount > 0) {
                 return res.status(400).json({
                     message: 'A Suvlasnik already exists for this building.',
@@ -99,14 +91,11 @@ class UserController {
             if (!email) {
                 return res.status(400).json({ message: 'Missing email.' });
             }
-    
             console.log(`Removing as Suvlasnik user with email: ${email}`);
-    
             const result = await this.pool.query(
                 'UPDATE korisnik SET suvlasnik = false WHERE email = $1 RETURNING *',
                 [email]
             );
-    
             if (result.rowCount > 0) {
                 res.json({ message: 'User removed as suvlansik successfully.', user: result.rows[0] });
             } else {
@@ -121,18 +110,14 @@ class UserController {
     async deactivateUser(req, res) {
         try {
             const { email } = req.body;
-    
             if (!email) {
                 return res.status(400).json({ message: 'Missing email.' });
             }
-    
             console.log(`Deactivating user with email: ${email}`);
-    
             const result = await this.pool.query(
                 'UPDATE korisnik SET aktivan = false, suvlasnik = false WHERE email = $1 RETURNING *',
                 [email]
             );
-    
             if (result.rowCount > 0) {
                 res.json({ message: 'User deactivated successfully.', user: result.rows[0] });
             } else {
@@ -149,7 +134,6 @@ class UserController {
             const result = await this.pool.query(
                 'SELECT ime, prezime, email, stan_id, zgrada_id, suvlasnik FROM korisnik WHERE aktivan = false'
             );
-    
             if (result.rows.length > 0) {
                 res.json(result.rows); 
             } else {
@@ -166,7 +150,6 @@ class UserController {
             const result = await this.pool.query(
                 'SELECT ime, prezime, email, stan_id, suvlasnik, zgrada_id FROM korisnik WHERE aktivan = true'
             );
-    
             if (result.rows.length > 0) {
                 res.json(result.rows); 
             } else {
@@ -183,7 +166,6 @@ class UserController {
             const result = await this.pool.query(
                 'SELECT emailosobe,tekst FROM upit WHERE rjeseno = false'
             );
-    
             if (result.rows.length > 0) {
                 res.json(result.rows); 
             } else {
@@ -196,7 +178,7 @@ class UserController {
     }
     async fetchBuildingNames(req, res) {
         try {
-            const result = await this.pool.query('SELECT id, naziv_zgrade FROM zgrade');
+            const result = await this.pool.query('SELECT id, naziv_zgrade, slika_link FROM zgrade');
             res.json(result.rows);
         } catch (error) {
             console.error('Error fetching building names:', error);
@@ -208,7 +190,8 @@ class UserController {
         try {
             const result = await this.pool.query(
                 `SELECT zgrada_id, naziv_zgrade, 
-                        json_build_object('ime', ime, 'prezime', prezime, 'email', email, 'stan_id', stan_id) AS suvlasnik
+                        json_build_object('ime', ime, 'prezime', prezime, 'email', email, 'stan_id', stan_id) AS suvlasnik,
+                        zgrade.slika_link
                  FROM korisnik
                  JOIN zgrade ON korisnik.zgrada_id = zgrade.id
                  WHERE suvlasnik = true AND email != 'easyflatprogi@gmail.com'
@@ -221,7 +204,6 @@ class UserController {
             res.status(500).json({ message: 'Internal server error.' });
         }
     }
-
 
     async getUserData(session) {
         console.log("Fetching data for user with stanID:", session.stanBr);
@@ -239,7 +221,7 @@ class UserController {
             const user = result.rows[0];
 
             return {
-                slika: session.picture,  // Slika is fetched from the session
+                slika: session.picture, 
                 ime: user.ime,
                 prezime: user.prezime,
                 status: session.status || 'Suvlasnik',
@@ -298,7 +280,7 @@ class UserController {
                     slika: req.session.picture,  
                     ime: req.session.ime,
                     prezime: req.session.prezime,
-                    status: req.session.status || 'Suvlasnik',
+                    // status: req.session.status || 'Suvlasnik',
                     email: req.session.email,
                     stanBr: req.session.stanBr,
                     suvlasnik: req.session.suvlasnik,

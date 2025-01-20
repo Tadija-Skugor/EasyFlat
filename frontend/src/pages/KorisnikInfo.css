@@ -128,10 +128,30 @@ button:disabled {
    background-color: #fff;
    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
    border: 1px solid #ddd;
+   position: relative;
+   overflow: hidden; 
+}
+
+.suvlasnik-item::before {
+   content: ''; 
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: rgba(0, 0, 0, 0.3); 
+   z-index: 1; 
+}
+
+.suvlasnik-item p {
+   z-index: 2; 
+   color: white; 
+   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); 
+   font-weight: bold;
 }
 
 .admin-message {
-   width: 70%;
+   width: 60%;
    height: fit-content;
    margin: 10px auto;
    padding: 20px;
@@ -231,5 +251,33 @@ button:disabled {
 .admin-message-right2 button:disabled {
    background-color: #ccc;
    cursor: not-allowed;
+}
+
+.remove-coowner {
+   background-color: red;
+   color: white;
+   border: none;
+   padding: 10px 20px;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 14px;
+}
+
+.remove-coowner:hover {
+   background-color: darkred;
+}
+
+.set-coowner {
+   background-color: green;
+   color: white;
+   border: none;
+   padding: 10px 20px;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 14px;
+}
+
+.set-coowner:hover {
+   background-color: darkgreen;
 }
 
