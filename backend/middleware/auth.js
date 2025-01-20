@@ -8,7 +8,7 @@ class AuthMiddleware {
   }
 
   isAuthenticated(req, res, next) {
-    console.log("Dosnlo je do autnetifikacije:-----------------------------------------");
+    console.log("Doslo je do autnetifikacije:-----------------------------------------");
     console.log(req.session.userId);
     if (req.session.userId) {
       next();
