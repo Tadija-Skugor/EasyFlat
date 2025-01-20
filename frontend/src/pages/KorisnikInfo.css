@@ -1,5 +1,5 @@
 #user-details {
-   width:100%;
+   width:80%;
    height:fit-content;
    margin: 10px auto; 
    padding: 20px;
@@ -98,7 +98,7 @@ button:disabled {
 }
 
 .suvlasnik-message {
-   width: 100%;
+   width: 80%;
    height: fit-content;
    margin: 10px auto;
    padding: 20px;
@@ -253,31 +253,39 @@ button:disabled {
    cursor: not-allowed;
 }
 
-.remove-coowner {
-   background-color: red;
-   color: white;
+.admin-message-right2 .remove-coowner {
+   padding: 5px 5px;
    border: none;
-   padding: 10px 20px;
-   border-radius: 5px;
-   cursor: pointer;
-   font-size: 14px;
-}
-
-.remove-coowner:hover {
-   background-color: darkred;
-}
-
-.set-coowner {
-   background-color: green;
+   border-radius: 8px;
+   background-color: #dc3545;
    color: white;
-   border: none;
-   padding: 10px 20px;
-   border-radius: 5px;
    cursor: pointer;
-   font-size: 14px;
+   margin: 5px;
 }
 
-.set-coowner:hover {
-   background-color: darkgreen;
+.admin-message-right2 .remove-coowner:hover {
+   background-color: #a71d2a;
 }
 
+.admin-message-right2 .set-coowner {
+   padding: 5px 5px;
+   border: none;
+   border-radius: 8px;
+   background-color: #28a745;
+   color: white;
+   cursor: pointer;
+   margin: 5px;
+}
+
+.admin-message-right2 .set-coowner:hover {
+   background-color: #218838;
+}
+
+.admin-message-right2 .set-coowner:disabled {
+   background-color: #ccc;
+   cursor: not-allowed;
+}
+
+.admin-message-right2 .set-coowner:disabled:hover {
+   background-color: #ccc;
+}
