@@ -36,8 +36,8 @@ class DiscussionRoutes {
         // Ako diskusija ima povezanu formu, dohvatite detalje forme
         if (row.id_forme !== null) {
           const formResult = await pool.query(
-            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $2 AND zgrada_id=$2',
-            [req.session.zgrada_id,row.id_forme]
+            'SELECT id, naslov, glasovanje_da, glasovanje_ne, datum_stvoreno, datum_istece, kreator FROM glasanje_forma WHERE id = $1 AND zgrada_id=$2',
+            [row.id_forme, req.session.zgrada_id]
           );
           discussion.forma = formResult.rows[0];
         }
