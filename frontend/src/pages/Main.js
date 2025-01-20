@@ -166,7 +166,6 @@ export default function Home() {
         }
     };
 
-    // ova funkcija jos ne radi dobro, treba se popraviti
     const handleVoteSubmit = async (formaId, vote) => {
         try {
             const response = await axios.post(
@@ -215,15 +214,15 @@ export default function Home() {
     }, [location.search]);
 
 
-    
     const handleAddDiscussion = async (e) => {
         e.preventDefault();
-    
+        
         const { naslov, opis } = newDiscussion;
         const { naslov: naslovGlasanja, opis: opisGlasanja, datum_istece } = newGlasanje;
     
-        if (!naslov.trim() || !opis.trim() || !naslovGlasanja.trim() || !opisGlasanja.trim() || !datum_istece.trim()) {
-            console.log('All fields are required.');
+        // Validate only the required fields
+        if (!naslov.trim() || !opis.trim()) {
+            console.log('Naslov i opis diskusije su obavezni.');
             return;
         }
     
@@ -240,15 +239,17 @@ export default function Home() {
             const id_diskusije = newDiscussion.id; // Extracting the id of the new discussion
             console.log('New discussion ID:', id_diskusije);
     
-            // Step 2: Add the glasanje with id_diskusije
-            await axios.post('http://localhost:4000/data/bindNewForm', {
-                id_diskusije,
-                naslov: naslovGlasanja,
-                opis: opisGlasanja,
-                datum_istece,
-            }, {
-                withCredentials: true,
-            });
+            // Step 2: Add glasanje only if optional fields are filled
+            if (naslovGlasanja.trim() || opisGlasanja.trim() || datum_istece.trim()) {
+                await axios.post('http://localhost:4000/data/bindNewForm', {
+                    id_diskusije,
+                    naslov: naslovGlasanja,
+                    opis: opisGlasanja,
+                    datum_istece,
+                }, {
+                    withCredentials: true,
+                });
+            }
     
             // Reset form fields
             setNewDiscussion({ naslov: '', opis: '' });
@@ -260,8 +261,6 @@ export default function Home() {
         }
     };
     
-    
-
 
     const toggleResponsesVisibility = (discussionId) => {
         if (selectedDiscussionId === discussionId) {
@@ -271,8 +270,6 @@ export default function Home() {
             fetchResponses(discussionId);
         }
     };
-
-
 
     if (loading) {
         return <div>Učitavanje podataka...</div>;
