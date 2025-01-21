@@ -61,6 +61,11 @@ class SlanjePoruka {
             res.status(500).json({ error: 'Failed to fetch messages from the database' });
         }
     }
+
+    checkStatus(req, res) {
+        console.log("Provjera route hit");
+        res.status(200).send('This is the response from the /poruke/provjera route!');
+    }
 }
 
 module.exports = new SlanjePoruka().router;  

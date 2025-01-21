@@ -22,6 +22,16 @@
    justify-content: space-between;
  }
 
+ .building-picture{
+  background-color: white;
+  margin: auto;
+  margin-right: 50px;
+ }
+
+ .building-item img{
+    width: 300px
+ }
+
  .building-podaci{
    width: 100%;
  }
@@ -52,10 +62,7 @@
      margin-inline: auto;
    }
     
-   .building-item img {
-     max-height: auto;
-     margin-right: 50px;
-   }
+
  
    .users-list {
      list-style-type: disc; 

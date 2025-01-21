@@ -119,12 +119,10 @@ function Contact() {
         building.korisnici.some(
           (user) => user.email === userEmail && user.suvlasnik
         );
-      
-
         return (
           <div key={building.zgrada_id} className="building-item">
             <div className="building-picture">
-              <img src={building.slika_link} alt={building.naziv_zgrade} width="300" />
+              <img src={building.slika_link} alt={building.naziv_zgrade}  />
             </div>
             <div className="building-podaci">
               <div className="building-naslov-gumb">
@@ -144,7 +142,9 @@ function Contact() {
               </div>
               {building.korisnici && building.korisnici.length > 0 ? (
                 <ul>
-                  {building.korisnici.map((user, index) => (
+                  {building.korisnici
+                  .filter((user) => user.aktivan)
+                  .map((user, index) => (
                     <li
                       key={index}
                       style={{ fontWeight: user.suvlasnik ? 'bold' : 'normal' }}

@@ -34,7 +34,8 @@ router.get('/zgrade', async (req, res) => {
                   'ime', k.Ime,
                   'prezime', k.Prezime,
                   'email', k.email,
-                  'suvlasnik', k.suvlasnik
+                  'suvlasnik', k.suvlasnik, 
+                  'aktivan', k.aktivan
                 )
                 ELSE NULL
               END
