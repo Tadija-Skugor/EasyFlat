@@ -69,6 +69,23 @@ router.post('/zgrade', async (req, res) => {
   }
 });
 
+router.put('/zgrade/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { naziv_zgrade, slika_link } = req.body;
+    await pool.query(
+      'UPDATE zgrade SET naziv_zgrade = $1, slika_link = $2 WHERE id = $3',
+      [naziv_zgrade, slika_link, id]
+    );
+    res.status(200).json({ message: 'Building updated' });
+  } catch (err) {
+    console.error('Error updating building:', err.message);
+    res.status(500).json({ error: 'Server Error' });
+  }
+});
+
+
+
 
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {

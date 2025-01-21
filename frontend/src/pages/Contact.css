@@ -1,3 +1,43 @@
+.contact-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 75%;
+  margin-inline: auto;
+}
+
+.add-building-button {
+  width:fit-content;
+  display: block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.building-naslov-gumb{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.building-podaci{
+  width: 100%;
+}
+
+.edit-building-button {
+  
+  width: fit-content;
+  display: block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 .building-list {
     display: flex;
     flex-direction: column;
@@ -18,8 +58,8 @@
   }
   
   .building-item img {
-    height: fit-content;
-    height: auto;
+    max-height: auto;
+    margin-right: 50px;
   }
 
   .users-list {
@@ -30,19 +70,7 @@
   .users-list li {
     margin-bottom: 10px;
   }
-
-  .add-building-button {
-    width: 20%;
-    margin-inline: auto;
-    display: block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
+ 
   .modal {
     position: fixed;
     top: 0;
