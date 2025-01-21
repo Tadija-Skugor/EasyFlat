@@ -204,22 +204,22 @@ class DiscussionRoutes {
   async bindNewForm(req, res) {
     try {
       // Dohvati podatke za glasanje.
-      let { naslov, opis, datum_istece, id_diskusije } = req.body;  
+      let { naslov, datum_istece, id_diskusije } = req.body;  
       const KreatorEmail = req.session.email;  
       const result = await pool.query(
-        'SELECT ime FROM korisnik WHERE email = $1', [KreatorEmail]
+        'SELECT ime, prezime FROM korisnik WHERE email = $1', [KreatorEmail]
       );
-      const Kreator = result.rows[0].ime;
+      const Kreator = result.rows[0].ime + " " + result.rows[0].prezime;
 
       console.log("primljen zahtjev za dodavanje glasabha diskuciji sa parametrima:");
       console.log("    naslov: ", naslov);
-      console.log("    opis: ", opis);              // Ovo bi mogao biti nepotreban podatak posto trenutno ne spremamo takvo nesto u bazu.
+      //console.log("    opis: ", opis);              // Ovo bi mogao biti nepotreban podatak posto trenutno ne spremamo takvo nesto u bazu.
       console.log("    datum_istece: ", datum_istece);
       console.log("    id_diskusije: ", id_diskusije);
       console.log("    Kreator: ", Kreator);
 
       // Verificiraj dohvacene podatke.
-      if (!naslov || !opis || !datum_istece || !Kreator || !id_diskusije) {
+      if (!naslov || !datum_istece || !Kreator || !id_diskusije) {
         console.log("Greska pri verifikaciji podataka");
         return res.status(400).json({ message: 'All fields are required.' });
       }
@@ -247,7 +247,7 @@ class DiscussionRoutes {
         newGlasanje: {
             id: idGlasanja,  
             naslov: naslov,
-            opis: opis,
+            //opis: opis,
             datum_istece: datum_istece,
             kreator: Kreator,
         },
@@ -263,7 +263,7 @@ class DiscussionRoutes {
   async addDiscussion(req, res) {
     try{
       // Dohvati podatke.
-      let {naslov,  opis, br_odgovora, id_forme} = req.body;
+      let {naslov,  opis, br_odgovora} = req.body;
       const KreatorEmail = req.session.email;
       const datum_stvorena = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format as YYYY-MM-DD HH:MM:SS
      
@@ -277,7 +277,7 @@ class DiscussionRoutes {
       console.log("    naslov: ", naslov);
       console.log("    opis: ", opis);
       console.log("    br_odgovora: ", br_odgovora);
-      console.log("    id_forme: ", id_forme);
+      //console.log("    id_forme: ", id_forme);
       console.log("    datum_stvorena: ", datum_stvorena);
       console.log("    zadnji_pristup: ", datum_stvorena);
       console.log("    kreator: ", KreatorEmail);
@@ -287,10 +287,10 @@ class DiscussionRoutes {
       // Upisi novu diskusiju u bazu.
       const query = `
         INSERT INTO diskusija (naslov, opis, kreator, datum_stvorena, zadnji_pristup, br_odgovora, odgovori, id_forme, zgrada_id)
-        VALUES ($1, $2, $3, $4, $5, $6, NULL, $7,$8)
+        VALUES ($1, $2, $3, $4, $5, $6, NULL, NULL ,$7)
         RETURNING id
       `;
-      const result = await pool.query(query, [naslov, opis, KreatorEmail, datum_stvorena, datum_stvorena, br_odgovora, id_forme, idZgradeKorisnika]);
+      const result = await pool.query(query, [naslov, opis, KreatorEmail, datum_stvorena, datum_stvorena, br_odgovora, idZgradeKorisnika]);
       const id = result.rows[0].id;
 
       // Posalji response.
@@ -302,7 +302,7 @@ class DiscussionRoutes {
             opis: opis,
             kreator: KreatorEmail,
             br_odgovora: br_odgovora,
-            id_forme: id_forme,
+            //id_forme: id_forme,
             datum_stvorena: datum_stvorena,
             zadnji_pristup: datum_stvorena,
         }

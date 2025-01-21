@@ -13,7 +13,6 @@ export default function Main() {
     const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
     const [newGlasanje, setNewGlasanje] = useState({
         naslov: '',
-        opis: '',
         datum_istece: '',
     });
 
@@ -227,7 +226,7 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
                 <div className="modal-overlay" onClick={closeModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="close-modal-button" onClick={closeModal}>&times;</button>
-                        <h2>Dodaj novu diskusiju</h2>
+                        <h2>Dodaj novo glasanje</h2>
                         <form onSubmit={handleAddGlasanje}>
                             <div className="form-group">
                                 <label htmlFor="naslov">Naslov:</label>
@@ -239,16 +238,6 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
                                     onChange={handleInputChange}
                                     required
                                 />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="opis">Opis:</label>
-                                <textarea
-                                    id="opis"
-                                    name="opis"
-                                    value={newGlasanje.opis}
-                                    onChange={handleInputChange}
-                                    required
-                                ></textarea>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="datum_istece">Datum isteka:</label>

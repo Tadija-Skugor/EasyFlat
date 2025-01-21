@@ -27,7 +27,6 @@ export default function Home() {
     const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
     const [newGlasanje, setNewGlasanje] = useState({
         naslov: '',
-        opis: '',
         datum_istece: '',
     });
 
@@ -243,11 +242,15 @@ export default function Home() {
         e.preventDefault();
         
         const { naslov, opis } = newDiscussion;
-        const { naslov: naslovGlasanja, opis: opisGlasanja, datum_istece } = newGlasanje;
+        const { naslov: naslovGlasanja, datum_istece } = newGlasanje;
     
         // Validate only the required fields
-        if (!naslov.trim() || !opis.trim()) {
-            console.log('Naslov i opis diskusije su obavezni.');
+        if (!naslov.trim()) {
+            console.log('Naslov diskusije je obavezan.');
+            return;
+        }
+        if (naslovGlasanja.trim() && !datum_istece){
+            console.log("Datum je obavezan");
             return;
         }
     
@@ -265,11 +268,10 @@ export default function Home() {
             console.log('New discussion ID:', id_diskusije);
     
             // Step 2: Add glasanje only if optional fields are filled
-            if (naslovGlasanja.trim() || opisGlasanja.trim() || datum_istece.trim()) {
+            if (naslovGlasanja.trim()) {
                 await axios.post('http://localhost:4000/data/bindNewForm', {
                     id_diskusije,
                     naslov: naslovGlasanja,
-                    opis: opisGlasanja,
                     datum_istece,
                 }, {
                     withCredentials: true,
@@ -354,15 +356,6 @@ export default function Home() {
                                     value={newGlasanje.naslov}
                                     onChange={(e) =>
                                         setNewGlasanje({ ...newGlasanje, naslov: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Opis glasanja:
-                                <textarea
-                                    value={newGlasanje.opis}
-                                    onChange={(e) =>
-                                        setNewGlasanje({ ...newGlasanje, opis: e.target.value })
                                     }
                                 />
                             </label>
