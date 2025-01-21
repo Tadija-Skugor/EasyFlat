@@ -111,6 +111,7 @@ function SuvlasnikMessage({ coOwners , allBuildings, onSetCoOwner}) {
 
 
 function AdminMessage({
+    currentInfo,
     inactiveUsers,
     activeUsers,
     onActivateUser,
@@ -118,52 +119,60 @@ function AdminMessage({
     onSetCoOwner,
     onRemoveCoowner,
     allBuildings,
-    setAllBuildings,
-    coOwners
 }) {
+    const isAdmin = currentInfo.email === "easyflatprogi@gmail.com";
+
+    const filteredInactiveUsers = isAdmin
+        ? inactiveUsers
+        : inactiveUsers.filter((user) => user.zgrada_id === currentInfo.zgrada_id);
+
+    const filteredActiveUsers = isAdmin
+        ? activeUsers
+        : activeUsers.filter((user) => user.zgrada_id === currentInfo.zgrada_id);
+
     return (
         <div className="admin-message">
             <p className="admin-message-header">Administracija</p>
             <div className="admin-message-container">
-                {inactiveUsers.length > 0 ? (
+                {filteredInactiveUsers.length > 0 ? (
                     <>
                         <p className="section-header">Neprihvaćeni korisnici</p>
-                        {inactiveUsers
-                        .sort((a, b) => Number(a.zgrada_id) - Number(b.zgrada_id))
-                        .sort((a, b) => Number(a.stanBr) - Number(b.stanBr))
-                        .map((user, index) => (
-                            <div className="admin-message-item" key={index}>
-                                <div className="admin-message-left">
-                                    <p><strong>{user.ime} {user.prezime}</strong></p>
-                                    <p>{user.email}</p>
-                                    <p>Stan {user.stan_id}</p>
-                                    <p>Zgrada {user.zgrada_id}</p>
+                        {filteredInactiveUsers
+                            .sort((a, b) => Number(a.stanBr) - Number(b.stanBr))
+                            .map((user, index) => (
+                                <div className="admin-message-item" key={index}>
+                                    <div className="admin-message-left">
+                                        <p><strong>{user.ime} {user.prezime}</strong></p>
+                                        <p>{user.email}</p>
+                                        <p>Stan {user.stan_id}</p>
+                                        <p>Zgrada {user.zgrada_id}</p>
+                                    </div>
+                                    <div className="admin-message-right1">
+                                        <button onClick={() => onActivateUser(user.email)}>Prihvati</button>
+                                    </div>
                                 </div>
-                                <div className="admin-message-right1">
-                                    <button onClick={() => onActivateUser(user.email)}>Prihvati</button>
-                                </div>
-                            </div>
-                        ))}
+                            ))}
                     </>
                 ) : (
                     <p>Nema neprihvaćenih stanara.</p>
                 )}
 
-                {activeUsers.length > 0 && (
+                
+                {filteredActiveUsers.length > 0 && (
                     <>
                         <p className="section-header">Aktivni korisnici</p>
-                        {activeUsers
+                        {filteredActiveUsers
                             .filter((user) => user.email !== "easyflatprogi@gmail.com")
-                            .sort((a, b) => Number(a.zgrada_id) - Number(b.zgrada_id))
+                            .filter((user) => user.email !== currentInfo.email)
                             .sort((a, b) => Number(a.stanBr) - Number(b.stanBr))
                             .map((user, index) => {
-                                
-                                const building = allBuildings.find(building => building.id === user.zgrada_id);
-                                const buildingHasSuvlasnik = building && activeUsers.some(
+                                const building = allBuildings.find((building) => building.id === user.zgrada_id);
+                                const buildingHasSuvlasnik = building && filteredActiveUsers.some(
                                     (activeUser) =>
-                                        activeUser.zgrada_id === building.id && activeUser.suvlasnik === true && activeUser.email !== user.email
-                                );                           
-
+                                        activeUser.zgrada_id === building.id &&
+                                        activeUser.suvlasnik === true &&
+                                        activeUser.email !== user.email
+                                );
                                 return (
                                     <div className="admin-message-item" key={index}>
                                         <div className="admin-message-left">
@@ -174,6 +183,7 @@ function AdminMessage({
                                             <p>Predstavnik: {user.suvlasnik ? "Da" : "Ne"}</p>
                                         </div>
                                         <div className="admin-message-right2">
+                                        {isAdmin && (
                                             <button
                                                 onClick={() =>
                                                     user.suvlasnik
@@ -185,10 +195,10 @@ function AdminMessage({
                                             >
                                                 {user.suvlasnik ? "Ukloni predstavnika" : "Postavi predstavnika"}
                                             </button>
-
+                                        )}
                                             <button onClick={() => onDeactivateUser(user.email)}>
                                                 Deaktiviraj
-                                            </button>
+                                            </button> 
                                         </div>
                                     </div>
                                 );
@@ -200,6 +210,7 @@ function AdminMessage({
     );
 }
 
+
 export default function KorisnikInfo() {
     const [info, setInfo] = useState(null);
     const [editing, setEditing] = useState(false);
@@ -208,7 +219,7 @@ export default function KorisnikInfo() {
     const [activeUsers, setActiveUsers] = useState([]);
     const [coOwners, setCoOwners] = useState([]);
     const [allBuildings, setAllBuildings] = useState([]);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -237,6 +248,10 @@ export default function KorisnikInfo() {
     
         fetchData();
     }, []);
+
+    const isAdmin = info?.email === "easyflatprogi@gmail.com";
+    const isOwner = info?.suvlasnik === true;
+    
 
     const handleEdit = () => {
         setEditedInfo({ ...info });
@@ -344,34 +359,34 @@ export default function KorisnikInfo() {
 
 
 
-    return (
-        <div style={{ display: "flex"}}>
-            <div style={{display:'flex', flexFlow:"column", marginLeft:"100px"}}>
-                {info && (
-                    <UserDetails
-                        info={editing ? editedInfo : info}
-                        onEdit={handleEdit}
-                        onSave={handleSave}
-                        onCancel={handleCancel}
-                        editing={editing}
-                        setEditingField={setEditingField}
-                    />
-                )}
-                {info.email.startsWith("easyflatprogi@") && (
-                    <SuvlasnikMessage 
+return (
+        <div style={{ display: "flex" }}>
+            <div style={{ display: 'flex', flexFlow: "column", marginLeft: "100px" }}>
+                <UserDetails
+                    info={editing ? editedInfo : info}
+                    onEdit={handleEdit}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                    editing={editing}
+                    setEditingField={setEditingField}
+                />
+
+                {(isAdmin) && (
+                    <SuvlasnikMessage
                         coOwners={coOwners}
                         allBuildings={allBuildings}
                     />
                 )}
             </div>
-            {info.email.startsWith("easyflatprogi@") && (
+            {(isAdmin || isOwner) && (
                 <AdminMessage
+                    currentInfo = {info}
                     inactiveUsers={inactiveUsers}
                     activeUsers={activeUsers}
                     onActivateUser={handleActivateUser}
                     onDeactivateUser={handleDeactivateUser}
                     onSetCoOwner={handleSetSuvlasnik}
-                    onRemoveCoowner = {handleRemoveSuvlasnik}
+                    onRemoveCoowner={handleRemoveSuvlasnik}
                     allBuildings={allBuildings}
                     setAllBuildings={setAllBuildings}
                     coOwners={coOwners}
