@@ -20,6 +20,7 @@ const archiveRouter = archive.router
 const pool = require('./db');
 const userDataRouter = require('./routes/userData')(pool);
 const dataRouter = require('./routes/discussionData');
+const zgradeInfoRouter = require('./routes/zgradeInfo');
 
 const authMiddleware = require('./middleware/auth');
 const session = require('express-session');
@@ -127,6 +128,7 @@ console.log(zgrada_id)
     this.app.use('/signupAuth', podatciKorisnikaSignup);
     this.app.use('/glasanje', glasanjeSlanje);
     this.app.use('/userInfo', userDataRouter);
+    this.app.use('/zgradeInfo', zgradeInfoRouter);
     this.app.use('/data', (req, res, next) => {
       console.log('Session Data:', req.session); // Check if session is available here
       next();

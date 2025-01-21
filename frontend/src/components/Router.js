@@ -16,6 +16,7 @@ import KontaktDetalji from '../pages/KontaktDetalji';
 import CentarZaPoruke from '../pages/CentarZaPoruke';
 import PotvrdaSignupa from '../pages/additionalInfo';
 import UserPage from '../pages/KorisnikInfo';
+import Zgrade from '../pages/Zgrade';
 
 export default function Router() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -113,7 +114,7 @@ export default function Router() {
               </PrivateRoute>
             }
           />
-                    <Route
+          <Route
             path="main"
             element={
               <PrivateRoute>
@@ -126,6 +127,14 @@ export default function Router() {
             element={
               <PrivateRoute>
                 <Contact />
+              </PrivateRoute>
+            }
+          />
+                    <Route
+            path="zgrade"
+            element={
+              <PrivateRoute>
+                <Zgrade />
               </PrivateRoute>
             }
           />

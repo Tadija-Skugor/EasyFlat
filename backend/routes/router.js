@@ -16,7 +16,13 @@ router.get('/users', async (req, res) => {
 
 router.get('/zgrade', async (req, res) => {
   try {
-    const result = await pool.query(`
+    if (!req.session || !req.session.email) {
+      return res.status(400).json({ message: 'User is not authenticated' });
+    }
+
+    const userEmail = req.session.email;
+
+    let query = `
         SELECT
           z.id AS zgrada_id,
           z.naziv_zgrade,
@@ -41,17 +47,25 @@ router.get('/zgrade', async (req, res) => {
           korisnik k ON z.id = k.zgrada_id
         GROUP BY
           z.id, z.naziv_zgrade, z.slika_link;
+    `;
 
-    `);  // join `zgrade` and `korisnik`
-    result.rows.forEach(building => {
-      console.log(building.korisnici); // provjera korisnika
-    });
-    res.json(result.rows);
+    const result = await pool.query(query);
+
+    // Filter buildings based on user email
+    const filteredBuildings =
+      userEmail === 'easyflatprogi@gmail.com'
+        ? result.rows // Admin sees all buildings
+        : result.rows.filter(building =>
+            building.korisnici.some(user => user.email === userEmail)
+          ); // Regular user sees their associated buildings only
+
+    res.json(filteredBuildings);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
+
 
 router.post('/zgrade', async (req, res) => {
   try {

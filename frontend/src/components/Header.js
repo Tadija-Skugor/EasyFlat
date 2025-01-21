@@ -69,6 +69,13 @@ export default function Header() {
                         className="nav-icon"
                     />
                 </Link>
+                <Link to="/zgrade">
+                    <img
+                        src={require('../assets/images/building.png')}
+                        alt="buildings"
+                        className="nav-icon"
+                    />
+                </Link>
                 <Link to="/inbox">
                     <img
                         src={require('../assets/images/mail-inbox-app.png')}
@@ -76,13 +83,13 @@ export default function Header() {
                         className="nav-icon"
                     />
                 </Link>
-                <Link to="/main">
+                {/* <Link to="/main">
                     <img
                         src={require('../assets/images/home.png')}
                         alt="Home"
                         className="nav-icon"
                     />
-                </Link>
+                </Link> */}
                 <Link to="/glasanje">
                     <img
                         src={require('../assets/images/vote.png')}
