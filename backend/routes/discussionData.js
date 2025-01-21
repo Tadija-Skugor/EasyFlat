@@ -42,6 +42,16 @@ class DiscussionRoutes {
           discussion.forma = formResult.rows[0];
         }
 
+        const sastanak = await pool.query('SELECT link from sastanak WHERE id_diskusije = $1', [row.id]);
+        if (sastanak.rowCount > 0){
+          if (sastanak.rows[0].link == 'create' && row.kreator == req.session.email){
+            discussion.sastanak = 'create';
+          }
+          else if (sastanak.rows[0].link != 'create'){
+            discussion.sastanak = sastanak.rows[0].link;
+          }
+        }
+
         return discussion;
       }));
 
@@ -304,6 +314,18 @@ class DiscussionRoutes {
     }
   }
 
+  async createMeeting (req,res){
+    const id = req.body.id;
+    //tu sad pošaljemo upit drugoj grupi i dobimo neki link
+    try{
+      const link = 'https://primjerLinka/sdfgsdfgsdfg';
+      await pool.query('UPDATE sastanak SET link = $1 WHERE id_diskusije = $2', [link, id]);
+      res.json({link: link});
+    } catch(err) {
+      res.json({error: err, message: "Internal server error: couldn't provide a link"});
+    }
+  }
+
   // Inicijaliziraj rute
   initializeRoutes() {
     this.router.get('/allDiscussions', this.fetchAllDiscussions.bind(this));
@@ -312,7 +334,7 @@ class DiscussionRoutes {
     this.router.post('/discussionAddResponse', this.sendDiscussionResponse.bind(this));
     this.router.post('/bindNewForm', this.bindNewForm.bind(this));
     this.router.post('/addDiscussion', this.addDiscussion.bind(this)); //dodavanje nove diskusije preko forme
-    
+    this.router.post('/createMeeting', this.createMeeting.bind(this));
   }
 }
 

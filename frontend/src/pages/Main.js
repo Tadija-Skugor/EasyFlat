@@ -204,6 +204,31 @@ export default function Home() {
         setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [formaId]: value }));
     };
     
+    const createSastanak = async (id) => {
+        try {
+            const response = await axios.post('http://localhost:4000/data/createMeeting', { id });
+            if (response.data.link) {
+                setDiscussions((prevDiscussions) =>
+                    prevDiscussions.map((discussion) =>
+                        discussion.id === id
+                            ? { ...discussion, sastanak: response.data.link }
+                            : discussion
+                    )
+                );
+            } else if (response.data.error) {
+                console.error(response.data.error);
+                setDiscussions((prevDiscussions) =>
+                    prevDiscussions.map((discussion) =>
+                        discussion.id === id
+                            ? { ...discussion, sastanak: response.data.message }
+                            : discussion
+                    )
+                );
+            }
+        } catch (err) {
+            console.error('Error creating sastanak:', err);
+        }
+    };
 
     // Effect for loading search query or fetching all discussions
     useEffect(() => {
@@ -367,7 +392,20 @@ export default function Home() {
 
                 {discussions.map((discussion) => (
                     <div key={discussion.id} className="discussion-box">
-                        <h3>{discussion.naslov}</h3>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h3>{discussion.naslov}</h3>
+                            {discussion.sastanak ? (
+                                discussion.sastanak === 'create' ? (
+                                    <button onClick={() => createSastanak(discussion.id)} style={{ marginLeft: 'auto' }}>
+                                        Create Sastanak
+                                    </button>
+                                ) : (
+                                    <a href={discussion.sastanak} style={{ marginLeft: 'auto' }}>
+                                        {discussion.sastanak}
+                                    </a>
+                                )
+                            ) : null}
+                        </div>
                         <p><strong>Autor:</strong> {discussion.kreator}</p>
                         <p><strong>Opis:</strong> {discussion.opis}</p>
                         <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
