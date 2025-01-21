@@ -7,6 +7,7 @@ import Home from '../pages/Main';
 import Signup from '../pages/Signup';
 import Glasanje from '../pages/Glasanje';
 import Main from '../pages/Main';
+import Arhiva from '../pages/Archive';
 
 import Contact from '../pages/Contact';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
@@ -143,6 +144,14 @@ export default function Router() {
             element={
               <PrivateRoute>
                 <Upit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="archive"
+            element={
+              <PrivateRoute>
+                <Arhiva />
               </PrivateRoute>
             }
           />

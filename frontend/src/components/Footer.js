@@ -8,6 +8,7 @@ export default function Footer() {
             padding: "10px 0"
         }}>
            <p> <a href="/contact">@EasyFlat FER 2024.</a> </p>
+           <p> <a href='http://localhost:5000/archive'>Arhiva</a></p>
         </div>
     );
 }
