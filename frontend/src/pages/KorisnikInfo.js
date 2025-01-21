@@ -56,9 +56,10 @@ function UserDetails({
                             <td>{info.stanBr}</td>
                         </tr>
                         <tr>
-                            <th>Predstavnik stanara</th>
-                            <td>{info.suvlasnik ? "Da" : "Ne"}</td>
+                            <th>{info.email === "easyflatprogi@gmail.com" ? "Admin" : "Predstavnik stanara"}</th>
+                            <td>{info.email === "easyflatprogi@gmail.com" ? "Da" : (info.suvlasnik ? "Da" : "Ne")}</td>
                         </tr>
+
                     </tbody>
                 </table>
 
