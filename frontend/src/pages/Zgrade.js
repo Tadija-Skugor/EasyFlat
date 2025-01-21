@@ -114,7 +114,6 @@ function Contact() {
     buildings
       .sort((a, b) => a.naziv_zgrade.localeCompare(b.naziv_zgrade))
       .map((building) => {
-        // Check if the current user is a suvlasnik of this building
         const isSuvlasnik = building.korisnici.some(
           (user) => user.email === userEmail && user.suvlasnik
         );
@@ -127,8 +126,7 @@ function Contact() {
             <div className="building-podaci">
               <div className="building-naslov-gumb">
                 <h2>{building.naziv_zgrade}</h2>
-                {/* Render the Edit button only if the user is suvlasnik */}
-                {isSuvlasnik && (
+                {(isSuvlasnik || userEmail === 'easyflatprogi@gmail.com') && (
                   <button
                     onClick={() => {
                       setEditBuilding(building);
