@@ -17,19 +17,31 @@ router.get('/users', async (req, res) => {
 router.get('/zgrade', async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT
-        z.id AS zgrada_id,
-        z.naziv_zgrade,
-        z.slika_link,
-        ARRAY_AGG(k.Ime || ' ' || k.Prezime || ' ' || k.email) AS korisnici
-      FROM
-        zgrade z
-      LEFT JOIN
-        korisnik k ON z.id = k.zgrada_id
-      WHERE
-        k.email NOT LIKE '%easyflatprogi@gmail.com%'
-      GROUP BY
-        z.id, z.naziv_zgrade, z.slika_link
+        SELECT
+          z.id AS zgrada_id,
+          z.naziv_zgrade,
+          z.slika_link,
+          COALESCE(
+            JSON_AGG(
+              CASE 
+                WHEN k.email IS NOT NULL THEN JSON_BUILD_OBJECT(
+                  'ime', k.Ime,
+                  'prezime', k.Prezime,
+                  'email', k.email,
+                  'suvlasnik', k.suvlasnik
+                )
+                ELSE NULL
+              END
+            ) FILTER (WHERE k.email IS NOT NULL), 
+            '[]'
+          ) AS korisnici
+        FROM
+          zgrade z
+        LEFT JOIN
+          korisnik k ON z.id = k.zgrada_id
+        GROUP BY
+          z.id, z.naziv_zgrade, z.slika_link;
+
     `);  // join `zgrade` and `korisnik`
     result.rows.forEach(building => {
       console.log(building.korisnici); // provjera korisnika
@@ -40,6 +52,23 @@ router.get('/zgrade', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+router.post('/zgrade', async (req, res) => {
+  try {
+    console.log('Received request to add a building:', req.body);
+    const { id, naziv_zgrade, slika_link } = req.body;
+    await pool.query(
+      'INSERT INTO zgrade (id, naziv_zgrade, slika_link) VALUES ($1, $2, $3)',
+      [id, naziv_zgrade, slika_link]
+    );
+    console.log('Building added successfully:', req.body);
+    res.status(201).send('Building added');
+  } catch (err) {
+    console.error('Error adding building:', err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {
@@ -91,6 +120,7 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+module.exports = router;
 
 /*router.post('/addSignupInfo', async(req,res) => {        //dodavanje korisnika u bazu, bez potvrde administratora
   try{              
@@ -111,4 +141,4 @@ router.post('/login', async (req, res) => {
 
 
 
-module.exports = router;
+
