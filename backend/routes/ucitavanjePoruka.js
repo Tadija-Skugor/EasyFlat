@@ -33,28 +33,33 @@ class SlanjePoruka {
 
     async getUserData(req, res) {
         try {
-            const result = await pool.query(
-                'SELECT emailosobe, tekst FROM upit WHERE rjeseno = false AND zgrada_id=$1',[req.session.zgrada_id]
-            );
-            console.log("nesto se vrti");
-
+            let result;
+    
+            if (req.session.email.startsWith("easyflatprogi@")) {
+                // Admin can view all unresolved messages
+                result = await pool.query(
+                    'SELECT emailosobe, tekst FROM upit WHERE rjeseno = false'
+                );
+            } else {
+                
+                result = await pool.query(
+                    'SELECT emailosobe, tekst FROM upit WHERE rjeseno = false AND zgrada_id = $1',
+                    [req.session.zgrada_id]
+                );
+            }
+    
             console.log('Unresolved messages:', result.rows);
-
+    
             const messages = result.rows.map((row) => ({
                 senderEmail: row.emailosobe,
                 messageText: row.tekst,
             }));
-
+    
             res.status(200).json(messages);
         } catch (error) {
             console.error('Error fetching message data from database:', error);
             res.status(500).json({ error: 'Failed to fetch messages from the database' });
         }
-    }
-
-    checkStatus(req, res) {
-        console.log("Provjera route hit");
-        res.status(200).send('This is the response from the /poruke/provjera route!');
     }
 }
 

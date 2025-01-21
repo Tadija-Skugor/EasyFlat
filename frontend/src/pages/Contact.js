@@ -13,19 +13,19 @@ function Contact1() {
 
             <ul className="contact-list">
                 <li className="contact-item">
-                    <a href="/kontakt/1" className="contact-link">
+                    <a href="/contact" className="contact-link">
                         <img className="contact-image" src={require('../assets/images/LC_hephaistos.jpg')} alt="Slika zgrade" />
                     </a>
                     <p className="contact-info">
-                        <a href="/kontakt/1" className="contact-link">Kontakt informacije o zgradama</a>
+                        <a href="/contact" className="contact-link">Kontakt informacije o zgradama</a>
                     </p>
                 </li>
                 <li className="contact-item">
-                    <a href="/kontakt/999" className="contact-link">
+                    <a href="/contact" className="contact-link">
                         <img className="contact-image" src={require('../assets/images/easyflatLogo.png')} alt="Slika firme" />
                     </a>
                     <p className="contact-info">
-                        <a href="/kontakt/999" className="contact-link">Kontakt informacije o našoj firmi</a>
+                        <a href="/contact" className="contact-link">Kontakt informacije o našoj firmi</a>
                     </p>
                 </li>
             </ul>

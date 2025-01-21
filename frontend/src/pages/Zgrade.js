@@ -114,9 +114,11 @@ function Contact() {
     buildings
       .sort((a, b) => a.naziv_zgrade.localeCompare(b.naziv_zgrade))
       .map((building) => {
-        const isSuvlasnik = building.korisnici.some(
+        const isSuvlasnik = Array.isArray(building.korisnici) && 
+        building.korisnici.some(
           (user) => user.email === userEmail && user.suvlasnik
         );
+      
 
         return (
           <div key={building.zgrada_id} className="building-item">
