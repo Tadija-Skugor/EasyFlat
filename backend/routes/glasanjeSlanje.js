@@ -112,19 +112,19 @@ router.post('/', async (req, res) => {
 router.post('/dodavanjeGlasovanja', async (req, res) => {
     console.log("Backend se vrti kad prima ");
     
-    let { naslov, opis, datum_istece } = req.body;  
+    let { naslov, datum_istece } = req.body;  
     const KreatorEmail = req.session.email;  
     let result = await pool.query(
-        'SELECT ime FROM korisnik WHERE email = $1', [KreatorEmail]
+        'SELECT ime, prezime FROM korisnik WHERE email = $1', [KreatorEmail]
     );
-    const Kreator = result.rows[0].ime;
+    const Kreator = result.rows[0].ime + " " + result.rows[0].prezime;
 
     console.log(req.body);
     console.log(naslov);
-    console.log(opis);
+    //console.log(opis);
     console.log(datum_istece);
 
-    if (!naslov || !opis || !datum_istece || !Kreator) {
+    if (!naslov || !datum_istece || !Kreator) {
         console.log("Greska pri verifikaciji podataka");
         return res.status(400).json({ message: 'All fields are required.' });
     }
@@ -148,7 +148,7 @@ router.post('/dodavanjeGlasovanja', async (req, res) => {
             newGlasanje: {
                 id: result.rows[0].id,  
                 naslov: naslov,
-                opis: opis,
+                //opis: opis,
                 datum_istece: datum_istece,
                 kreator: Kreator,
             },
