@@ -46,7 +46,7 @@ function Contact() {
       alert('Please fill out all fields.');
       return;
     }
-
+  
     axios.post('http://localhost:4000/zgrade', newBuilding, {
       withCredentials: true,
     })
@@ -56,7 +56,8 @@ function Contact() {
       setShowModal(false);
     })
     .catch((error) => {
-      console.error('Error adding building:', error.message);
+        console.error('Error adding building:', error.message);
+        alert('Pokušavate dodati zgradu sa postojećim zgrada_id. Pokušajte ponovo!');
     });
   };
 
