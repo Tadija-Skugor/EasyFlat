@@ -222,6 +222,12 @@ label {
 
 }
 
+.voting-box h4 {
+  margin-bottom: 10px;
+  color: #007BFF;
+  font-size: 1.2em;
+}
+
 @media only screen and (max-width: 1000px){
   .Glasanje-list{
     width: 90%;
