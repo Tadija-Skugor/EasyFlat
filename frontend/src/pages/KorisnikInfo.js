@@ -361,8 +361,8 @@ export default function KorisnikInfo() {
 
 
 return (
-        <div style={{ display: "flex" }}>
-            <div style={{ display: 'flex', flexFlow: "column", marginLeft: "100px" }}>
+        <div className='korisnik_flex'>
+            <div className='column_container'>
                 <UserDetails
                     info={editing ? editedInfo : info}
                     onEdit={handleEdit}
