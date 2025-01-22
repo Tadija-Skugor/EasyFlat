@@ -80,8 +80,8 @@
 /* Diskusija forma css U MAIN */
 .add-discussion-button {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 10%;
+    right: 3%;
     background-color: #45a049;
     color: white;
     border: none;

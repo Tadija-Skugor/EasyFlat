@@ -383,7 +383,6 @@ button:disabled {
 
    #user-details{
       max-width: 100%;
-      overflow: auto;
       padding: 10px;
    }
 
@@ -405,5 +404,16 @@ button:disabled {
    .korisnik_flex{
       gap: 10px;
    }
+
+   table th, table td {
+      padding-left: 0;
+      padding-right: 0;
+   }
    
+}
+
+@media only screen and (max-width: 370px){
+   table {
+      font-size: 16px;
+   }
 }
