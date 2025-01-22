@@ -9,7 +9,6 @@ import Glasanje from '../pages/Glasanje';
 import Main from '../pages/Main';
 import Arhiva from '../pages/Archive';
 
-import Contact from '../pages/Contact';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -123,14 +122,7 @@ export default function Router() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="contact"
-            element={
-              <PrivateRoute>
-                <Contact />
-              </PrivateRoute>
-            }
-          />
+
                     <Route
             path="zgrade"
             element={

@@ -27,6 +27,14 @@
   margin: auto;
   margin-right: 50px;
  }
+ .building-picture img {
+  max-width: 100%; /* Limit the width to 100% of the container */
+  max-height: 300px; /* Set a maximum height */
+  width: auto; /* Maintain the aspect ratio */
+  height: auto; /* Maintain the aspect ratio */
+  object-fit: cover; /* Optional: Crop the image if needed */
+  border-radius: 10px; /* Optional: Add rounded corners */
+}
 
  .building-item img{
     width: 300px

@@ -97,13 +97,7 @@ export default function Header() {
                         className="nav-icon"
                     />
                 </Link>
-                <Link to="/contact">
-                    <img
-                        src={require('../assets/images/phone-call.png')}
-                        alt="Contact"
-                        className="nav-icon"
-                    />
-                </Link>
+
                 <Link to="/upit">
                     <img
                         src={require('../assets/images/question.png')}

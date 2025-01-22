@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import './Zgrade.css';
 
@@ -119,10 +121,13 @@ function Contact() {
         building.korisnici.some(
           (user) => user.email === userEmail && user.suvlasnik
         );
+        console.log("Link za zgradu je: ", building.slika_link);
         return (
           <div key={building.zgrada_id} className="building-item">
             <div className="building-picture">
-              <img src={building.slika_link} alt={building.naziv_zgrade}  />
+            <img src={building.slika_link} alt={building.naziv_zgrade} />
+
+
             </div>
             <div className="building-podaci">
               <div className="building-naslov-gumb">
