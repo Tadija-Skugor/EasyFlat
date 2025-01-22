@@ -90,7 +90,7 @@ class ArchiveManager {
 
       if (result.rows[0]) {
         const odgovori = result.rows[0].odgovori;
-        res.json(odgovori);
+        res.json({odgovori: odgovori});
       } else {
         res.json('Polje odgovora je prazno');
       }
