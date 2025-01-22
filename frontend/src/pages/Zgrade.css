@@ -16,24 +16,26 @@
    border-radius: 5px;
    cursor: pointer;
  }
- .building-naslov-gumb{
+
+.building-naslov-gumb{
    display: flex;
    flex-direction: row;
    justify-content: space-between;
- }
+}
 
- .building-picture{
+.building-picture{
   background-color: white;
   margin: auto;
   margin-right: 50px;
- }
- .building-picture img {
-  max-width: 100%; /* Limit the width to 100% of the container */
-  max-height: 300px; /* Set a maximum height */
-  width: auto; /* Maintain the aspect ratio */
-  height: auto; /* Maintain the aspect ratio */
-  object-fit: cover; /* Optional: Crop the image if needed */
-  border-radius: 10px; /* Optional: Add rounded corners */
+}
+
+.building-picture img {
+  max-width: 100%; 
+  max-height: 300px; 
+  width: auto; 
+  height: auto; 
+  object-fit: cover; 
+  border-radius: 10px; 
 }
 
  .building-item img{
@@ -55,6 +57,7 @@
    border-radius: 5px;
    cursor: pointer;
  }
+
  .building-list {
      display: flex;
      flex-direction: column;
@@ -62,12 +65,15 @@
    }
    
    .building-item {
-     border: 1px solid #ccc;
      padding: 20px;
      width: 75%;
      display: flex;
      flex-direction: row;
      margin-inline: auto;
+     border-radius: 12px;
+     background-color: #f4f7f6;
+     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
    }
     
 
@@ -104,6 +110,7 @@
      margin-top: 20px;
      display: flex;
      justify-content: space-between;
+     gap: 20px;
    }
    
    .save-button, .cancel-button {
@@ -131,3 +138,53 @@
     background-color: #a71d2a;
     color: white;
   }
+
+@media only screen and (max-width: 1000px) {
+  .contact-header{
+    width: 90%;
+  }
+  .building-item{
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .contact-header{
+    flex-flow: column;
+  }
+
+  .building-naslov-gumb{
+    flex-flow: column;
+  }
+
+  .edit-building-button{
+    width: 100%;
+  }
+
+  .add-building-button{
+    width: 100%;
+  }
+
+  .building-picture{
+    margin: 10px;
+  }
+
+  .building-picture img{
+    height: 100%;
+  }
+
+  .building-item{
+    flex-flow: column-reverse;
+    align-items: center;
+    width: 80%;
+  }
+
+  .modal-content{
+    width: 80%;
+  }
+
+  .building-list{
+    gap: 10px
+  }
+}
+  
