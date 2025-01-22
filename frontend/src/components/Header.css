@@ -68,7 +68,7 @@
    transform: scale(1.1);
 }
 
-@media only screen and (max-width: 680px){
+@media only screen and (max-width: 870px){
    .nav-bar {
       flex-wrap: wrap;
       justify-content: space-between;
@@ -91,6 +91,9 @@
 
    .nav-center{
       width: 55%;
+      position: relative;
+      left: 0%;
+      transform: translateX(-0%);
    }
 
    .logo {

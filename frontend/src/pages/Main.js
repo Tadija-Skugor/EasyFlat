@@ -378,11 +378,11 @@ export default function Home() {
 
                 {discussions.map((discussion) => (
                     <div key={discussion.id} className="discussion-box">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexFlow: 'column'}}>
                             <h3>{discussion.naslov}</h3>
                             {discussion.sastanak ? (
                                 discussion.sastanak === 'create' ? (
-                                    <button onClick={() => createSastanak(discussion.id,discussion.naslov,discussion.kreator,discussion.opis,discussion.glasovanje_da,discussion.glasovanje_ne)} style={{ marginLeft: 'auto' }}>
+                                    <button className='sastanak-button' onClick={() => createSastanak(discussion.id,discussion.naslov,discussion.kreator,discussion.opis,discussion.glasovanje_da,discussion.glasovanje_ne)} style={{ marginLeft: 'auto' }}>
                                         Kreiraj sastanak
                                     </button>
                                 ) : (

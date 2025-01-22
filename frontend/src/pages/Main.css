@@ -215,6 +215,10 @@
     background-color: #a71d2a;
 }
 
+.sastanak-button{
+    margin-bottom: 10px;
+}
+
 @media only screen and (max-width: 1000px){
     .discussion-box{
         width: 90%;
