@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import './Upit.css';
 
 export default function Upit() {
     const [email, setEmail] = useState('');

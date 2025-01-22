@@ -383,6 +383,7 @@ button:disabled {
 
    #user-details{
       max-width: 100%;
+      overflow: auto;
    }
 
    .suvlasnik-message{
