@@ -218,10 +218,7 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
             </div>
 
             <button className="navigation-button" onClick={openModal}>+</button>
-            <button
-            className="archive-button"
-            onClick={() => window.location.href = 'http://localhost:5000/archive'}>Arhiva
-            </button>
+
 
             {/* Modal */}
             {isModalOpen && (

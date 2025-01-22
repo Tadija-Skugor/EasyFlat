@@ -58,6 +58,8 @@ export default function Home() {
                 const votedGlasanjes = {};
 
                 for (let discussion of filteredDiscussions) {
+                    console.log(discussion);
+                    console.log("AAAAAAAAAAAAAAAAAAAAA");
                     if (discussion.forma){
                     console.log("forma: ", discussion.forma);
                     const user_glasanje = await axios.get('http://localhost:4000/glasanje/userVote', {
@@ -101,7 +103,6 @@ export default function Home() {
     };
     
 
-    // Fetch responses to a selected discussion
     const fetchResponses = async (discussionId) => {
         try {
             const response = await axios.get('http://localhost:4000/data/discussionResponses', {
@@ -109,7 +110,6 @@ export default function Home() {
             },                {withCredentials: true} 
         );
 
-            // spremi sve odgovore u wrapper element 'odgovori' kako bi parseFromString kod radio ispravno
             const wrappedXmlString = `<odgovori>${response.data.odgovori}</odgovori>`;
             const broj_preostalih_odgovora = response.data.br_odgovora;
             setRemainingResponses((prev) => ({
@@ -117,11 +117,9 @@ export default function Home() {
                 [discussionId]: broj_preostalih_odgovora,
             }));
 
-            // parsiranje XMLa u DOM objekt
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(wrappedXmlString, "text/xml");
     
-            // izdvajanje odgovora iz DOM objekta
             const responseElements = xmlDoc.getElementsByTagName("odgovor");
             const parsedResponses = Array.from(responseElements).map((responseElement) => ({
                 korisnik: responseElement.getElementsByTagName("korisnik")[0].textContent,
@@ -151,7 +149,6 @@ export default function Home() {
         try {
             const response = await axios.post('http://localhost:4000/data/discussionAddResponse', {
                 id_diskusije: selectedDiscussionId,
-                //korisnik: 'User1', // Replace with dynamic user data if needed
                 tekst: newResponse,
             },{withCredentials: true}
 
@@ -203,9 +200,9 @@ export default function Home() {
         setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [formaId]: value }));
     };
     
-    const createSastanak = async (id) => {
+    const createSastanak = async (id,naslov,kreator,opis,da,ne) => {
         try {
-            const response = await axios.post('http://localhost:4000/data/createMeeting', { id });
+            const response = await axios.post('http://localhost:4000/data/createMeeting', { id ,naslov,kreator,opis});
             if (response.data.link) {
                 setDiscussions((prevDiscussions) =>
                     prevDiscussions.map((discussion) =>
@@ -229,12 +226,11 @@ export default function Home() {
         }
     };
 
-    // Effect for loading search query or fetching all discussions
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const searchQuery = params.get('search_query');
 
-        fetchDiscussions(searchQuery); // Pass the searchQuery to filter discussions
+        fetchDiscussions(searchQuery);
     }, [location.search]);
 
 
@@ -244,7 +240,6 @@ export default function Home() {
         const { naslov, opis } = newDiscussion;
         const { naslov: naslovGlasanja, datum_istece } = newGlasanje;
     
-        // Validate only the required fields
         if (!naslov.trim()) {
             console.log('Naslov diskusije je obavezan.');
             return;
@@ -255,7 +250,6 @@ export default function Home() {
         }
     
         try {
-            // Step 1: Add the discussion and get the ID
             const response = await axios.post('http://localhost:4000/data/addDiscussion', {
                 naslov,
                 opis,
@@ -263,11 +257,10 @@ export default function Home() {
                 withCredentials: true,
             });
     
-            const newDiscussion = response.data.newDiscussion; // Accessing newDiscussion object from response
-            const id_diskusije = newDiscussion.id; // Extracting the id of the new discussion
+            const newDiscussion = response.data.newDiscussion; 
+            const id_diskusije = newDiscussion.id; 
             console.log('New discussion ID:', id_diskusije);
     
-            // Step 2: Add glasanje only if optional fields are filled
             if (naslovGlasanja.trim()) {
                 await axios.post('http://localhost:4000/data/bindNewForm', {
                     id_diskusije,
@@ -385,12 +378,12 @@ export default function Home() {
 
                 {discussions.map((discussion) => (
                     <div key={discussion.id} className="discussion-box">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                             <h3>{discussion.naslov}</h3>
                             {discussion.sastanak ? (
                                 discussion.sastanak === 'create' ? (
-                                    <button onClick={() => createSastanak(discussion.id)} style={{ marginLeft: 'auto' }}>
-                                        Create Sastanak
+                                    <button onClick={() => createSastanak(discussion.id,discussion.naslov,discussion.kreator,discussion.opis,discussion.glasovanje_da,discussion.glasovanje_ne)} style={{ marginLeft: 'auto' }}>
+                                        Kreiraj sastanak
                                     </button>
                                 ) : (
                                     <a href={discussion.sastanak} style={{ marginLeft: 'auto' }}>
@@ -496,6 +489,11 @@ export default function Home() {
                         )}
                     </div>
                 ))}
+
+<button
+className="archive-button"
+onClick={() => window.location.href = 'http://localhost:5000/archive'}>Arhiva
+</button>
             </div>
         </div>
     );

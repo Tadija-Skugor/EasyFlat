@@ -4,6 +4,7 @@
    align-items: center;
    padding: 10px 20px;
    background-color: #f4f7f6;
+   position: relative; /* Added to allow absolute centering of the search bar */
 }
 
 .nav-left,
@@ -14,7 +15,12 @@
 }
 
 .nav-center {
-   width: 25%;
+   position: absolute; 
+   left: 50%;
+   transform: translateX(-50%); 
+   display: flex;
+   justify-content: center;
+   width: 30%; 
 }
 
 .logo {

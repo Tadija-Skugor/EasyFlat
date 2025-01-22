@@ -231,3 +231,14 @@
         padding: 10px;
     }
 }
+
+.archive-button {
+    margin: 20px auto;
+    width: 25%; 
+    padding: 10px 15px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: block; 
+  }
+  

@@ -207,14 +207,6 @@ label {
   width: 100%;
 }
 
-.archive-button {
-  margin-top: 20px;
-  width:25%;
-  padding: 10px 15px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  cursor: pointer;
-}
 
 .DatumIme{
   display: flex;

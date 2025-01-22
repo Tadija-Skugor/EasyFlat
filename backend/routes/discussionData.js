@@ -2,6 +2,7 @@
 const express = require('express');
 const pool = require('../db'); // Uvezi svoju vezu na bazu podataka
 const js2xmlparser = require('js2xmlparser');
+const axios = require('axios');
 
 class DiscussionRoutes {
   constructor() {
@@ -317,12 +318,52 @@ class DiscussionRoutes {
 
   async createMeeting (req,res){
     const id = req.body.id;
+    const naslov = req.body.naslov;
+    const kreator = req.body.kreator;
+    const opis = req.body.opis;
+    const zgradaId=req.session.zgrada_id
+    const glasova_da = req.body.da;
+    const glasova_ne = req.body.ne;
+    const currentTime = new Date().toISOString();
+
     //tu sad pošaljemo upit drugoj grupi i dobimo neki link
+    const stanjeZakljucka = glasova_da > glasova_ne ? "Prihvaceno" : "Odbiji"; 
+
     try{
-      const link = 'https://primjerLinka/sdfgsdfgsdfg';
+      const payload = {
+        Naslov: naslov,
+        Mjesto: "Conference Room A",
+        Opis: opis,
+        Vrijeme: currentTime,
+        Status: "Planiran",
+        ZgradaId: zgradaId,
+        Sazetak: `Ovo je diskusija koju pokreće zgrada ${zgradaId}, sa opisom ${opis}`,
+        TockeDnevnogReda: [
+            {
+                ImeTocke: naslov,
+                ImaPravniUcinak: true,
+                Sazetak: opis,
+                StanjeZakljucka: stanjeZakljucka,
+                Url: null
+            }
+        ]
+    };
+    const response = await axios.post(
+      'https://ezgrada-2.onrender.com/api/create',
+      payload,
+      {
+          headers: {
+              'Content-Type': 'application/json',
+              'ApiKey': 'c92cd177-4267-4e7e-871c-3f68c7f1acfd'
+          }
+      }
+  );
+
+      const link = 'Sastanak je kreiran na linku: https://ezgrada-2.onrender.com';
       await pool.query('UPDATE sastanak SET link = $1 WHERE id_diskusije = $2', [link, id]);
       res.json({link: link});
     } catch(err) {
+      console.log(err);
       res.json({error: err, message: "Internal server error: couldn't provide a link"});
     }
   }
