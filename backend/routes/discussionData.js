@@ -24,10 +24,11 @@ class DiscussionRoutes {
 
       // Kreiraj i popuni listu diskusija
       const discussionList = await Promise.all(result.rows.map(async (row) => {
+        const kreator = await pool.query('SELECT ime, prezime FROM korisnik where email = $1', [row.kreator]);
         const discussion = {
           id: row.id,
           naslov: row.naslov,
-          kreator: row.kreator,
+          kreator: kreator.rows[0].ime + " " + kreator.rows[0].prezime,
           opis: row.opis,
           datum_stvorena: row.datum_stvorena,
           br_odgovora: row.br_odgovora,

@@ -52,11 +52,18 @@ class ArchiveManager {
 
       // lista svih diskusija iz arhive
       const discussionList = await Promise.all(result.rows.map(async (row) => {
+        const kreator = await pool.query('SELECT ime, prezime FROM korisnik where email = $1', [row.kreator]);
+        if (kreator.rowCount > 0){
+          var user = kreator.rows[0].ime + " " + kreator.rows[0].prezime;
+        }
+        else{
+          var user = row.kreator;
+        }
         const discussion = {
           id: row.id,
           naslov: row.naslov,
           opis: row.opis,
-          kreator: row.kreator,
+          kreator: user,
           datum_stvorena: row.datum_stvorena,
         };
 

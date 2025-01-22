@@ -1,0 +1,81 @@
+.kontakt-forma {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f4f7f6;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+.form-header {
+    font-size: 28px;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+ }
+
+ .kontakt-forma textarea:focus {
+    border-color: #45a049;
+    outline: none;
+  }
+
+  .kontakt-forma input,
+.kontakt-forma select,
+.kontakt-forma textarea,
+.kontakt-forma button {
+  width: 100%; 
+  max-width: 560px; 
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  box-sizing: border-box; 
+}
+
+.kontakt-forma input:focus,
+.kontakt-forma select:focus,
+.kontakt-forma textarea:focus {
+  border-color: #45a049;
+  outline: none;
+}
+
+.kontakt-forma button {
+  padding: 14px 20px;
+  background-color: #45a049;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.kontakt-forma button:hover {
+  background-color: #398f38;
+}
+
+.kontakt-forma button:active {
+  background-color: #398f38;
+  transform: scaleY(0.95);
+  transform: scaleX(0.99);
+}
+
+.kontakt-forma textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+ @media only screen and (max-width: 700px) {
+    .kontakt-forma{
+        width: 80%;
+        padding: 10px;
+        margin: 10px auto;
+
+    }
+ }
