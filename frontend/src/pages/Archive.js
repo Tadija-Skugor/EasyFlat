@@ -64,45 +64,52 @@ export default function Main(){
         fetchArchivedDiscussion();
       }, []);
 
-    return(
-        <><h1>Arhivirane diskusije:</h1>
-        <div className="archive-wrapper">
+      return (
+        <>
+          <h1>Arhivirane diskusije:</h1>
+          <div className="archive-wrapper">
             {discussions.map((discussion) => (
-                <div key={discussion.id} className="discussion-box">
-                    <h3>{discussion.naslov}</h3>
-                    <p><strong>Autor:</strong> {discussion.kreator}</p>
-                    <p><strong>Opis:</strong> {discussion.opis}</p>
-                    <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
-                    {discussion.naslov_glasanja && (
-                        <><><div className="forma-section">
-                            <h4><strong></strong> {discussion.naslov_glasanja}</h4>
-                            <p><strong>Glasova 'Da':</strong> {discussion.glasovi_da}</p>
-                            <p><strong>Glasova 'Ne':</strong> {discussion.glasovi_ne}</p>
-                        </div>
-                            <button onClick={() => toggleResponsesVisibility(discussion.id)}>
-                                {selectedDiscussionId === discussion.id ? 'Sakrij odgovore' : 'Vidi odgovore'}
-                            </button></><div>
-                            {selectedDiscussionId === discussion.id && (
-                            <div className="responses-section">
-                                <h3>Odgovori na diskusiju</h3>
-                                {responses.length > 0 ? (
-                                    <ul>
-                                        {responses.map((response, index) => (
-                                            <li key={index}>
-                                                <p><strong>Korisnik:</strong> {response.korisnik}</p>
-                                                <p><strong>Tekst:</strong> {response.tekst}</p>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>Nema odgovora.</p>
-                                )}
-                            </div>
-                        )}
-                            </div></>
+              <div key={discussion.id} className="discussion-box">
+                <h3>{discussion.naslov}</h3>
+                <p><strong>Autor:</strong> {discussion.kreator}</p>
+                <p><strong>Opis:</strong> {discussion.opis}</p>
+                <p><strong>Datum objavljeno:</strong> {new Date(discussion.datum_stvorena).toLocaleDateString()}</p>
+                
+                {discussion.naslov_glasanja && (
+                  <div className="forma-section">
+                    <h4>{discussion.naslov_glasanja}</h4>
+                    <p><strong>Glasova 'Da':</strong> {discussion.glasovi_da}</p>
+                    <p><strong>Glasova 'Ne':</strong> {discussion.glasovi_ne}</p>
+                  </div>
+                )}
+      
+                {/* Button to toggle response visibility */}
+                <button onClick={() => toggleResponsesVisibility(discussion.id)}>
+                  {selectedDiscussionId === discussion.id ? 'Sakrij odgovore' : 'Vidi odgovore'}
+                </button>
+      
+                {/* Responses section displayed only if the discussion is selected */}
+                {selectedDiscussionId === discussion.id && (
+                  <div className="responses-section">
+                    <h3>Odgovori na diskusiju</h3>
+                    {responses.length > 0 ? (
+                      <ul>
+                        {responses.map((response, index) => (
+                          <li key={index}>
+                            <p><strong>Korisnik:</strong> {response.korisnik}</p>
+                            <p><strong>Tekst:</strong> {response.tekst}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>Nema odgovora.</p>
                     )}
-                </div>
+                  </div>
+                )}
+              </div>
             ))}
-        </div></>
-    );
+          </div>
+        </>
+      );
+      
 }
