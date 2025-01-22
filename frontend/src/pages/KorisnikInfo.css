@@ -312,6 +312,7 @@ button:disabled {
       flex-flow: row;
       width: 83%;
       justify-content: center;
+      align-items: flex-start
    }
 
    .korisnik_flex{
@@ -376,18 +377,19 @@ button:disabled {
 @media only screen and (max-width: 700px){
 
    .column_container{
-      width: 90%;
+      width: 100%;
       flex-flow: column;
       gap: 10px;
+      align-items: center;
    }
 
    #user-details{
-      max-width: 100%;
-      padding: 10px;
+      width: 100%;
+      padding: 20px;
    }
 
    .suvlasnik-message{
-      max-width: 100%;
+      width: 100%;
    }
 
    .admin-message{
