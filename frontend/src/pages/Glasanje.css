@@ -114,8 +114,8 @@
 /* Close Button */
 .close-modal-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0px;
+  right: 0px;
   background: transparent;
   border: none;
   font-size: 1.5rem;
@@ -138,6 +138,7 @@
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .submit-form-button {
@@ -158,29 +159,25 @@
 
 .navigation-button {
   position: fixed;
-  bottom: 10%;
-  right: 3%;
+  bottom: 20px;
+  right: 20px;
+  background-color: #45a049;
+  color: white;
+  border: none;
+  border-radius: 50%;
   width: 50px;
   height: 50px;
-  background-color: #45a049;
-  border: 3px solid #45a049;
-  border-radius: 50%;
-  color: black;
-  font-weight: bold;
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .navigation-button:hover {
-  background-color: #3a8d3f;
-  color: white;
+  background-color: #27792b;
 }
-
-
 
 .page-container {
   display: flex;
@@ -192,4 +189,51 @@
 .main-content {
   flex: 1; 
 }
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.archive-button {
+  margin-top: 20px;
+  width:25%;
+  padding: 10px 15px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.DatumIme{
+  display: flex;
+  justify-content: space-between;
+
+}
+
+@media only screen and (max-width: 1000px){
+  .Glasanje-list{
+    width: 90%;
+  }
+
+}
+
+@media only screen and (max-width: 700px){
+  .archive-button{
+    width: 90%;
+    margin-top: 10px;
+  }
+
+  .additional-info{
+    margin-top: 10px;
+  }
+
+  .toggle-info-button{
+    margin-top: 5px;
+  }
+}
+
+
+
 
