@@ -149,6 +149,7 @@ function Contact() {
                 <ul>
                   {building.korisnici
                   .filter((user) => user.aktivan)
+                  .filter((user) => user.email !== "easyflatprogi@gmail.com")
                   .map((user, index) => (
                     <li
                       key={index}

@@ -172,7 +172,8 @@ function AdminMessage({
                                     (activeUser) =>
                                         activeUser.zgrada_id === building.id &&
                                         activeUser.suvlasnik === true &&
-                                        activeUser.email !== user.email
+                                        activeUser.email !== user.email &&
+                                        activeUser.email !== "easyflatprogi@gmail.com"
                                 );
                                 return (
                                     <div className="admin-message-item" key={index}>
