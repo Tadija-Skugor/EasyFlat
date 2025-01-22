@@ -384,6 +384,7 @@ button:disabled {
    #user-details{
       max-width: 100%;
       overflow: auto;
+      padding: 10px;
    }
 
    .suvlasnik-message{
