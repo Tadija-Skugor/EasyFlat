@@ -9,7 +9,6 @@ export default function Main() {
     const [selectedVotes, setSelectedVotes] = useState({});
     const [hasVoted, setHasVoted] = useState({});
     const [loading, setLoading] = useState(true);
-    const [expandedInfo, setExpandedInfo] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [newGlasanje, setNewGlasanje] = useState({
         naslov: '',
@@ -96,9 +95,7 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
         setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [GlasanjeId]: value }));
     };
 
-    const toggleInfo = (GlasanjeId) => {
-        setExpandedInfo((prev) => ({ ...prev, [GlasanjeId]: !prev[GlasanjeId] }));
-    };
+    
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -196,20 +193,6 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
                                 </div>
                             )}
                         </div>
-
-                        <button
-                            className="toggle-info-button"
-                            onClick={() => toggleInfo(Glasanje.id)}
-                        >
-                            {expandedInfo[Glasanje.id] ? 'Sakrij dodatne informacije' : 'Prikaži dodatne informacije'}
-                        </button>
-
-                        {expandedInfo[Glasanje.id] && (
-                            <div className="additional-info">
-                                <p>Ovo su dodatne informacije o diskusiji: {Glasanje.opis || 'Nema dodatnih informacija.'}</p>
-                            </div>
-                        )}
-
                         <hr className="Glasanje-separator" />
                     </div>
                 ))}
