@@ -13,12 +13,11 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
-    const [showAddDiscussion, setShowAddDiscussion] = useState(false); // Manage add discussion form visibility
+    const [showAddDiscussion, setShowAddDiscussion] = useState(false); 
     const [newDiscussion, setNewDiscussion] = useState({
         naslov: '',
         opis: '',
     });
-    const [Glasanjes, setGlasanjes] = useState([]);
     const [userEmail, setUserEmail] = useState('');
     const [userVotes, setUserVotes] = useState({});
     const [selectedVotes, setSelectedVotes] = useState({});
@@ -88,21 +87,7 @@ export default function Home() {
             setLoading(false);
         }
     };
-
-
-    const toggleInfo = (GlasanjeId) => {
-        setExpandedInfo((prev) => ({ ...prev, [GlasanjeId]: !prev[GlasanjeId] }));
-    };
-
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewGlasanje((prev) => ({ ...prev, [name]: value }));
-    };
-    
-
+  
     const fetchResponses = async (discussionId) => {
         try {
             const response = await axios.get('http://localhost:4000/data/discussionResponses', {
@@ -134,8 +119,6 @@ export default function Home() {
         }
     };
 
-
-    // Handle adding a new response
     const handleAddResponse = async (e) => {
         e.preventDefault();
         if (!selectedDiscussionId) return;
@@ -151,12 +134,10 @@ export default function Home() {
                 id_diskusije: selectedDiscussionId,
                 tekst: newResponse,
             },{withCredentials: true}
-
-        
         );
             console.log('Response added:', response.data);
-            setNewResponse(''); // Clear the input
-            fetchResponses(selectedDiscussionId); // Refresh responses
+            setNewResponse(''); 
+            fetchResponses(selectedDiscussionId); 
         } catch (error) {
             console.error('Error adding response:', error);
         }
@@ -171,7 +152,6 @@ export default function Home() {
             );
     
             if (response.data.success) {
-                // Update state after a successful vote
                 setDiscussions((prevDiscussions) =>
                     prevDiscussions.map((discussion) =>
                         discussion.forma && discussion.forma.id === formaId
@@ -271,7 +251,6 @@ export default function Home() {
                 });
             }
     
-            // Reset form fields
             setNewDiscussion({ naslov: '', opis: '' });
             setNewGlasanje({ naslov: '', opis: '', datum_istece: '' });
             setShowAddDiscussion(false);
@@ -400,11 +379,9 @@ export default function Home() {
                         {discussion.forma && (
                             <div className="forma-section">
                                 <h4><strong></strong> {discussion.forma.naslov}</h4>
-                                <p><strong>Glasova 'Da':</strong> {discussion.forma.glasovanje_da}</p>
-                                <p><strong>Glasova 'Ne':</strong> {discussion.forma.glasovanje_ne}</p>
                                 <p><strong>Datum stvoreno:</strong> {new Date(discussion.forma.datum_stvoreno).toLocaleDateString()}</p>
                                 <p><strong>Datum ističe:</strong> {new Date(discussion.forma.datum_istece).toLocaleDateString()}</p>
-                                <p><strong>Kreator forme:</strong> {discussion.forma.kreator}</p>
+                                <p><strong>Autor:</strong> {discussion.forma.kreator}</p>
 
                                 <div className="voting-box">
                                     <h4>Slažete li se?</h4>
