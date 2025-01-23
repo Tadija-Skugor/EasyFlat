@@ -10,7 +10,7 @@ export default function Main() {
     const [hasVoted, setHasVoted] = useState({});
     const [loading, setLoading] = useState(true);
     const [expandedInfo, setExpandedInfo] = useState({});
-    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+    const [isModalOpen, setIsModalOpen] = useState(false); 
     const [newGlasanje, setNewGlasanje] = useState({
         naslov: '',
         datum_istece: '',
@@ -38,7 +38,7 @@ export default function Main() {
                         });
 
                         if (response.data.voted) {
-                            votes[Glasanje.id] = response.data.vote;
+                            votes[Glasanje.id] = response.data.vote === true ? 'da' : 'ne';
                             votedGlasanjes[Glasanje.id] = true;
                         }
                     }
@@ -57,7 +57,6 @@ export default function Main() {
     }, []);
 
 
-// Update voting logic to handle state correctly after vote submission
 const handleVoteSubmit = async (GlasanjeId, vote) => {
     if (!userEmail) {
         alert('Morate biti prijavljeni da biste glasali');
@@ -72,7 +71,6 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
         );
 
         if (response.data.success) {
-            // Update the specific Glasanje state after voting
             setGlasanjes((prevGlasanjes) =>
                 prevGlasanjes.map((Glasanje) =>
                     Glasanje.id === GlasanjeId
@@ -121,9 +119,9 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
             if (response.data.success) {
                 const newGlasanjeWithVotes = {
                     ...response.data.newGlasanje,
-                    glasovanje_da: 0, // Initialize vote counts to 0
+                    glasovanje_da: 0, 
                     glasovanje_ne: 0,
-                    datum_stvoreno: response.data.newGlasanje.datum_stvoreno || new Date().toISOString(), // Set current date if not provided
+                    datum_stvoreno: response.data.newGlasanje.datum_stvoreno || new Date().toISOString(), 
                 };
     
                 setGlasanjes((prev) => [...prev, newGlasanjeWithVotes]);
