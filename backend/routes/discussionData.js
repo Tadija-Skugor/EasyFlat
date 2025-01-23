@@ -332,7 +332,7 @@ class DiscussionRoutes {
     try{
       const payload = {
         Naslov: naslov,
-        Mjesto: "Conference Room A",
+        Mjesto: `Konferencijska soba zgrade ${zgradaId}`,
         Opis: opis,
         Vrijeme: currentTime,
         Status: "Planiran",
@@ -349,7 +349,7 @@ class DiscussionRoutes {
         ]
     };
     const response = await axios.post(
-      'https://ezgrada-2.onrender.com/api/create',
+      'https://ezgrada-backend-2.onrender.com',
       payload,
       {
           headers: {
@@ -359,10 +359,10 @@ class DiscussionRoutes {
       }
   );
 
-      const link = 'Sastanak je kreiran na linku: https://ezgrada-2.onrender.com';
-      await pool.query('UPDATE sastanak SET link = $1 WHERE id_diskusije = $2', [link, id]);
-      res.json({link: link});
-    } catch(err) {
+  const link = 'https://ezgrada-2.onrender.com/'; // Update with actual link logic if needed
+    await pool.query('UPDATE sastanak SET link = $1 WHERE id_diskusije = $2', [link, id]);
+    res.send(`<a href="${link}" target="_blank">Sastanak je kreiran na linku: ${link}</a>`);
+  } catch(err) {
       console.log(err);
       res.json({error: err, message: "Internal server error: couldn't provide a link"});
     }

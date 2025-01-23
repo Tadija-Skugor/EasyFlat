@@ -28,16 +28,16 @@ export default function Home() {
         naslov: '',
         datum_istece: '',
     });
+    const [sastanakCreated, setSastanakCreated] = useState(false);
 
 
     const fetchDiscussions = async (searchQuery) => {
         try {
             const response = await axios.get('http://localhost:4000/data/allDiscussions', {
-                withCredentials: true,  // Ensures cookies are sent with the request if needed
+                withCredentials: true, 
             });
             let filteredDiscussions = response.data;
             console.log(filteredDiscussions);
-            // If searchQuery exists, filter discussions based on title (naslov)
             if (searchQuery) {
                 filteredDiscussions = filteredDiscussions.filter((discussion) =>
                     discussion.naslov.toLowerCase().includes(searchQuery.toLowerCase())
@@ -171,10 +171,17 @@ export default function Home() {
                 setHasVoted((prevHasVoted) => ({ ...prevHasVoted, [formaId]: true }));
                 setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [formaId]: '' }));
             }
+            const params = new URLSearchParams(location.search);
+
+            const searchQuery = params.get('search_query');
+
+            await fetchDiscussions(searchQuery);
+
         } catch (error) {
             console.error('Error submitting vote:', error);
         }
     };
+    
     
     const handleRadioChange = (formaId, value) => {
         setSelectedVotes((prevSelectedVotes) => ({ ...prevSelectedVotes, [formaId]: value }));
@@ -358,18 +365,30 @@ export default function Home() {
                 {discussions.map((discussion) => (
                     <div key={discussion.id} className="discussion-box">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexFlow: 'column'}}>
-                            <h3>{discussion.naslov}</h3>
-                            {discussion.sastanak ? (
-                                discussion.sastanak === 'create' ? (
-                                    <button className='sastanak-button' onClick={() => createSastanak(discussion.id,discussion.naslov,discussion.kreator,discussion.opis,discussion.glasovanje_da,discussion.glasovanje_ne)} style={{ marginLeft: 'auto' }}>
-                                        Kreiraj sastanak
-                                    </button>
-                                ) : (
-                                    <a href={discussion.sastanak} style={{ marginLeft: 'auto' }}>
-                                        {discussion.sastanak}
-                                    </a>
-                                )
-                            ) : null}
+                            
+                            
+                        <h3>{discussion.naslov}</h3>
+{discussion.sastanak ? (
+    discussion.sastanak === 'create' ? (
+        <button
+            className="sastanak-button"
+            onClick={() => {
+                createSastanak(discussion.id, discussion.naslov, discussion.kreator, discussion.opis, discussion.glasovanje_da, discussion.glasovanje_ne);
+                setSastanakCreated(true); // Ensure this state is set when the button is clicked
+            }}
+            style={{ marginLeft: 'auto' }}
+        >
+            Kreiraj sastanak
+        </button>
+    ) : (
+        <p>
+                        <strong>Sastanak je dostupan na stranici:</strong> <a href="https://ezgrada-2.onrender.com/" target="_blank" rel="noopener noreferrer">https://ezgrada-2.onrender.com/</a>
+
+        </p>
+    )
+) : null}
+
+
                         </div>
                         <p><strong>Autor:</strong> {discussion.kreator}</p>
                         <p><strong>Opis:</strong> {discussion.opis}</p>
