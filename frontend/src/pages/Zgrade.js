@@ -15,25 +15,28 @@ function Contact() {
     slika_link: ''
   });
   const [userEmail, setUserEmail] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-   const fetchData = async () => {
-     try {
-       const [userEmailResponse, buildingsResponse] = await Promise.all([
-         axios.get('http://localhost:4000/zgradeInfo/userEmail', { withCredentials: true }),
-         axios.get('http://localhost:4000/zgrade', { withCredentials: true }),
-       ]);
- 
-       setUserEmail(userEmailResponse.data.email);
-       console.log(userEmailResponse.data.email);
-       setBuildings(buildingsResponse.data);
-     } catch (error) {
-       console.error('Error fetching data:', error.response ? error.response.data : error.message);
-     }
-   };
- 
-   fetchData();
- }, []);
- 
+    const fetchData = async () => {
+      try {
+        const [userEmailResponse, buildingsResponse] = await Promise.all([
+          axios.get('http://localhost:4000/zgradeInfo/userEmail', { withCredentials: true }),
+          axios.get('http://localhost:4000/zgrade', { withCredentials: true }),
+        ]);
+
+        setUserEmail(userEmailResponse.data.email);
+        console.log(userEmailResponse.data.email);
+        setBuildings(buildingsResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error.response ? error.response.data : error.message);
+      } finally {
+        setIsLoading(false); 
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,46 +51,42 @@ function Contact() {
       alert('Please fill out all fields.');
       return;
     }
-  
+
     axios.post('http://localhost:4000/zgrade', newBuilding, {
       withCredentials: true,
     })
-    .then(() => {
-      setBuildings([...buildings, newBuilding]);
-      setNewBuilding({ id: '', naziv_zgrade: '', slika_link: '' });
-      setShowModal(false);
-    })
-    .catch((error) => {
+      .then(() => {
+        setBuildings([...buildings, newBuilding]);
+        setNewBuilding({ id: '', naziv_zgrade: '', slika_link: '' });
+        setShowModal(false);
+      })
+      .catch((error) => {
         console.error('Error adding building:', error.message);
         alert('Pokušavate dodati zgradu sa postojećim zgrada_id. Pokušajte ponovo!');
-    });
+      });
   };
 
   const handleEditSave = () => {
     console.log('Edit Building:', editBuilding);
-  
 
-  
     axios.put(`http://localhost:4000/zgrade/${editBuilding.zgrada_id}`, editBuilding, {
       withCredentials: true,
     })
-    .then(() => {
-      setBuildings((prevBuildings) =>
-        prevBuildings.map((building) =>
-          building.zgrada_id === editBuilding.id ? editBuilding : building
-        )
-      );
-      setEditBuilding(null);
-      setShowModal(false);
-      setIsEditing(false);
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error('Error updating building:', error.message);
-    });
+      .then(() => {
+        setBuildings((prevBuildings) =>
+          prevBuildings.map((building) =>
+            building.zgrada_id === editBuilding.id ? editBuilding : building
+          )
+        );
+        setEditBuilding(null);
+        setShowModal(false);
+        setIsEditing(false);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error updating building:', error.message);
+      });
   };
-  
-  
 
   const handleCancel = () => {
     setNewBuilding({ id: '', naziv_zgrade: '', slika_link: '' });
@@ -95,6 +94,10 @@ function Contact() {
     setShowModal(false);
     setIsEditing(false);
   };
+
+  if (isLoading) {
+    return <div className="loading">Učitavanje podataka...</div>;
+  }
 
   return (
     <div>
@@ -113,63 +116,61 @@ function Contact() {
         )}
       </div>
       <div className="building-list">
-  {Array.isArray(buildings) && buildings.length > 0 ? (
-    buildings
-      .sort((a, b) => a.naziv_zgrade.localeCompare(b.naziv_zgrade))
-      .map((building) => {
-        const isSuvlasnik = Array.isArray(building.korisnici) && 
-        building.korisnici.some(
-          (user) => user.email === userEmail && user.suvlasnik
-        );
-        console.log("Link za zgradu je: ", building.slika_link);
-        return (
-          <div key={building.zgrada_id} className="building-item">
-            <div className="building-picture">
-            <img src={building.slika_link} alt={building.naziv_zgrade} />
-
-
-            </div>
-            <div className="building-podaci">
-              <div className="building-naslov-gumb">
-                <h2>{building.naziv_zgrade}</h2>
-                {(isSuvlasnik || userEmail === 'easyflatprogi@gmail.com') && (
-                  <button
-                    onClick={() => {
-                      setEditBuilding(building);
-                      setShowModal(true);
-                      setIsEditing(true);
-                    }}
-                    className="edit-building-button"
-                  >
-                    Uredi
-                  </button>
-                )}
-              </div>
-              {building.korisnici && building.korisnici.length > 0 ? (
-                <ul>
-                  {building.korisnici
-                  .filter((user) => user.aktivan)
-                  .filter((user) => user.email !== "easyflatprogi@gmail.com")
-                  .map((user, index) => (
-                    <li
-                      key={index}
-                      style={{ fontWeight: user.suvlasnik ? 'bold' : 'normal' }}
-                    >
-                      {`${user.ime} ${user.prezime} (${user.email})`}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>Nema korisnika u ovoj zgradi.</p>
-              )}
-            </div>
-          </div>
-        );
-      })
-  ) : (
-    <p>Nema dohvaćenih zgrada</p>
-  )}
-</div>
+        {Array.isArray(buildings) && buildings.length > 0 ? (
+          buildings
+            .sort((a, b) => a.naziv_zgrade.localeCompare(b.naziv_zgrade))
+            .map((building) => {
+              const isSuvlasnik = Array.isArray(building.korisnici) &&
+                building.korisnici.some(
+                  (user) => user.email === userEmail && user.suvlasnik
+                );
+              console.log("Link za zgradu je: ", building.slika_link);
+              return (
+                <div key={building.zgrada_id} className="building-item">
+                  <div className="building-picture">
+                    <img src={building.slika_link} alt={building.naziv_zgrade} />
+                  </div>
+                  <div className="building-podaci">
+                    <div className="building-naslov-gumb">
+                      <h2>{building.naziv_zgrade}</h2>
+                      {(isSuvlasnik || userEmail === 'easyflatprogi@gmail.com') && (
+                        <button
+                          onClick={() => {
+                            setEditBuilding(building);
+                            setShowModal(true);
+                            setIsEditing(true);
+                          }}
+                          className="edit-building-button"
+                        >
+                          Uredi
+                        </button>
+                      )}
+                    </div>
+                    {building.korisnici && building.korisnici.length > 0 ? (
+                      <ul>
+                        {building.korisnici
+                          .filter((user) => user.aktivan)
+                          .filter((user) => user.email !== "easyflatprogi@gmail.com")
+                          .map((user, index) => (
+                            <li
+                              key={index}
+                              style={{ fontWeight: user.suvlasnik ? 'bold' : 'normal' }}
+                            >
+                              {`${user.ime} ${user.prezime} (${user.email})`}
+                            </li>
+                          ))}
+                      </ul>
+                    ) : (
+                      <p>Nema korisnika u ovoj zgradi.</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+        ) : (
+          <p>Nema dohvaćenih zgrada</p>
+        )}
+      </div>
 
       {showModal && (
         <div className="modal">
