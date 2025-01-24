@@ -1,0 +1,317 @@
+{
+  "id": "999c44f6-89ad-4b1e-92fe-5e33eeb4f55f",
+  "version": "2.0",
+  "name": "progi",
+  "url": "http://localhost:5000",
+  "tests": [{
+    "id": "83f0c10e-70b1-42c2-94f1-c2d23a4aacb4",
+    "name": "test1",
+    "commands": [{
+      "id": "cf533e2c-3d66-4b7a-a877-7190e16e8f4b",
+      "comment": "",
+      "command": "open",
+      "target": "/signup",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d026411c-1715-45ff-a02f-b6afb0fae31f",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "616x848",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0312325d-fbb4-4291-ad00-5263ad006e05",
+      "comment": "",
+      "command": "click",
+      "target": "css=.google-auth-button",
+      "targets": [
+        ["css=.google-auth-button", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Prijavite se putem Google-a')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7b94d4df-4022-4528-99f7-792bea6ac400",
+      "comment": "",
+      "command": "click",
+      "target": "css=.aZvCDf:nth-child(2) > .VV3oRb",
+      "targets": [
+        ["css=.aZvCDf:nth-child(2) > .VV3oRb", "css:finder"],
+        ["xpath=//body[@id='yDmH0d']/div[3]/div/div[2]/div/div/div[2]/div/div/div/form/span/section/div/div/div/div/ul/li[2]/div", "xpath:idRelative"],
+        ["xpath=//li[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb4e4ee5-d7e6-46c1-a310-34d387051047",
+      "comment": "",
+      "command": "click",
+      "target": "css=.VfPpkd-ksKsZd-mWPk3d-OWXEXe-Tv8l5d-lJfZMc > .VfPpkd-RLmnJb",
+      "targets": [
+        ["css=.VfPpkd-ksKsZd-mWPk3d-OWXEXe-Tv8l5d-lJfZMc > .VfPpkd-RLmnJb", "css:finder"],
+        ["xpath=//div[@id='yDmH0d']/c-wiz/div/div[3]/div/div/div[2]/div/div/button/div[3]", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/button/div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e81b79cd-ec75-422a-b801-84444e36bacb",
+      "comment": "",
+      "command": "verifyElementNotPresent",
+      "target": "css=.Ekjuhf",
+      "targets": [
+        ["css=.Ekjuhf", "css:finder"],
+        ["xpath=//div[@id='yDmH0d']/c-wiz/div/div[2]/div/div/div/form/span/section/div/div/div/div/div[2]/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "295c077f-c1df-47be-8d30-8dd588afbf72",
+    "name": "test2",
+    "commands": [{
+      "id": "5ed0aaaa-e6eb-4f36-a181-816a96ce37a5",
+      "comment": "",
+      "command": "open",
+      "target": "/signup",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e97d7f45-9538-44ad-b478-6ce3929975d2",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1470x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "134d36dd-78eb-4ef8-8dba-915da74a3d80",
+      "comment": "",
+      "command": "click",
+      "target": "css=.google-auth-button",
+      "targets": [
+        ["css=.google-auth-button", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Prijavite se putem Google-a')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d44a66a0-6f2e-4e63-96d7-eea4ba96e6fa",
+      "comment": "",
+      "command": "click",
+      "target": "css=.B682ne > .VV3oRb",
+      "targets": [
+        ["css=.B682ne > .VV3oRb", "css:finder"],
+        ["xpath=//body[@id='yDmH0d']/div[3]/div/div[2]/div/div/div[2]/div/div/div/form/span/section/div/div/div/div/ul/li[3]/div", "xpath:idRelative"],
+        ["xpath=//li[3]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "61412294-b979-49f4-abb3-7af47d9d91d5",
+      "comment": "",
+      "command": "type",
+      "target": "id=identifierId",
+      "targets": [
+        ["id=identifierId", "id"],
+        ["name=identifier", "name"],
+        ["css=#identifierId", "css:finder"],
+        ["xpath=//input[@id='identifierId']", "xpath:attributes"],
+        ["xpath=//div[@id='yDmH0d']/c-wiz/div/div[2]/div/div/div/form/span/section/div/div/div/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "4ab"
+    }, {
+      "id": "735fc559-e838-4daf-8e9f-1a263455a676",
+      "comment": "",
+      "command": "click",
+      "target": "css=.VfPpkd-LgbsSe-OWXEXe-k8QpJ > .VfPpkd-vQzf8d",
+      "targets": [
+        ["css=.VfPpkd-LgbsSe-OWXEXe-k8QpJ > .VfPpkd-vQzf8d", "css:finder"],
+        ["xpath=//div[@id='identifierNext']/div/button/span", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/div/button/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Dalje')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "eb891402-de73-4d20-bba1-519df48b9610",
+      "comment": "",
+      "command": "verifyElementPresent",
+      "target": "css=.LXRPh",
+      "targets": [
+        ["css=.Ekjuhf", "css:finder"],
+        ["xpath=//div[@id='yDmH0d']/c-wiz/div/div[2]/div/div/div/form/span/section/div/div/div/div/div[2]/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "b0f8705a-51d5-4f7c-aef7-3c788acd11c8",
+    "name": "test3",
+    "commands": [{
+      "id": "9c9e3f02-d3a1-4d04-aa2f-c6efc0a13ebe",
+      "comment": "",
+      "command": "open",
+      "target": "/signup",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a255c1a8-e154-4cc2-934c-e05170d610b6",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1200x817",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "854ba66a-9975-4a9a-b40a-ca8f10ecaf43",
+      "comment": "",
+      "command": "click",
+      "target": "css=.google-auth-button",
+      "targets": [
+        ["css=.google-auth-button", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Prijavite se putem Google-a')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5d5cd802-641d-4169-b31f-f5c753e9a3e4",
+      "comment": "",
+      "command": "click",
+      "target": "css=.aZvCDf:nth-child(1) .LbOduc",
+      "targets": [
+        ["css=.aZvCDf:nth-child(1) .LbOduc", "css:finder"],
+        ["xpath=//body[@id='yDmH0d']/div[3]/div/div[2]/div/div/div[2]/div/div/div/form/span/section/div/div/div/div/ul/li/div/div/div", "xpath:idRelative"],
+        ["xpath=//li/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "47064bf5-9364-4a6b-8470-b77714110559",
+      "comment": "",
+      "command": "click",
+      "target": "css=.VfPpkd-ksKsZd-mWPk3d-OWXEXe-Tv8l5d-lJfZMc > .VfPpkd-RLmnJb",
+      "targets": [
+        ["css=.VfPpkd-ksKsZd-mWPk3d-OWXEXe-Tv8l5d-lJfZMc > .VfPpkd-RLmnJb", "css:finder"],
+        ["xpath=//div[@id='yDmH0d']/c-wiz/div/div[3]/div/div/div[2]/div/div/button/div[3]", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/button/div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d9a6ab7f-d476-49f2-892c-e4e50531dfaa",
+      "comment": "",
+      "command": "verifyElementNotPresent",
+      "target": "css=a:nth-child(1) > .nav-icon",
+      "targets": [
+        ["css=a:nth-child(1) > .nav-icon", "css:finder"],
+        ["xpath=//img[@alt='korisnikInfo']", "xpath:img"],
+        ["xpath=//div[@id='root']/div/nav/div[3]/a/img", "xpath:idRelative"],
+        ["xpath=//div[3]/a/img", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "5c1a593e-b77f-443b-b14f-4e769eb17c8f",
+    "name": "test4",
+    "commands": [{
+      "id": "e8cc20c2-abc4-45ec-a6da-cd71ea3220ed",
+      "comment": "",
+      "command": "open",
+      "target": "/signup",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "41deda01-fdb0-481c-95fb-5b2d2a1c6d9f",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1200x817",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c0c9a12f-f828-478f-8277-66c2a0f73689",
+      "comment": "",
+      "command": "click",
+      "target": "css=.google-auth-button",
+      "targets": [
+        ["css=.google-auth-button", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Prijavite se putem Google-a')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c5f7f242-fc09-441a-9aca-e869299043bb",
+      "comment": "",
+      "command": "click",
+      "target": "css=.aZvCDf:nth-child(1) .pGzURd",
+      "targets": [
+        ["css=.aZvCDf:nth-child(1) .pGzURd", "css:finder"],
+        ["xpath=//body[@id='yDmH0d']/div/div/div[2]/div/div/div[2]/div/div/div/form/span/section/div/div/div/div/ul/li/div/div/div/div[2]/div", "xpath:idRelative"],
+        ["xpath=//li/div/div/div/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e2604a88-cca5-4869-8288-9df15274ccb3",
+      "comment": "",
+      "command": "click",
+      "target": "css=.VfPpkd-ksKsZd-mWPk3d-OWXEXe-Tv8l5d-lJfZMc > .VfPpkd-RLmnJb",
+      "targets": [
+        ["css=.VfPpkd-ksKsZd-mWPk3d-OWXEXe-Tv8l5d-lJfZMc > .VfPpkd-RLmnJb", "css:finder"],
+        ["xpath=//div[@id='yDmH0d']/c-wiz/div/div[3]/div/div/div[2]/div/div/button/div[3]", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/button/div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3ffcfe85-8b44-4f67-8b3f-55d1a1a7781b",
+      "comment": "",
+      "command": "click",
+      "target": "css=select",
+      "targets": [
+        ["css=select", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/form/div[4]/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d2e9b834-ce2f-4711-b4a3-5123f027f4d7",
+      "comment": "",
+      "command": "select",
+      "target": "css=select",
+      "targets": [],
+      "value": "label=1"
+    }, {
+      "id": "bb0b3027-e7cf-443c-bb8e-63f72ed77b80",
+      "comment": "",
+      "command": "click",
+      "target": "css=.submit-button",
+      "targets": [
+        ["css=.submit-button", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Complete Signup')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "cf608c71-c459-4bed-ba81-49e58b75adb9",
+      "comment": "",
+      "command": "verifyElementPresent",
+      "target": "css=.google-auth-button",
+      "targets": [
+        ["css=.google-auth-button", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Prijavite se putem Google-a')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "ca12dc17-cb2c-4f1e-8543-bc782be078c3",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["83f0c10e-70b1-42c2-94f1-c2d23a4aacb4"]
+  }],
+  "urls": ["http://localhost:5000/"],
+  "plugins": []
+}
