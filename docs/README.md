@@ -5,7 +5,7 @@ Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Progra
 
 Cilj ovog projekta je razviti web aplikaciju koja će omogućiti poboljšanje komunikacije i olakšanu koordinaciju inicijativa suvlasnika u zgradi. Često postoji potreba za međusobnom koordinacijom suvlasnika vezano za dijeljenje troškova, izvođenje građevinskih radova i ostalih poslova vezanih uz zgradu. Za ovu svrhu suvlasnici mogu koristiti razne aplikacije općenitije namjene kao što su Discord serveri i WhatsApp grupe ili pak koristiti samo fizičke poruke na oglasnoj ploči zgrade. Ovakva komunikacija se može pokazati izazovna zbog velikog broja suvlasnika. Prednost ove aplikacije je prilagođenost toj specifičnoj potrebi povezivanja suvlasnika pojedine zgrade. Glavni dio, a ujedno i početna stranica aplikacije je oglasna ploča. Na oglasnoj ploči korisnici imaju pristup diskusijama koje su stvorili ostali suvlasnici u zgradi kao i mogućnost iniciranja vlastite diskusije.
 
-Domena aplikacije je **[easyflat.ngrok.app](https://easyflat.ngrok.app)**.  
+Domena aplikacije je **[https://easyflat.eu.ngrok.io/](https://easyflat.eu.ngrok.io/)**.
 
 Za potrebe evaluacije projekta, možete se prijaviti koristeći sljedeći račun:  
 - **Email**: easyflatprogi@gmail.com  
