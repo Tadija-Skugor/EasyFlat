@@ -43,30 +43,32 @@ class Server {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(express.json());
-    
+    this.app.set('trust proxy', 1);
+
     const corsOptions = {
-      origin: 'http://localhost:5000',
+      origin: 'https://easyflat.eu.ngrok.io',
       credentials: true,
       optionsSuccessStatus: 200,
     };
 
     this.app.use(cors(corsOptions));
-
     this.app.use(session({
-      secret: 'your_secret_key', 
+      secret: 'your_secret_key', // tajna shhh
       resave: false,
       saveUninitialized: false,
       cookie: {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 // 1 day
+        secure: true,      // Koristite true za HTTPS, false za HTTP (ili testiranje na localhostu)
+        sameSite: 'none',  // Potrebno za CORS s credentials i različite domene
+        maxAge: 1000 * 60 * 60 * 24 // 1 day 
       }
     }));
+    
   }
 
   setupRoutes() {
     //OVO POSLATI U TERMINAL
     
-    //curl -H "Authorization: ApiKey key" -H "Naslov-diskusije: Primjer" -H "ID-zgrade:1" http://localhost:4000/slanjeRazgovoraPrekoApi
+    //curl -H "Authorization: ApiKey key" -H "Naslov-diskusije: Primjer" -H "ID-zgrade:1" https://be30c39fc6db.ngrok.app/slanjeRazgovoraPrekoApi
 
     this.app.use('/slanjeRazgovoraPrekoApi', apiKeyAuth, async (req, res) => {
       const { apiKeyInfo } = req;
@@ -101,7 +103,7 @@ console.log(zgrada_id)
           const encodedNaslov = encodeURIComponent(Naslov);
 
           // Construct the site link with the encoded Naslov
-          const siteLink = `http://localhost:5000/main?search_query=${encodedNaslov}`;
+          const siteLink = `https://easyflat.eu.ngrok.io/main?search_query=${encodedNaslov}`;
       
           res.send({
             message: 'Pristup dan preko api kljuca!',

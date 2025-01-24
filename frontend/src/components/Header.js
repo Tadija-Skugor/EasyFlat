@@ -21,7 +21,7 @@ export default function Header() {
     };
 
     const handleLogout = () => {
-        fetch('http://localhost:4000/logout', {
+        fetch('https://be30c39fc6db.ngrok.app/logout', {
             method: 'POST',
             credentials: 'include', // kredencijali iako mislim da moze bez njih jer nema provjere na backendu
         })

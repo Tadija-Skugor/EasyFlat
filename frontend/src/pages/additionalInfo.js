@@ -18,7 +18,7 @@ const AdditionalSignup = () => {
     // Fetch user data for initial form state
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/signupAuth', {
+        const response = await axios.get('https://be30c39fc6db.ngrok.app/signupAuth', {
           withCredentials: true,
         });
         const { imeKorisnika, prezimeKorisnika, email } = response.data.user;
@@ -37,7 +37,7 @@ const AdditionalSignup = () => {
     // Fetch building data for dropdown menu
     const fetchBuildingData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/userInfo/buildings', {
+        const response = await axios.get('https://be30c39fc6db.ngrok.app/userInfo/buildings', {
           withCredentials: true,
         });
         setBuildings(response.data);
@@ -59,12 +59,12 @@ const AdditionalSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:4000/signupAuth/additional-signup', formData, {
+      await axios.post('https://be30c39fc6db.ngrok.app/signupAuth/additional-signup', formData, {
         withCredentials: true
       });
 
       // Log out the user after successful submission
-      await axios.post('http://localhost:4000/logout', {}, {
+      await axios.post('https://be30c39fc6db.ngrok.app/logout', {}, {
         withCredentials: true
       });
       alert("Your data has been sent for review.");

@@ -10,11 +10,11 @@ function CentarZaPoruke() {
 
     const fetchMessages = async () => {
         try {
-            const emailKorisnika = await axios.post('http://localhost:4000/userInfo', {}, { withCredentials: true });
+            const emailKorisnika = await axios.post('https://be30c39fc6db.ngrok.app/userInfo', {}, { withCredentials: true });
             setInfo(emailKorisnika.data);
             console.log(emailKorisnika);
     
-            const response = await axios.get("http://localhost:4000/poruke", {
+            const response = await axios.get("https://be30c39fc6db.ngrok.app/poruke", {
                 withCredentials: true,
             });
     
@@ -38,7 +38,7 @@ function CentarZaPoruke() {
         console.log("Pokusaj brisanja", { naslov, tekst });
         try {
             const response = await axios.post(
-                'http://localhost:4000/poruke/obrisiRazgovor',
+                'https://be30c39fc6db.ngrok.app/poruke/obrisiRazgovor',
                 { naslov: naslov, tekst: tekst },
                 { withCredentials: true }
             );

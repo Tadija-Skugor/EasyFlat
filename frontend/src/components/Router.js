@@ -24,7 +24,7 @@ export default function Router() {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/check-auth', {
+      const response = await axios.get('https://be30c39fc6db.ngrok.app/check-auth', {
         withCredentials: true,
       });
 
@@ -50,7 +50,15 @@ export default function Router() {
       <Footer />
     </div>
   );
-
+  const ErrorPage = () => (
+    <div style={{ textAlign: 'center', padding: '50px' }}>
+      <h1 style={{ fontSize: '3rem', color: '#e74c3c' }}>404 - Stranica nije pronađena</h1>
+      <p>Stranica koju tražite ne postoji.</p>
+      <a href="/" style={{ color: '#3498db', textDecoration: 'none', fontWeight: 'bold' }}>
+        Vrati se na početnu stranicu
+      </a>
+    </div>
+  );
   const NoLayout = () => (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <NoHeader />
@@ -192,6 +200,8 @@ export default function Router() {
             }
           />
         </Route>
+        <Route path="*" element={<ErrorPage />} />
+
       </Routes>
     </BrowserRouter>
   );

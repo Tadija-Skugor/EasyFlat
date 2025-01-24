@@ -33,7 +33,7 @@ export default function Home() {
 
     const fetchDiscussions = async (searchQuery) => {
         try {
-            const response = await axios.get('http://localhost:4000/data/allDiscussions', {
+            const response = await axios.get('https://be30c39fc6db.ngrok.app/data/allDiscussions', {
                 withCredentials: true, 
             });
             let filteredDiscussions = response.data;
@@ -45,8 +45,8 @@ export default function Home() {
             }
     
             const [userEmailResponse, GlasanjesResponse] = await Promise.all([
-                axios.get('http://localhost:4000/glasanje/userEmail', { withCredentials: true }),
-                axios.get('http://localhost:4000/glasanje/Glasanjes'),
+                axios.get('https://be30c39fc6db.ngrok.app/glasanje/userEmail', { withCredentials: true }),
+                axios.get('https://be30c39fc6db.ngrok.app/glasanje/Glasanjes'),
             ]);
 
             setUserEmail(userEmailResponse.data.email);
@@ -61,7 +61,7 @@ export default function Home() {
                     console.log("AAAAAAAAAAAAAAAAAAAAA");
                     if (discussion.forma){
                     console.log("forma: ", discussion.forma);
-                    const user_glasanje = await axios.get('http://localhost:4000/glasanje/userVote', {
+                    const user_glasanje = await axios.get('https://be30c39fc6db.ngrok.app/glasanje/userVote', {
                         params: { email: userEmailResponse.data.email, GlasanjeId: discussion.forma.id },
                         withCredentials: true,
                     });
@@ -90,7 +90,7 @@ export default function Home() {
   
     const fetchResponses = async (discussionId) => {
         try {
-            const response = await axios.get('http://localhost:4000/data/discussionResponses', {
+            const response = await axios.get('https://be30c39fc6db.ngrok.app/data/discussionResponses', {
                 params: { id_diskusije: discussionId },
             },                {withCredentials: true} 
         );
@@ -130,7 +130,7 @@ export default function Home() {
         }
 
         try {
-            const response = await axios.post('http://localhost:4000/data/discussionAddResponse', {
+            const response = await axios.post('https://be30c39fc6db.ngrok.app/data/discussionAddResponse', {
                 id_diskusije: selectedDiscussionId,
                 tekst: newResponse,
             },{withCredentials: true}
@@ -146,7 +146,7 @@ export default function Home() {
     const handleVoteSubmit = async (formaId, vote) => {
         try {
             const response = await axios.post(
-                'http://localhost:4000/glasanje',
+                'https://be30c39fc6db.ngrok.app/glasanje',
                 { GlasanjeId: formaId, vote },
                 { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
             );
@@ -189,7 +189,7 @@ export default function Home() {
     
     const createSastanak = async (id,naslov,kreator,opis,da,ne) => {
         try {
-            const response = await axios.post('http://localhost:4000/data/createMeeting', { id ,naslov,kreator,opis});
+            const response = await axios.post('https://be30c39fc6db.ngrok.app/data/createMeeting', { id ,naslov,kreator,opis});
             if (response.data.link) {
                 setDiscussions((prevDiscussions) =>
                     prevDiscussions.map((discussion) =>
@@ -237,7 +237,7 @@ export default function Home() {
         }
     
         try {
-            const response = await axios.post('http://localhost:4000/data/addDiscussion', {
+            const response = await axios.post('https://be30c39fc6db.ngrok.app/data/addDiscussion', {
                 naslov,
                 opis,
             }, {
@@ -249,7 +249,7 @@ export default function Home() {
             console.log('New discussion ID:', id_diskusije);
     
             if (naslovGlasanja.trim()) {
-                await axios.post('http://localhost:4000/data/bindNewForm', {
+                await axios.post('https://be30c39fc6db.ngrok.app/data/bindNewForm', {
                     id_diskusije,
                     naslov: naslovGlasanja,
                     datum_istece,
@@ -488,7 +488,7 @@ export default function Home() {
 
 <button
 className="archive-button"
-onClick={() => window.location.href = 'http://localhost:5000/archive'}>Arhiva
+onClick={() => window.location.href = 'https://easyflat.eu.ngrok.io/archive'}>Arhiva
 </button>
             </div>
         </div>

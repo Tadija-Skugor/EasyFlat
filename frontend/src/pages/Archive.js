@@ -9,7 +9,7 @@ export default function Main(){
 
     const fetchArchivedDiscussion = async () => {
         try{
-            const response = await axios.get('http://localhost:4000/archive/allArchived', {
+            const response = await axios.get('https://be30c39fc6db.ngrok.app/archive/allArchived', {
                 withCredentials: true,  // Ensures cookies are sent with the request if needed
             });
             setDiscussions(response.data);
@@ -33,7 +33,7 @@ export default function Main(){
 
     const fetchResponses = async (discussionId) => {
             try {
-                const response = await axios.get('http://localhost:4000/archive/archivedResponses', {
+                const response = await axios.get('https://be30c39fc6db.ngrok.app/archive/archivedResponses', {
                     params: { id_diskusije: discussionId },
                 },                {withCredentials: true} 
             );

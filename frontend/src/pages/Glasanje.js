@@ -19,8 +19,8 @@ export default function Main() {
         const fetchData = async () => {
             try {
                 const [userEmailResponse, GlasanjesResponse] = await Promise.all([
-                    axios.get('http://localhost:4000/glasanje/userEmail', { withCredentials: true }),
-                    axios.get('http://localhost:4000/glasanje/Glasanjes',{ withCredentials: true }),
+                    axios.get('https://be30c39fc6db.ngrok.app/glasanje/userEmail', { withCredentials: true }),
+                    axios.get('https://be30c39fc6db.ngrok.app/glasanje/Glasanjes',{ withCredentials: true }),
                 ]);
 
                 setUserEmail(userEmailResponse.data.email);
@@ -31,7 +31,7 @@ export default function Main() {
                     const votedGlasanjes = {};
 
                     for (let Glasanje of GlasanjesResponse.data) {
-                        const response = await axios.get('http://localhost:4000/glasanje/userVote', {
+                        const response = await axios.get('https://be30c39fc6db.ngrok.app/glasanje/userVote', {
                             params: { email: userEmailResponse.data.email, GlasanjeId: Glasanje.id },
                             withCredentials: true,
                         });
@@ -64,7 +64,7 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
 
     try {
         const response = await axios.post(
-            'http://localhost:4000/glasanje',
+            'https://be30c39fc6db.ngrok.app/glasanje',
             { userId: userEmail, GlasanjeId, vote },
             { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
         );
@@ -109,7 +109,7 @@ const handleVoteSubmit = async (GlasanjeId, vote) => {
         e.preventDefault();
     
         try {
-            const response = await axios.post('http://localhost:4000/glasanje/dodavanjeGlasovanja', newGlasanje, {
+            const response = await axios.post('https://be30c39fc6db.ngrok.app/glasanje/dodavanjeGlasovanja', newGlasanje, {
                 withCredentials: true,
             });
     

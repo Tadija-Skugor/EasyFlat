@@ -16,7 +16,7 @@ export default function Upit() {
     // Auth funkcija izmjenjena tako da koristi navigate iz useNavigate
     const auth = async () => {
         try {
-            const response = await fetch('http://localhost:4000/request', { method: 'POST' });
+            const response = await fetch('https://be30c39fc6db.ngrok.app/request', { method: 'POST' });
             if (!response.ok) {
                 throw new Error('Failed to fetch the authorization URL.');
             }

@@ -19,7 +19,7 @@ export default function Upit() {
 
     const axiosFetchData = async (processing) => {
         try {
-            const response = await axios.get('http://localhost:4000/users', {
+            const response = await axios.get('https://be30c39fc6db.ngrok.app/users', {
                 withCredentials: true,
             });
 
@@ -33,7 +33,7 @@ export default function Upit() {
 
     const fetchProtectedData = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/protected', {
+            const response = await axios.get('https://be30c39fc6db.ngrok.app/protected', {
                 withCredentials: true,
             });
             setProtectedData(response.data);
@@ -49,7 +49,7 @@ export default function Upit() {
             website: selectValue,
             poruka: poruka
         };
-        await axios.post('http://localhost:4000/contact', postData, {
+        await axios.post('https://be30c39fc6db.ngrok.app/contact', postData, {
             withCredentials: true
         })
         .then(res => setError(<p className="success">{res.data}</p>))

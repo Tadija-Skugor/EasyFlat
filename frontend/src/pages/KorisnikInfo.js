@@ -225,21 +225,21 @@ export default function KorisnikInfo() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.post('http://localhost:4000/userInfo', {}, { withCredentials: true });
+                const response = await axios.post('https://be30c39fc6db.ngrok.app/userInfo', {}, { withCredentials: true });
                 setInfo(response.data);
                 setEditedInfo(response.data);
     
-                const inactiveResponse = await axios.get('http://localhost:4000/userInfo/inactive-users', { withCredentials: true });
+                const inactiveResponse = await axios.get('https://be30c39fc6db.ngrok.app/userInfo/inactive-users', { withCredentials: true });
                 setInactiveUsers(inactiveResponse.data);
     
-                const activeResponse = await axios.get('http://localhost:4000/userInfo/active-users', { withCredentials: true });
+                const activeResponse = await axios.get('https://be30c39fc6db.ngrok.app/userInfo/active-users', { withCredentials: true });
                 setActiveUsers(activeResponse.data);
     
-                const coOwnersResponse = await axios.get('http://localhost:4000/userInfo/active-suvlasnici', { withCredentials: true });
+                const coOwnersResponse = await axios.get('https://be30c39fc6db.ngrok.app/userInfo/active-suvlasnici', { withCredentials: true });
                 setCoOwners(coOwnersResponse.data);
                 console.log("ovo su mi suvlasnici",coOwnersResponse.data); 
 
-                const allBudilingsResponse = await axios.get('http://localhost:4000/userInfo/buildings', { withCredentials: true });
+                const allBudilingsResponse = await axios.get('https://be30c39fc6db.ngrok.app/userInfo/buildings', { withCredentials: true });
                 console.log(allBudilingsResponse);
                 setAllBuildings(allBudilingsResponse.data);
 
@@ -268,7 +268,7 @@ export default function KorisnikInfo() {
     const handleSave = async () => {
         try {
             const response = await axios.post(
-                'http://localhost:4000/userInfo/update',
+                'https://be30c39fc6db.ngrok.app/userInfo/update',
                 { ime: editedInfo.ime, prezime: editedInfo.prezime },
                 { withCredentials: true }
             );
@@ -281,7 +281,7 @@ export default function KorisnikInfo() {
 
     const handleActivateUser = async (email) => {
         try {
-            await axios.post('http://localhost:4000/userInfo/activate-user', { email }, { withCredentials: true });
+            await axios.post('https://be30c39fc6db.ngrok.app/userInfo/activate-user', { email }, { withCredentials: true });
             setInactiveUsers((prev) => prev.filter((user) => user.email !== email));
             const activatedUser = inactiveUsers.find((user) => user.email === email);
             setActiveUsers((prev) =>
@@ -297,7 +297,7 @@ export default function KorisnikInfo() {
     
     const handleDeactivateUser = async (email) => {
         try {
-            await axios.post('http://localhost:4000/userInfo/deactivate-user', { email }, { withCredentials: true });
+            await axios.post('https://be30c39fc6db.ngrok.app/userInfo/deactivate-user', { email }, { withCredentials: true });
             setActiveUsers((prev) => prev.filter((user) => user.email !== email));
             const deactivatedUser = activeUsers.find((user) => user.email === email);
             setInactiveUsers((prev) => [...prev, deactivatedUser]);
@@ -316,7 +316,7 @@ export default function KorisnikInfo() {
     const handleSetSuvlasnik = async (email) => {
         try {
             console.log("Setting as Suvlasnik");
-            await axios.post('http://localhost:4000/userInfo/setSuvlasnik-user', { email }, { withCredentials: true });
+            await axios.post('https://be30c39fc6db.ngrok.app/userInfo/setSuvlasnik-user', { email }, { withCredentials: true });
             const updatedCoOwners = [...coOwners, activeUsers.find((user) => user.email === email)];
             setCoOwners(updatedCoOwners);
             setActiveUsers((prevUsers) =>
@@ -335,7 +335,7 @@ export default function KorisnikInfo() {
     const handleRemoveSuvlasnik = async (email) => {
         try {
             console.log("Removing Suvlasnik");
-            await axios.post('http://localhost:4000/userInfo/removeSuvlasnik-user', { email }, { withCredentials: true });
+            await axios.post('https://be30c39fc6db.ngrok.app/userInfo/removeSuvlasnik-user', { email }, { withCredentials: true });
             window.location.reload();
             const updatedCoOwners = coOwners.filter((owner) => owner.suvlasnik.email !== email);
             setCoOwners(updatedCoOwners);

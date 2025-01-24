@@ -21,8 +21,8 @@ function Contact() {
     const fetchData = async () => {
       try {
         const [userEmailResponse, buildingsResponse] = await Promise.all([
-          axios.get('http://localhost:4000/zgradeInfo/userEmail', { withCredentials: true }),
-          axios.get('http://localhost:4000/zgrade', { withCredentials: true }),
+          axios.get('https://be30c39fc6db.ngrok.app/zgradeInfo/userEmail', { withCredentials: true }),
+          axios.get('https://be30c39fc6db.ngrok.app/zgrade', { withCredentials: true }),
         ]);
 
         setUserEmail(userEmailResponse.data.email);
@@ -52,7 +52,7 @@ function Contact() {
       return;
     }
 
-    axios.post('http://localhost:4000/zgrade', newBuilding, {
+    axios.post('https://be30c39fc6db.ngrok.app/zgrade', newBuilding, {
       withCredentials: true,
     })
       .then(() => {
@@ -69,7 +69,7 @@ function Contact() {
   const handleEditSave = () => {
     console.log('Edit Building:', editBuilding);
 
-    axios.put(`http://localhost:4000/zgrade/${editBuilding.zgrada_id}`, editBuilding, {
+    axios.put(`https://be30c39fc6db.ngrok.app/zgrade/${editBuilding.zgrada_id}`, editBuilding, {
       withCredentials: true,
     })
       .then(() => {
