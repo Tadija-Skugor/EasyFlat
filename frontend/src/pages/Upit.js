@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import './Upit.css';
 
 export default function Upit() {
     const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export default function Upit() {
 
     const axiosFetchData = async (processing) => {
         try {
-            const response = await axios.get('http://localhost:4000/users', {
+            const response = await axios.get('https://be30c39fc6db.ngrok.app/users', {
                 withCredentials: true,
             });
 
@@ -32,7 +33,7 @@ export default function Upit() {
 
     const fetchProtectedData = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/protected', {
+            const response = await axios.get('https://be30c39fc6db.ngrok.app/protected', {
                 withCredentials: true,
             });
             setProtectedData(response.data);
@@ -41,19 +42,6 @@ export default function Upit() {
         }
     };
 
-    const SelectDropdown = () => {
-        return (
-            <select value={selectValue} onChange={(e) => setSelectValue(e.target.value)}>
-                {
-                    selectData?.map((item) => (
-                        <option value={item.stan_id} key={item.stan_id}>
-                            {item.stan_id}
-                        </option>
-                    ))
-                }
-            </select>
-        );
-    };
 
     const axiosPostData = async () => {
         const postData = {
@@ -61,7 +49,7 @@ export default function Upit() {
             website: selectValue,
             poruka: poruka
         };
-        await axios.post('http://localhost:4000/contact', postData, {
+        await axios.post('https://be30c39fc6db.ngrok.app/contact', postData, {
             withCredentials: true
         })
         .then(res => setError(<p className="success">{res.data}</p>))
@@ -87,13 +75,10 @@ export default function Upit() {
 
     return (
         <>
-            <h1 className="form-header">FORMA / KONTAKTIRAJTE NAS</h1>
+            <h1 className="form-header">Forma za obavijesti</h1>
             <form className="kontakt-forma" onSubmit={posao}>
-                <label>Email</label>
-                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-
-                <label>Koja je tema vaseg upita?</label>
-                <SelectDropdown />
+                <label>Naslov</label>
+                <input type="text" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
                 <label>Poruka</label>
                 <textarea id="poruka" name="poruka" value={poruka} onChange={(e) => setPoruka(e.target.value)} required></textarea>

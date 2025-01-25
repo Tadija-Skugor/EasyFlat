@@ -1,35 +1,39 @@
 import Header from './Header';
 import Footer from './Footer';
+import NoHeader from './NoHeader';
+import NoFooter from './NoFooter';
 import Upit from '../pages/Upit';
-import Home from '../pages/Home';
+import Home from '../pages/Main';
 import Signup from '../pages/Signup';
+import Glasanje from '../pages/Glasanje';
 import Main from '../pages/Main';
-import Contact from '../pages/Contact';
+import Arhiva from '../pages/Archive';
+
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import KontaktDetalji from '../pages/KontaktDetalji';
+import CentarZaPoruke from '../pages/CentarZaPoruke';
 import PotvrdaSignupa from '../pages/additionalInfo';
 import UserPage from '../pages/KorisnikInfo';
+import Zgrade from '../pages/Zgrade';
 
 export default function Router() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // Initialize as null to track loading state
-  const [isEmailVerified, setIsEmailVerified] = useState(null); // Track email verification status
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isEmailVerified, setIsEmailVerified] = useState(null);
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/check-auth', {
+      const response = await axios.get('https://be30c39fc6db.ngrok.app/check-auth', {
         withCredentials: true,
       });
-      
-      // Update both authentication and email verification status
+
       setIsAuthenticated(response.data.isAuthenticated);
       setIsEmailVerified(response.data.isEmailVerified);
-      
     } catch (error) {
-      console.error("Authentication check failed:", error);
-      setIsAuthenticated(false); // If there's an error, set as unauthenticated
-      setIsEmailVerified(false); // Set email verification status as false on error
+      console.error('Authentication check failed:', error);
+      setIsAuthenticated(false);
+      setIsEmailVerified(false);
     }
   };
 
@@ -38,88 +42,87 @@ export default function Router() {
   }, []);
 
   const Layout = () => (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <Outlet />
+      <div style={{ flex: 1 }}>
+        <Outlet />
+      </div>
       <Footer />
-    </>
+    </div>
+  );
+  const ErrorPage = () => (
+    <div style={{ textAlign: 'center', padding: '50px' }}>
+      <h1 style={{ fontSize: '3rem', color: '#e74c3c' }}>404 - Stranica nije pronađena</h1>
+      <p>Stranica koju tražite ne postoji.</p>
+      <a href="/" style={{ color: '#3498db', textDecoration: 'none', fontWeight: 'bold' }}>
+        Vrati se na početnu stranicu
+      </a>
+    </div>
+  );
+  const NoLayout = () => (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <NoHeader />
+      <div style={{ flex: 1 }}>
+        <Outlet />
+      </div>
+      <NoFooter />
+    </div>
   );
 
   const PrivateRoute = ({ children }) => {
     if (isAuthenticated === null || isEmailVerified === null) {
-      return <div>Loading...</div>; 
+      return <div>Loading...</div>;
     }
-    console.log(isAuthenticated);
-    console.log("------------------------");
-    console.log(isEmailVerified);
-
-    // Redirect to signup if not authenticated or email is not verified
     if (!isAuthenticated || !isEmailVerified) {
       return <Navigate to="/signup" />;
     }
-    return children; // If authenticated and verified, render the children components
+    return children;
   };
 
   const LoggedRoute = ({ children }) => {
     if (isAuthenticated === null || isEmailVerified === null) {
-      return <div>Loading...</div>; 
+      return <div>Loading...</div>;
     }
-
-    console.log(isAuthenticated);
-    console.log("------------------------");
-    console.log(isEmailVerified);
-
-    // Redirect to signup if not authenticated or email is not verified
     if (isAuthenticated && isEmailVerified) {
       return <Navigate to="/home" />;
     }
-    return children; // If authenticated and verified, render the children components
+    return children;
   };
+
   const AuthenticatedRoute = ({ children }) => {
-    if (isAuthenticated === null) {
+    if (isAuthenticated === null || isEmailVerified === null) {
       return <div>Loading...</div>;
     }
-    // If authenticated, render the children components; otherwise, redirect to signup
-    return isAuthenticated ? children : <Navigate to="/signup" />;
+    if (isAuthenticated && isEmailVerified) {
+      return <Navigate to="/home" />;
+    }
+    return children;
   };
+  
 
   const BrowserRouters = () => (
     <BrowserRouter>
       <Routes>
+        {/* Routes with Layout */}
         <Route path="/" element={<Layout />}>
-
-        <Route path="/" element={
-          <LoggedRoute>
-          <Signup />
-        </LoggedRoute>
-          } 
-          />
-          
-          
-          <Route 
-          path="signup" 
-          element={
-            <LoggedRoute>
-
-            <Signup />
-          </LoggedRoute>
-
-          } 
-          />
-          
-          
-
-
-          {/* Protected Routes */}
-          <Route
-            path="home"
+        <Route
+            path="/"
             element={
               <PrivateRoute>
                 <Home />
               </PrivateRoute>
             }
           />
-                    <Route
+
+          <Route
+            path="glasanje"
+            element={
+              <PrivateRoute>
+                <Glasanje />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="main"
             element={
               <PrivateRoute>
@@ -127,22 +130,12 @@ export default function Router() {
               </PrivateRoute>
             }
           />
+
                     <Route
-            path="potvrda"
-            element={
-              <AuthenticatedRoute>
-                <PotvrdaSignupa />
-              </AuthenticatedRoute>
-            }
-          />
-
-
-
-          <Route
-            path="contact"
+            path="zgrade"
             element={
               <PrivateRoute>
-                <Contact />
+                <Zgrade />
               </PrivateRoute>
             }
           />
@@ -151,6 +144,14 @@ export default function Router() {
             element={
               <PrivateRoute>
                 <Upit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="archive"
+            element={
+              <PrivateRoute>
+                <Arhiva />
               </PrivateRoute>
             }
           />
@@ -170,7 +171,37 @@ export default function Router() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="inbox"
+            element={
+              <PrivateRoute>
+                <CentarZaPoruke />
+              </PrivateRoute>
+            }
+          />
         </Route>
+
+        {/* Tu cemo puknuti sve rute koje pocinju sa signup */}
+        <Route element={<NoLayout />}>
+          <Route
+            path="/signup"
+            element={
+              <LoggedRoute>
+                <Signup />
+              </LoggedRoute>
+            }
+          />
+          <Route
+            path="/potvrda"
+            element={
+              <AuthenticatedRoute>
+                <PotvrdaSignupa />
+              </AuthenticatedRoute>
+            }
+          />
+        </Route>
+        <Route path="*" element={<ErrorPage />} />
+
       </Routes>
     </BrowserRouter>
   );

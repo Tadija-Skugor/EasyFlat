@@ -14,12 +14,105 @@ router.get('/users', async (req, res) => {
   }
 });
 
+router.get('/zgrade', async (req, res) => {
+  try {
+    if (!req.session || !req.session.email) {
+      return res.status(400).json({ message: 'User is not authenticated' });
+    }
+
+    const userEmail = req.session.email;
+
+    let query = `
+        SELECT
+          z.id AS zgrada_id,
+          z.naziv_zgrade,
+          z.slika_link,
+          COALESCE(
+            JSON_AGG(
+              CASE 
+                WHEN k.email IS NOT NULL THEN JSON_BUILD_OBJECT(
+                  'ime', k.Ime,
+                  'prezime', k.Prezime,
+                  'email', k.email,
+                  'suvlasnik', k.suvlasnik, 
+                  'aktivan', k.aktivan
+                )
+                ELSE NULL
+              END
+            ) FILTER (WHERE k.email IS NOT NULL), 
+            '[]'
+          ) AS korisnici
+        FROM
+          zgrade z
+        LEFT JOIN
+          korisnik k ON z.id = k.zgrada_id
+        GROUP BY
+          z.id, z.naziv_zgrade, z.slika_link;
+    `;
+
+    const result = await pool.query(query);
+
+    // Filter buildings based on user email
+    const filteredBuildings =
+      userEmail === 'easyflatprogi@gmail.com'
+        ? result.rows // Admin sees all buildings
+        : result.rows.filter(building =>
+            building.korisnici.some(user => user.email === userEmail)
+          ); // Regular user sees their associated buildings only
+
+    res.json(filteredBuildings);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+router.post('/zgrade', async (req, res) => {
+  try {
+    console.log('Received request to add a building:', req.body);
+    const { id, naziv_zgrade, slika_link } = req.body;
+    await pool.query(
+      'INSERT INTO zgrade (id, naziv_zgrade, slika_link) VALUES ($1, $2, $3)',
+      [id, naziv_zgrade, slika_link]
+    );
+    console.log('Building added successfully:', req.body);
+    res.status(201).send('Building added');
+  } catch (err) {
+    console.error('Error adding building:', err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.put('/zgrade/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { naziv_zgrade, slika_link } = req.body;
+    await pool.query(
+      'UPDATE zgrade SET naziv_zgrade = $1, slika_link = $2 WHERE id = $3',
+      [naziv_zgrade, slika_link, id]
+    );
+    res.status(200).json({ message: 'Building updated' });
+  } catch (err) {
+    console.error('Error updating building:', err.message);
+    res.status(500).json({ error: 'Server Error' });
+  }
+});
+
+
+
+
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {
   console.log("Received contact data");
 
   const { email, website, poruka } = req.body;
+  const slanjeUpita = await pool.query(`insert into UPIT (emailOsobe,Tekst,zgrada_id) VALUES ('${email}','${poruka}',$1)`,[req.session.zgrada_id]); 
+  
+
   try {
+
+
     //const query = 'INSERT INTO your_table_name (email, website, poruka) VALUES ($1, $2, $3) RETURNING *';
     //const values = [email, website, poruka];
 
@@ -59,6 +152,7 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+module.exports = router;
 
 /*router.post('/addSignupInfo', async(req,res) => {        //dodavanje korisnika u bazu, bez potvrde administratora
   try{              
@@ -79,4 +173,4 @@ router.post('/login', async (req, res) => {
 
 
 
-module.exports = router;
+

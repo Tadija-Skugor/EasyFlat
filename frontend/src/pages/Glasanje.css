@@ -1,0 +1,247 @@
+.additional-info {
+    margin-top: 15px;
+    padding: 15px;
+    border: 2px solid #ccc;
+    border-radius: 10px; 
+    background-color: #ffffff; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    font-size: 14px;
+    color: #333; 
+    width: 97%;
+    max-width: 100%; 
+    min-width: 0; 
+    display: inline-block; 
+}
+
+.toggle-info-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.2s ease-in-out;
+    display: inline-block; /* Ensure button dimensions influence the box */
+}
+
+
+.additional-info p {
+    margin: 0; /* Remove margins for inner text */
+    line-height: 1.5; /* Improve readability */
+    text-align: justify; /* Align text for a clean look */
+}
+
+
+
+.toggle-info-button:hover {
+    background-color: #0056b3;
+}
+
+
+.Glasanje-list {
+    width: 60%;
+  }
+  
+
+  
+  .voting-box {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 15px 0;
+    background-color: #f4f7f6;
+  }
+  
+  .radio-group {
+    margin: 10px 0;
+  }
+  
+  .radio-group label {
+    display: block;
+  }
+  
+  .vote-button {
+    padding: 10px 15px;
+    background-color: #4CAF50; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .vote-button:hover {
+    background-color: #45a049;
+  }
+  
+  .vote-button:active {
+    background-color: #45a049;
+    transform: scaleY(0.95);
+    transform: scaleX(0.99);
+  }
+  
+  .vote-results {
+    margin-top: 10px;
+  }
+
+
+  /* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+/* Close Button */
+.close-modal-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.submit-form-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-form-button:hover {
+  background-color: #0056b3;
+}
+
+
+.navigation-button {
+  position: fixed;
+  bottom: 10%;
+  right: 3%;
+  background-color: #45a049;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.navigation-button:hover {
+  background-color: #27792b;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
+/* For the main content area */
+.main-content {
+  flex: 1; 
+}
+
+.submit-vote-button{
+  margin-top: 10px;
+}
+
+label {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+
+.DatumIme{
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.voting-box h4 {
+  margin-bottom: 10px;
+  color: #007BFF;
+  font-size: 1.2em;
+}
+
+@media only screen and (max-width: 1000px){
+  .Glasanje-list{
+    width: 90%;
+  }
+
+}
+
+@media only screen and (max-width: 700px){
+  .archive-button{
+    width: 90%;
+    margin-top: 10px;
+  }
+
+  .additional-info{
+    margin-top: 10px;
+  }
+
+  .toggle-info-button{
+    margin-top: 5px;
+  }
+}
+
+
+
+
