@@ -1,0 +1,19 @@
+INSERT INTO public.diskusija VALUES (8, 'Discussion 8', 'Sample response text 8', 8, '2024-11-04', 6, 'Description for discussion 8', NULL);
+INSERT INTO public.diskusija VALUES (1, 'Discussion 1', 'Sample response text 1', 1, '2024-11-01', 5, 'Description for discussion 1', NULL);
+INSERT INTO public.diskusija VALUES (2, 'Discussion 2', 'Sample response text 2', 2, '2024-11-01', 3, 'Description for discussion 2', NULL);
+INSERT INTO public.diskusija VALUES (3, 'Discussion 3', 'Sample response text 3', 3, '2024-11-02', 8, 'Description for discussion 3', NULL);
+INSERT INTO public.diskusija VALUES (4, 'Discussion 4', 'Sample response text 4', 4, '2024-11-02', 2, 'Description for discussion 4', NULL);
+INSERT INTO public.diskusija VALUES (5, 'Discussion 5', 'Sample response text 5', 5, '2024-11-03', 7, 'Description for discussion 5', NULL);
+INSERT INTO public.diskusija VALUES (6, 'Discussion 6', 'Sample response text 6', 6, '2024-11-03', 1, 'Description for discussion 6', NULL);
+INSERT INTO public.diskusija VALUES (7, 'Discussion 7', 'Sample response text 7', 7, '2024-11-04', 4, 'Description for discussion 7', NULL);
+INSERT INTO public.diskusija VALUES (9, 'Discussion 9', 'Sample response text 9', 9, '2024-11-05', 9, 'Description for discussion 9', NULL);
+INSERT INTO public.diskusija VALUES (10, 'Discussion 10', 'Sample response text 10', 10, '2024-11-05', 0, 'Description for discussion 10', NULL);
+INSERT INTO public.diskusija VALUES (11, 'Discussion 11', 'Sample response text 11', 11, '2024-11-06', 5, 'Description for discussion 11', NULL);
+INSERT INTO public.diskusija VALUES (12, 'Discussion 12', 'Sample response text 12', 12, '2024-11-06', 3, 'Description for discussion 12', NULL);
+INSERT INTO public.diskusija VALUES (15, 'Discussion 15', 'Sample response text 15', 15, '2024-11-08', 4, 'Description for discussion 15', 115);
+INSERT INTO public.diskusija VALUES (13, 'Discussion 13', 'Sample response text 13', 13, '2024-11-07', 2, 'Description for discussion 13', 113);
+INSERT INTO public.diskusija VALUES (14, 'Discussion 14', 'Sample response text 14', 14, '2024-11-07', 8, 'Description for discussion 14', 114);
+
+INSERT INTO public.glasanje_forma VALUES (113, '2024-11-03', NULL, 0, 0, 'First Voting Form');
+INSERT INTO public.glasanje_forma VALUES (114, '2024-11-03', NULL, 0, 0, 'Second Voting Form');
+INSERT INTO public.glasanje_forma VALUES (115, '2024-11-03', NULL, 0, 0, 'Third Voting Form');
